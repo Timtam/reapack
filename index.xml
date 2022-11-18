@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="f92c6e1d2f0f6ff19cee0b4225a2012aec5d4049">
+<index version="1" name="Toni Barth REAPER Things" commit="67705713dd69c812b4036a3a528c418c59cd8b46">
+  <category name="MIDI Editor">
+    <reapack name="timtam_IntelliQuant.lua" type="script" desc="IntelliQuant">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 A way to quantize notes intelligently.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 This script will make sure to e.g. pull the notes into the correct direction without snapping them to grid exactly. You can configure a window in which the notes will be quantized. More informative README will follow as soon as 1.0 is out.\par}
+}
+]]></description>
+        <link rel="website" href="https://github.com/Timtam/IntelliQuant">GitHub repository</link>
+        <link rel="website" href="https://paypal.me/ToniRonaldBarth">Donation</link>
+      </metadata>
+      <version name="1.0b1" author="Toni Barth (Timtam)" time="2022-11-18T18:36:53Z">
+        <changelog><![CDATA[add additional support for 8th triplets, 16th triplets and quintuplets]]></changelog>
+        <source file="timtam_IntelliQuant/smallfolk.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b1/timtam_IntelliQuant/smallfolk.lua</source>
+        <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant quantize.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b1/timtam_IntelliQuant/timtam_IntelliQuant%20quantize.lua</source>
+        <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant set parameters for 16th note quantization.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b1/timtam_IntelliQuant/timtam_IntelliQuant%20set%20parameters%20for%2016th%20note%20quantization.lua</source>
+        <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant set parameters for 16th triplet note quantization.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b1/timtam_IntelliQuant/timtam_IntelliQuant%20set%20parameters%20for%2016th%20triplet%20note%20quantization.lua</source>
+        <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant set parameters for 32th note quantization.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b1/timtam_IntelliQuant/timtam_IntelliQuant%20set%20parameters%20for%2032th%20note%20quantization.lua</source>
+        <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant set parameters for 4th note quantization.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b1/timtam_IntelliQuant/timtam_IntelliQuant%20set%20parameters%20for%204th%20note%20quantization.lua</source>
+        <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant set parameters for 8th note quantization.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b1/timtam_IntelliQuant/timtam_IntelliQuant%20set%20parameters%20for%208th%20note%20quantization.lua</source>
+        <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant set parameters for 8th triplet note quantization.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b1/timtam_IntelliQuant/timtam_IntelliQuant%20set%20parameters%20for%208th%20triplet%20note%20quantization.lua</source>
+        <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant set parameters for quintuplet note quantization.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b1/timtam_IntelliQuant/timtam_IntelliQuant%20set%20parameters%20for%20quintuplet%20note%20quantization.lua</source>
+        <source file="timtam_IntelliQuant/timtam_IntelliQuant.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b1/timtam_IntelliQuant/timtam_IntelliQuant.lua</source>
+      </version>
+    </reapack>
+  </category>
   <category name="Various">
     <reapack name="timtam_IntelliFreeze.lua" type="script" desc="IntelliFreeze">
       <metadata>
