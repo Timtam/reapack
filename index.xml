@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="fc905baddaf27285ba2784d737f9c6cb32db7267">
+<index version="1" name="Toni Barth REAPER Things" commit="afc172cdaf7649277f87672abf552b246c963f68">
   <category name="MIDI Editor">
+    <reapack name="chessel_Speak note velocity.lua" type="script" desc="Speak the first selected note velocity">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Announces the velocity of the first selected midi note\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Chessel (Chris Goodwin)" time="2023-01-07T21:13:57Z">
+        <source main="midi_editor">https://github.com/Timtam/reapack/raw/afc172cdaf7649277f87672abf552b246c963f68/MIDI%20Editor/chessel_Speak%20note%20velocity.lua</source>
+      </version>
+    </reapack>
     <reapack name="timtam_AccessiChords.lua" type="script" desc="AccessiChords">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
