@@ -1,5 +1,5 @@
 -- @metapackage
--- @version 1.0b2
+-- @version 1.0b3
 -- @description IntelliQuant
 -- @author Toni Barth (Timtam)
 -- @links
@@ -17,7 +17,7 @@
 --   [main=midi_editor] timtam_IntelliQuant/timtam_IntelliQuant set parameters for quintuplet note quantization.lua https://github.com/Timtam/IntelliQuant/raw/v$version/timtam_IntelliQuant/timtam_IntelliQuant%20set%20parameters%20for%20quintuplet%20note%20quantization.lua
 --   [nomain] timtam_IntelliQuant/timtam_IntelliQuant.lua https://github.com/Timtam/IntelliQuant/raw/v$version/timtam_IntelliQuant/timtam_IntelliQuant.lua
 -- @changelog
---   add flam support for all actions via additional parameter within the configuration dialog
+--   fix flam support introduced in 1.0b2
 -- @about
 --   A way to quantize notes intelligently.
 --   
