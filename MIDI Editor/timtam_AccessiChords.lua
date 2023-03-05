@@ -1,5 +1,5 @@
 -- @metapackage
--- @version 1.2
+-- @version 1.2.1
 -- @description AccessiChords
 -- @author Toni Barth (Timtam)
 -- @links
@@ -17,9 +17,7 @@
 --   [main=midi_editor] timtam_AccessiChords select previous chord mode.lua https://github.com/Timtam/AccessiChords/raw/v$version/timtam_AccessiChords/timtam_AccessiChords%20select%20previous%20chord%20mode.lua
 --   [nomain] timtam_AccessiChords/timtam_AccessiChords.lua https://github.com/Timtam/AccessiChords/raw/v$version/timtam_AccessiChords/timtam_AccessiChords.lua
 -- @changelog
---   * shortened playtime to 0.3 seconds
---   * rewrote stop notes action to work deferred
---   * added two new actions to cycle through chord modes and thus allowed to insert and preview broken chords (arpeggios)
+--   * fixed wrong action id for stopping currently playing notes
 -- @about
 --   <!-- taken from Best-README-Template
 --   <!-- https://github.com/othneildrew/Best-README-Template
