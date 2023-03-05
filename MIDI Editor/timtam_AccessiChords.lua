@@ -1,5 +1,5 @@
 -- @metapackage
--- @version 1.1
+-- @version 1.2
 -- @description AccessiChords
 -- @author Toni Barth (Timtam)
 -- @links
@@ -8,16 +8,18 @@
 -- @provides
 --   [nomain] timtam_AccessiChords/smallfolk.lua https://github.com/Timtam/AccessiChords/raw/v$version/timtam_AccessiChords/smallfolk.lua
 --   [main=midi_editor] timtam_AccessiChords/timtam_AccessiChords insert selected chord for pitch cursor.lua https://github.com/Timtam/AccessiChords/raw/v$version/timtam_AccessiChords/timtam_AccessiChords%20insert%20selected%20chord%20for%20pitch%20cursor.lua
+--   [main=midi_editor] timtam_AccessiChords process notes deferred.lua https://github.com/Timtam/AccessiChords/raw/v$version/timtam_AccessiChords/timtam_AccessiChords%20process%20notes%20deferred.lua
 --   [main=midi_editor] timtam_AccessiChords/timtam_AccessiChords select next chord for pitch cursor.lua https://github.com/Timtam/AccessiChords/raw/v$version/timtam_AccessiChords/timtam_AccessiChords%20select%20next%20chord%20for%20pitch%20cursor.lua
 --   [main=midi_editor] timtam_AccessiChords/timtam_AccessiChords select next chord inversion.lua https://github.com/Timtam/AccessiChords/raw/v$version/timtam_AccessiChords/timtam_AccessiChords%20select%20next%20chord%20inversion.lua
+--   [main=midi_editor] timtam_AccessiChords select next chord mode.lua https://github.com/Timtam/AccessiChords/raw/v$version/timtam_AccessiChords/timtam_AccessiChords%20select%20next%20chord%20mode.lua
 --   [main=midi_editor] timtam_AccessiChords/timtam_AccessiChords select previous chord for pitch cursor.lua https://github.com/Timtam/AccessiChords/raw/v$version/timtam_AccessiChords/timtam_AccessiChords%20select%20previous%20chord%20for%20pitch%20cursor.lua
 --   [main=midi_editor] timtam_AccessiChords/timtam_AccessiChords select previous chord inversion.lua https://github.com/Timtam/AccessiChords/raw/v$version/timtam_AccessiChords/timtam_AccessiChords%20select%20previous%20chord%20inversion.lua
---   [main=midi_editor] timtam_AccessiChords/timtam_AccessiChords stop notes.lua https://github.com/Timtam/AccessiChords/raw/v$version/timtam_AccessiChords/timtam_AccessiChords%20stop%20notes.lua
+--   [main=midi_editor] timtam_AccessiChords select previous chord mode.lua https://github.com/Timtam/AccessiChords/raw/v$version/timtam_AccessiChords/timtam_AccessiChords%20select%20previous%20chord%20mode.lua
 --   [nomain] timtam_AccessiChords/timtam_AccessiChords.lua https://github.com/Timtam/AccessiChords/raw/v$version/timtam_AccessiChords/timtam_AccessiChords.lua
 -- @changelog
---   * added: support chord inversions by adding two additional actions to switch between inversions
---   * fixed: flat fifth chord actually was a natural fifth chord
---   * fixed: AccessiChords didn't work with real-time generated samples (like ReaSynth)
+--   * shortened playtime to 0.3 seconds
+--   * rewrote stop notes action to work deferred
+--   * added two new actions to cycle through chord modes and thus allowed to insert and preview broken chords (arpeggios)
 -- @about
 --   <!-- taken from Best-README-Template
 --   <!-- https://github.com/othneildrew/Best-README-Template
