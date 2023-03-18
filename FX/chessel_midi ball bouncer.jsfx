@@ -1,0 +1,111 @@
+version:1.0
+desc:MIDI Ball Bouncer
+tags:MIDI FX
+author:Chessel (Chris Goodwin)
+about:
+  I’ve written a js plugin that captures midi notes being played and then repeats the notes like it is a bouncing ball. 
+  That is, the repeats get quicker and quicker and a little bit quieter.
+
+slider1:2<0.4,16,0.1>Starting height
+slider2:0.8<0.01,1.00,0.01>Bounciness 
+
+in_pin:none
+out_pin:none
+
+@init 
+noteOn = $x90; // note statusbyte
+noteOff = $x80; 
+
+//Array variables holding various states about each midi note as there is one bouncing ball per note 
+countdown_noteOn = 0;
+memset( countdown_noteOn, -1, 128);
+countdown_noteOff = 128;
+memset( countdown_noteOff, -1, 128);
+channel = 2*128;
+memset( channel, 0, 128);
+velocity = 3*128;
+memset( velocity, 0, 128);
+BallInFlight = 4*128;
+memset( BallInFlight, 0, 128);
+BallMidBounce=5*128;
+memset( BallMidBounce, 0, 128);
+delay = 6*128;
+memset( delay, -1, 128);
+
+@slider 
+InitialDelay=slider1 * srate / 8;
+cor = slider2
+
+@block
+//Loop through all the midi events and start or reset the ball bouncing if we get a note on 
+while ( midirecv( offset, msg1, msg2, msg3 )) 
+(
+  noteStatus = msg1 & $xF0; // strip channel info
+  note = msg2;
+  noteStatus ==  noteOn ? 
+  (
+    channel[note] = msg1 & $x0F; // strip event type
+    BallInFlight[note] = 1;
+    delay[note] = InitialDelay;
+    countdown_noteOn[note] = offset + delay[note];
+    velocity[note] = msg3;
+  );
+  // If there is a note off then set up the countdown_noteOff
+  noteStatus ==  noteOff ? 
+  (
+    countdown_noteOff[note] = offset + InitialDelay;
+    // Make the note off countdown shorter for the next bounce  
+    countdown_noteOff[note] -= ( countdown_noteOff[note] - countdown_noteOn[note] ) * ( 1 - cor );
+  );
+  // Pass through all  events 
+  midisend( offset, msg1, msg2, msg3 );
+); //End while loop looking for midi events 
+
+//Loop through all the 128 notes of the midi note arrays to process any countdowns that need acting on in this block
+note = 0;
+loop( 128, 
+  // If a ball is bouncing in this block send a note on event 
+  ( countdown_noteOn[note] >= 0 && countdown_noteOn[note] < samplesblock ) ? 
+  (
+    // The bounce about to be generated needs to be slightly quieter than the preceding bounce 
+    velocity[note] *=  cor;
+    midisend( countdown_noteOn[note], noteOn + channel[note], note, velocity[note] );
+    BallMidBounce[note] = 1;
+    // Reset the note on counter taking account of cor 
+  delay[note] *= cor;
+    delay[note] < 1000 ?  // If the delay is too short  then terminate the countdowns 
+    (
+      BallInFlight[note] = 0;
+      countdown_noteOn[note] = 0.-1;
+    )
+    :
+    (
+      // All good to  set the countdown to the adjusted delay 
+      countdown_noteOn[note] += delay[note];
+    );
+  ); // End of processing the note on countdown 
+
+  // Do similar thing for the note off 
+  ( countdown_noteOff[note] >= 0  && countdown_noteOff[note] < samplesblock ) ? 
+  (
+    midisend( countdown_noteOff[note], noteOff + channel[note], note, 0  );
+    // If there is a non-zero delay  then increase the note off counter by this 
+    delay[note] > 0 ? 
+    (
+      countdown_noteOff[note] += delay[note];
+      // Reduce length of note by bounciness factor so as the bounces get closer together the note off doesn't overlap the next note on 
+      countdown_noteOff[note] -= (countdown_noteOff[note] - countdown_noteOn[note] ) * ( 1 - cor);
+    );
+    //If that was the last bounce and last note off then reset the note off countdown 
+    ( BallMidBounce[note] && countdown_noteOn[note] == -1 ) ? countdown_noteOff[note] = -1;
+  );
+
+  // Last thing to do is decrement the countdowns ready for the processing in the next block 
+  countdown_noteOn[note] -= samplesblock;
+  countdown_noteOn[note] < 0 ? countdown_noteOn[note] = -1;
+  countdown_noteOff[note] -= samplesblock;
+  countdown_noteOff[note] < 0 ? countdown_noteOff[note] = -1.0;
+  note += 1;
+);
+
+@sample
