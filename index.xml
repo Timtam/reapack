@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="11e525a784b20499854ef136d89e113959f29ea5">
+<index version="1" name="Toni Barth REAPER Things" commit="f838716dab7d436ebf009854a8648090b4f2c2e1">
+  <category name="FX">
+    <reapack name="chessel_midi ball bouncer.jsfx" type="effect" desc="MIDI Ball Bouncer">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 I\u65533?ve written a js plugin that captures midi notes being played and then repeats the notes like it is a bouncing ball. That is, the repeats get quicker and quicker and a little bit quieter.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Chessel (Chris Goodwin)" time="2023-03-18T20:02:34Z">
+        <source>https://github.com/Timtam/reapack/raw/f838716dab7d436ebf009854a8648090b4f2c2e1/FX/chessel_midi%20ball%20bouncer.jsfx</source>
+      </version>
+    </reapack>
+  </category>
   <category name="MIDI Editor">
     <reapack name="chessel_Speak note velocity.lua" type="script" desc="Speak the first selected note velocity">
       <metadata>
