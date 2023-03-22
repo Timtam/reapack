@@ -1,0 +1,220 @@
+desc:Chesseq Midi sequencer 
+author:Chessel (Chris Goodwin)
+version:1.0
+provides:
+  [data] ChesSeq example > ChesSeq/4 step example.txt
+about:
+  Instructions:
+
+  This plugin is a monophonic midi sequencer that is intended to be accessible.
+  This plugin reads text files containing a sequence of notes and velocities which need to be in a subfolder of the Reaper resources folder.  Namely,  Data/ChessSeq.  Each file needs the txt extension.
+  the file needs to be made up of a series of pairs of numbers.  First number is the offset in semitones, the second is the velocity.  No spaces.  Lines starting with // are ignored. Here is an example:
+
+  //A 4 step sequence 
+  0,100
+  7,50
+  12,80
+  -1,40
+
+  This will play the root note, a fifth above, an octave above and a semitone below with given velocities.
+
+  A velocity of zero will mean no note is played.
+  A velocity of -1 means a tie so the previous note will last longer.  The offset value is ignored.
+
+  The sequencer makes no sound itself but sends midi events to a midi instrument.  Use one of the following setups:
+
+  1. Put Chessel Sequencer on a track in front of a synth,
+  2. Put Chessel Sequencer on the input FX chain with a synth on the main track FX.  This allows you to capture the midi events.
+  3. Put Chessel Sequencer  on a seprate track and set up a send to a track with a synth on.
+
+  The sequence file parameter is a list of all the files in the  ChessSeq folder.  When you change this parameter the sequence gets loaded.  If you change the contents of the file you can reload it using the reload parameter which just needs a twiddle.
+
+  The Play Mode parameter has two options.
+  Trigger mode allows you to press a key on a midi keyboard and that plays the next note in the sequence.  It plays at the volume given in the file and lasts as long as you hold down the key.  A step with a velocity of zero will still need a key press.  A tied note gets skipped.
+
+  You can write a sequence to play a tune and simply play it by continually pressing a single key.  To change the musical key, just use a different root note.
+
+  Sequencer mode plays the sequence at the rate determined by the steps per unit and beats per unit parameters.  For example, with beats per unit set to 1 and steps per unit set to 4, the sequencer will play sixteenth notes.
+  Press play and then play a key.  This key acts as the root note so a step with an offset of zero will play at this pitch.  As play continues you can change the root note by playing a different key.  Playback of the sequence starts at the next beat so timing of key presses doesn't need to be precise.
+  The note length parameter is a percentage of the time between steps.
+  The sequencer will only play if Reaper is playing or recording.
+
+  Possible future work:
+
+  * Add a swing parameter which will affect every other note.
+  * If velocity is -2 this means a slide which overrides the length parameter so this will cause a synth with portomento to work.
+  * If a second key is held down in sequencer mode that is a minor or major third above the root note, any steps with this offset will get played as minor or major accordingly.
+  * Allow a number of sequence patterns to be loaded.  Activate each pattern with keys C0 to B0.*/
+
+slider1:/ChessSeq:none:Sequence file
+slider2:0<0,1,1{No action,Sequence reloaded}>Change this to reload sequence  
+slider3:1<0,1,1{Trigger,Sequencer}>Play mode
+slider4:2<1,16,1>Steps per unit
+slider5:1<1,16,1>Beats per unit
+slider6:0.4<0.01,1.0,0.01>Note length
+//slider7:0<-1,1,0.1>Swing
+slider8:0<0,1,1{Unmuted,Muted}>Mute
+
+in_pin:none
+out_pin:none
+
+
+
+@init
+//Store steps and velocities in arrays.  Max number of steps is 128 
+maxSteps = 128;
+sequence = 0;
+velocity=maxSteps;
+seqFile = -1;
+currentStep = 0;
+numSteps=0;
+noteHold=-1;
+rootNote=-1;
+noteCount=0;
+stateNoteOn = $x90;
+stateNoteOff = $x80;
+nextNoteOffset=-1;
+offNoteOffset=-1;
+function getNextStep(curStep, maxStep )
+(
+  curStep+1 == maxStep ? 0 : curStep+1;
+);
+
+
+
+@slider
+playMode=slider3;
+stepsPerUnit=slider4;
+beatsPerUnit=slider5;
+noteLength=slider6;
+swing=slider7;
+muted = slider8;
+
+slider2 == 1 ? //Slider changed to reload file 
+(
+  reload = 1;
+  slider2 = 0; sliderchange(slider2);
+);
+
+//Load sequence 
+seqFile != slider1 | 0 || reload == 1 ?
+(
+  reload = 0;
+  stepsLoaded = 0;
+  step_value = 0;
+  vel_value = 0;
+  seqFile = slider1;
+  fileHandle = file_open(slider1);  //Open the file 
+  fileHandle > 0 && file_text(fileHandle) ?  //File is open and it is a text file 
+  (
+    while(       file_avail(fileHandle) > 0 && stepsLoaded < maxSteps )
+    (
+      step_value = -1;
+      file_var(fileHandle, step_value );   //Read the first value of the current line as the step offset 
+      sequence[ stepsLoaded] = step_value;
+      file_var(fileHandle, vel_value );   //Read the second value as the velocity 
+      velocity[ stepsLoaded ] = vel_value;
+      stepsLoaded += 1;
+    );    
+    file_close(fileHandle);
+    sequence[stepsLoaded-1] == -1 ? stepsLoaded -= 1;
+    numSteps = stepsLoaded;
+  );
+);
+
+@block 
+playMode == 0 ?
+(
+  while( midirecv( offset, msg1, msg23 ) )
+  (
+    // Extract message type 
+    status = msg1 & $xF0;
+    /// Is it a note on event?
+    status == stateNoteOn ?
+    (
+      // If note is already on because multiple keys are being pressed send a note off first 
+      noteHold >= 0 ?
+      (  
+        midisend( offset, $x80 + msg1&$x0F, noteHold ); 
+        noteHold = -1; 
+      );
+      // Send on note modified by the sequencer step value 
+      noteHold = ( msg23+sequence[currentstep] ) & $xFF;
+      noteHold < 0 ? noteHold = 0 : noteHold > 127 ? noteHold = 127 : noteHold;
+      muted == 0 ? midisend( offset, msg1, noteHold, velocity[currentstep] );
+      safer=0;
+      currentstep = getNextStep( currentstep, numSteps ); 
+      while( velocity[currentstep] == -1   && safer < numSteps )
+      (
+        currentstep = getNextStep( currentstep, numSteps );
+        safer += 1;
+      );
+    ) 
+    :status == stateNoteOff ? 
+    (
+      currentstep ==   0 ? offStep = numSteps -1 : offStep = currentstep - 1;
+      midisend(offset, msg1, noteHold ); 
+      noteHold = -1;
+    )
+    : 
+    (
+      midisend(offset, msg1, msg23); // Not a note event, pass thru
+    );
+  );
+);
+playMode == 1 ?
+(  //First examine notes coming in to see if the root note needs updating 
+  while( midirecv( offset, msg1, msg2, msg3 ) )
+  (
+    msg1 & $xF0 == stateNoteOn ? 
+    (
+      rootNote == -1 ? 
+      (
+        nextNoteOffset = ( ceil(beat_position) - beat_position ) * srate * 60 / tempo; //If this is the first key press then calculate samples until playback starts 
+        currentstep = 0;  //Force sequence to start at first step when key first pressed 
+      );
+      rootNote = msg2;          
+        noteCount += 1; //Count the number of note on events 
+    ) : msg1 & $xF0 == stateNoteOff  ? (
+        noteCount -= 1;  //Keeping track of how many keys are down 
+      noteCount == 0 ? rootnote = -1;  //Only stop playback if there are no keys held down 
+    ) : (  
+      midisend( offset, msg1, msg2, msg3 );  //Pass through anything that is not a note on or note off  
+    );
+  );
+  //Execute playing the sequence if we are playing or recording 
+  play_state &  $x1 ?
+  (
+    ( nextNoteOffset >= 0 && nextNoteOffset < samplesblock && rootNote != -1 ) ?
+    (
+      lastNotePlayed = rootNote + sequence[ currentstep ];
+      lastNotePlayed  < 0 ? lastNotePlayed = 0 : lastNotePlayed > 127 ? lastNotePlayed = 127 : lastNotePlayed;
+      muted == 0 ?midisend( nextNoteOffset, $x90, lastNotePlayed, velocity[ currentstep ] ); 
+      currentstep = getNextStep( currentstep, numSteps );
+      inc = (srate * 60 / tempo) * ( beatsPerUnit / stepsPerUnit  );
+      nextNoteOffset +=  inc;
+        while( velocity[currentstep] == -1 )  //This is the code block that skips steps if there the step is a tie
+        ( 
+          nextNoteOffset +=  inc; 
+          currentstep = getNextStep( currentstep, numsteps );
+        );
+      offNoteOffset = nextNoteOffset - ( 1 - noteLength ) * inc;
+    );
+    ( offNoteOffset >= 0 && offNoteOffset < samplesblock ) ?
+      (
+         midisend( offNoteOffset, $x80, lastNotePlayed  );
+      );
+    nextNoteOffset -= samplesblock;
+    offNoteOffset -= samplesblock;
+  ) //Playing or recording 
+  :
+  (
+    //If we have left play or record mode and the sequencer is playing then send a note off in case one is sounding and stop further playback 
+    rootNote != -1 ? 
+    (
+      midisend( offNoteOffset, $x80, lastNotePlayed  ); 
+      rootNote = -1;
+    );
+  ); //Not playing or recording 
+);  //Playmode is sequencer 
+

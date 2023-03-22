@@ -1,0 +1,8 @@
+//Chessel sequence file
+//Each line is a step in the sequence defining the semitone offset from the root note
+
+//A 4 step sequence 
+0,100
+7,50
+12,80
+-1,40
