@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="f5f1ef24ee052818c3ee03144ef3f97022eab479">
+<index version="1" name="Toni Barth REAPER Things" commit="3eb3a97df75c62c36a48faca6576e97e6ff93557">
   <category name="FX">
+    <reapack name="chessel_Chesseq.jsfx" type="effect" desc="Chesseq Midi sequencer">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Instructions:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 This plugin is a monophonic midi sequencer that is intended to be accessible. This plugin reads text files containing a sequence of notes and velocities which need to be in a subfolder of the Reaper resources folder. Namely, Data/ChessSeq. Each file needs the txt extension. the file needs to be made up of a series of pairs of numbers. First number is the offset in semitones, the second is the velocity. No spaces. Lines starting with // are ignored. Here is an example:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 //A 4 step sequence 0,100 7,50 12,80 -1,40\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 This will play the root note, a fifth above, an octave above and a semitone below with given velocities.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 A velocity of zero will mean no note is played. A velocity of -1 means a tie so the previous note will last longer. The offset value is ignored.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 The sequencer makes no sound itself but sends midi events to a midi instrument. Use one of the following setups:\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab Put Chessel Sequencer on a track in front of a synth,\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 2.\tx360\tab Put Chessel Sequencer on the input FX chain with a synth on the main track FX. This allows you to capture the midi events.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 3.\tx360\tab Put Chessel Sequencer on a seprate track and set up a send to a track with a synth on.\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 The sequence file parameter is a list of all the files in the ChessSeq folder. When you change this parameter the sequence gets loaded. If you change the contents of the file you can reload it using the reload parameter which just needs a twiddle.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 The Play Mode parameter has two options. Trigger mode allows you to press a key on a midi keyboard and that plays the next note in the sequence. It plays at the volume given in the file and lasts as long as you hold down the key. A step with a velocity of zero will still need a key press. A tied note gets skipped.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 You can write a sequence to play a tune and simply play it by continually pressing a single key. To change the musical key, just use a different root note.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Sequencer mode plays the sequence at the rate determined by the steps per unit and beats per unit parameters. For example, with beats per unit set to 1 and steps per unit set to 4, the sequencer will play sixteenth notes. Press play and then play a key. This key acts as the root note so a step with an offset of zero will play at this pitch. As play continues you can change the root note by playing a different key. Playback of the sequence starts at the next beat so timing of key presses doesn't need to be precise. The note length parameter is a percentage of the time between steps. The sequencer will only play if Reaper is playing or recording.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Possible future work:\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Add a swing parameter which will affect every other note.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab If velocity is -2 this means a slide which overrides the length parameter so this will cause a synth with portomento to work.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab If a second key is held down in sequencer mode that is a minor or major third above the root note, any steps with this offset will get played as minor or major accordingly.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Allow a number of sequence patterns to be loaded. Activate each pattern with keys C0 to B0.*/\sa180\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Chessel (Chris Goodwin)" time="2023-03-22T12:26:20Z">
+        <source>https://github.com/Timtam/reapack/raw/3eb3a97df75c62c36a48faca6576e97e6ff93557/FX/chessel_Chesseq.jsfx</source>
+        <source type="data" file="ChesSeq/4 step example.txt">https://github.com/Timtam/reapack/raw/3eb3a97df75c62c36a48faca6576e97e6ff93557/FX/ChesSeq%20example</source>
+      </version>
+    </reapack>
     <reapack name="chessel_midi ball bouncer.jsfx" type="effect" desc="MIDI Ball Bouncer">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
