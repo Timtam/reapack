@@ -2,7 +2,7 @@ desc:Chesseq Midi sequencer
 author:Chessel (Chris Goodwin)
 version:1.0
 provides:
-  [data] ChesSeq example > ChesSeq/4 step example.txt
+  [data] ChesSeq example > ChessSeq/4 step example.txt
 about:
   Instructions:
 
