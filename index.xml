@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="f838716dab7d436ebf009854a8648090b4f2c2e1">
+<index version="1" name="Toni Barth REAPER Things" commit="b44d07fe8ecae8ac8840f921439afb9867dc04ad">
   <category name="FX">
     <reapack name="chessel_midi ball bouncer.jsfx" type="effect" desc="MIDI Ball Bouncer">
       <metadata>
@@ -13,6 +13,64 @@
       </metadata>
       <version name="1.0" author="Chessel (Chris Goodwin)" time="2023-03-18T20:02:34Z">
         <source>https://github.com/Timtam/reapack/raw/f838716dab7d436ebf009854a8648090b4f2c2e1/FX/chessel_midi%20ball%20bouncer.jsfx</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Items Editing">
+    <reapack name="chessel_Move to end of selected item.lua" type="script" desc="Move to end of selected item">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 When there is only one selected item in the project, moves the edit cursor to the end of the item. Works even when there is an envelope selected.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Chessel (Chris Goodwin)" time="2023-03-22T08:13:37Z">
+        <source main="main">https://github.com/Timtam/reapack/raw/b44d07fe8ecae8ac8840f921439afb9867dc04ad/Items%20Editing/chessel_Move%20to%20end%20of%20selected%20item.lua</source>
+      </version>
+    </reapack>
+    <reapack name="chessel_Move to next item .lua" type="script" desc="Move to next item">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 When there is only one selected item in the project, moves to the next item and selects that instead. Works even if an envelope has the focus.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Chessel (Chris Goodwin)" time="2023-03-22T08:13:37Z">
+        <source main="main">https://github.com/Timtam/reapack/raw/b44d07fe8ecae8ac8840f921439afb9867dc04ad/Items%20Editing/chessel_Move%20to%20next%20item%20.lua</source>
+      </version>
+    </reapack>
+    <reapack name="chessel_Move to previous item .lua" type="script" desc="Move to previous item">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 When there is only one selected item in the project, moves to the previous item and selects that instead. Works even if an envelope has the focus.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Chessel (Chris Goodwin)" time="2023-03-22T08:13:37Z">
+        <source main="main">https://github.com/Timtam/reapack/raw/b44d07fe8ecae8ac8840f921439afb9867dc04ad/Items%20Editing/chessel_Move%20to%20previous%20item%20.lua</source>
+      </version>
+    </reapack>
+    <reapack name="chessel_Move to start of selected item.lua" type="script" desc="Move to start of selected item">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 When there is only one selected item in the project, moves the edit cursor to the start of the item. Works even if an envelope is selected.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Chessel (Chris Goodwin)" time="2023-03-22T08:13:37Z">
+        <source main="main">https://github.com/Timtam/reapack/raw/b44d07fe8ecae8ac8840f921439afb9867dc04ad/Items%20Editing/chessel_Move%20to%20start%20of%20selected%20item.lua</source>
       </version>
     </reapack>
   </category>
