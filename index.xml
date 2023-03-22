@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="b44d07fe8ecae8ac8840f921439afb9867dc04ad">
+<index version="1" name="Toni Barth REAPER Things" commit="f5f1ef24ee052818c3ee03144ef3f97022eab479">
   <category name="FX">
     <reapack name="chessel_midi ball bouncer.jsfx" type="effect" desc="MIDI Ball Bouncer">
       <metadata>
@@ -75,6 +75,21 @@
     </reapack>
   </category>
   <category name="MIDI Editor">
+    <reapack name="chessel_Export MIDI Sequence To Chesseq Sequence File.lua" type="script" desc="Export MIDI sequence to Chesseq sequence file">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Utility to create a Chessel sequencer file. In a midi item, create a series of notes. There should be no chords though this won't break the script if there are. Timing of the notes is not important, just their order. The velocity of each note is also important when making up your sequence. When ready, select all the notes and run this script. You will get a Save As dialogue to save the txt file. Once saved, copy it to the Reaper Resource folder, in Data/ChessSeq You may need to create this subfolder. The text file, or sequence, will now be available when using the Chessel Sequencer plugin.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Chessel (Chris Goodwin)" time="2023-03-22T12:03:13Z">
+        <changelog><![CDATA[initial release]]></changelog>
+        <source main="midi_editor">https://github.com/Timtam/reapack/raw/f5f1ef24ee052818c3ee03144ef3f97022eab479/MIDI%20Editor/chessel_Export%20MIDI%20Sequence%20To%20Chesseq%20Sequence%20File.lua</source>
+      </version>
+    </reapack>
     <reapack name="chessel_Speak note velocity.lua" type="script" desc="Speak the first selected note velocity">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
