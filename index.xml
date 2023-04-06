@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="2bb39e2d8becb30b44985450f86716b2339d2f92">
+<index version="1" name="Toni Barth REAPER Things" commit="201d9ecf0aeaffb5d9436969cfbb2774aae7c9e9">
   <category name="FX">
     <reapack name="chessel_Chesseq.jsfx" type="effect" desc="Chesseq Midi sequencer">
       <metadata>
@@ -17,9 +17,11 @@
 {\pard \ql \f0 \sa0 \li360 \fi-360 2.\tx360\tab Put Chessel Sequencer on the input FX chain with a synth on the main track FX. This allows you to capture the midi events.\par}
 {\pard \ql \f0 \sa0 \li360 \fi-360 3.\tx360\tab Put Chessel Sequencer on a seprate track and set up a send to a track with a synth on.\sa180\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 The sequence file parameter is a list of all the files in the ChessSeq folder. When you change this parameter the sequence gets loaded. If you change the contents of the file you can reload it using the reload parameter which just needs a twiddle.\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 The Play Mode parameter has two options. Trigger mode allows you to press a key on a midi keyboard and that plays the next note in the sequence. It plays at the volume given in the file and lasts as long as you hold down the key. A step with a velocity of zero will still need a key press. A tied note gets skipped.\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 You can write a sequence to play a tune and simply play it by continually pressing a single key. To change the musical key, just use a different root note.\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 Sequencer mode plays the sequence at the rate determined by the steps per unit and beats per unit parameters. For example, with beats per unit set to 1 and steps per unit set to 4, the sequencer will play sixteenth notes. Press play and then play a key. This key acts as the root note so a step with an offset of zero will play at this pitch. As play continues you can change the root note by playing a different key. Playback of the sequence starts at the next beat so timing of key presses doesn't need to be precise. The note length parameter is a percentage of the time between steps. The sequencer will only play if Reaper is playing or recording.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 The Play Mode parameter has two options.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Trigger mode allows you to press a key on a midi keyboard and that plays the next note in the sequence. By default, the velocity is set by the sequence file but toggling the velocity source parameter to "Key velocity" changes it to play at the velocity of the played key. The note lasts as long as you hold down the key. A step with a velocity of zero will still need a key press. A tied note gets skipped. You can write a sequence to play a tune and simply play it by continually pressing a single key. To change the musical key, just use a different root note.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Sequencer mode plays the sequence at the rate determined by the steps per unit and beats per unit parameters. For example, with beats per unit set to 1 and steps per unit set to 4, the sequencer will play sixteenth notes. Or a polyrythm of 5 notes every half measure can be set up with notes per unit set to 5 and beats per unit set to 2. To play just hold down a key. This key acts as the root note so a step with an offset of zero will play at this pitch. A step defined in the sequence file of 7 will play a fifth above this root note. As play continues you can change the root note by holding down a different key. Play legato for smooth transitions or leave a gap between keys to have the sequence restart from the first step. When Reaper is playing or recording, playback of the sequence starts at the next beat so timing of key presses doesn't need to be precise. The legato parameter is a percentage of the time between steps. Small values will be more staccato and larger values will approach full legato.\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 The mute parameter will suspend midi events but the sequencer will keep cycling. The direction the sequence is played can be reversed by toggling the direction parameter. Be aware of loading a new sequence from file if the direction is set to backwards! The invert parameter allows for playing negative harmonies as each step in the sequence is inverted. A step with offset plus 5 will become negative 5. An offset of negative 12 will become lus 12.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Generally, a sequence in a major key will become minor and vice versa. Good results are obtained by playing an inverted sequence a perfect fifth (7 steps) higher. The mute, direction and invert parameters can all be set to be midi key triggered with keys from 0 to 48.\line For example, setting the mute trigger key to 48 means that playing the sequence and then pressing midi note 48 will mute the further midi messages from being sent to the synth. This feature is also useful for playing inverted sequences on the fly.\par}
 }
 ]]></description>
       </metadata>
@@ -32,6 +34,10 @@
 * There is a velocity source parameter which can either be the sequence file or key velocity. �That is, how hard you play a note.� This applies in both sequencer and trigger play modes.]]></changelog>
         <source>https://github.com/Timtam/reapack/raw/2bb39e2d8becb30b44985450f86716b2339d2f92/FX/chessel_Chesseq.jsfx</source>
         <source type="data" file="ChessSeq/4 step example.txt">https://github.com/Timtam/reapack/raw/2bb39e2d8becb30b44985450f86716b2339d2f92/FX/ChesSeq%20example</source>
+      </version>
+      <version name="1.2" author="Chessel (Chris Goodwin)" time="2023-04-03T15:05:36Z">
+        <source>https://github.com/Timtam/reapack/raw/201d9ecf0aeaffb5d9436969cfbb2774aae7c9e9/FX/chessel_Chesseq.jsfx</source>
+        <source type="data" file="ChessSeq/4 step example.txt">https://github.com/Timtam/reapack/raw/201d9ecf0aeaffb5d9436969cfbb2774aae7c9e9/FX/ChesSeq%20example</source>
       </version>
     </reapack>
     <reapack name="chessel_midi ball bouncer.jsfx" type="effect" desc="MIDI Ball Bouncer">
