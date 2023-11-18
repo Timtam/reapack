@@ -1,0 +1,77 @@
+desc:MIDI Key Driver
+author:Chessel (Chris Goodwin)
+version:1.0
+tags:MIDI FX
+about:
+  This plugin exposes a parameter called output which is driven by the pitch of the last midi note received.
+  Another plugin on the same FX chain can have a parameter linked to this output usinng Reaper's parameter modulation dialogue.
+  This allows playing notes to drive this other plugin's parameter.
+  Use the PM dialogue to set the offset and scale of the link.
+  Other features include an offset of the midi key that acts as zero, a glide or portomento like time for the transition to the new value and whether this transition time is velocity sensitive.
+
+slider1:sldOutput=60<0,127,1>Output
+slider2:sldOffset=0<0,127,1,>Offset
+slider3:sldSpeed=1<0,9999,1>Speed (milliseconds )
+slider4:sldVelocity=0<0,1,1{Off,On}>Velocity sensitive
+
+in_pin:none
+out_pin:none
+
+
+@init
+arrSample = 0;
+
+@slider
+SpeedSamples = sldSpeed * srate / 1000;
+
+@block
+memset( arrSample, 0, samplesblock );
+blockCounter = 0;
+
+while( midirecv( offset, msg1,  msg2, msg3 ) )
+(
+  msg1 & 0xF0 == 0x90 ?
+  (
+    arrSample[ offset ] = ( msg2 - sldOffset )  * 256;
+    sldVelocity == 1 ? speed = ( 127 - msg3 ) * speedSamples / 127 : speed = speedSamples;
+  )
+  : midisend( offset, msg1, msg2, msg3 );
+);
+
+@sample
+//If there is a non zero value in the sample array means there was a note down in this sample 
+arrSample[blockCounter] > 0 ?
+(
+  notePrev = sldOutput;
+  noteTarget = arrSample[ blockCounter ] / 256;
+);
+
+noteTarget != notePrev ?
+(
+  //Calculate rate of change of output with special case for doing it straightaway 
+  speed == 0 ?   adjust = ( noteTarget - notePrev )  : adjust = ( noteTarget - notePrev ) / speed;
+);
+
+//Update the output variable 
+sldOutput += adjust;
+
+//Detect if target output has been reached 
+adjust > 0 ? 
+(
+  sldOutput > noteTarget ? 
+  (
+    adjust = 0;
+    sldOutput = noteTarget; 
+  );
+);
+adjust < 0 ? 
+(
+  sldOutput < noteTarget ? 
+  (
+    adjust = 0;
+    sldOutput = noteTarget;
+  );
+);
+
+//sldOutput = output;
+blockCounter += 1;
