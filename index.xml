@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="02e4d9dc2650d0de33d8eda5cf39744aed860284">
+<index version="1" name="Toni Barth REAPER Things" commit="d4feb358646d2b6defa9f82e9e4359be141aaca6">
   <category name="FX">
     <reapack name="chessel_Chesseq.jsfx" type="effect" desc="ChessSeq Midi sequencer">
       <metadata>
@@ -51,6 +51,53 @@
       <version name="1.3" author="Chessel" time="2023-04-06T08:03:28Z">
         <source>https://github.com/Timtam/reapack/raw/7b1ed9a48ea631b7ba7781c3b62d0b3e5d02a00a/FX/chessel_Chesseq.jsfx</source>
         <source type="data" file="ChessSeq/4 step example.txt">https://github.com/Timtam/reapack/raw/7b1ed9a48ea631b7ba7781c3b62d0b3e5d02a00a/FX/ChesSeq%20example</source>
+      </version>
+    </reapack>
+    <reapack name="chessel_LFO Genie.jsfx" type="effect" desc="LFO Genie">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 LFO generator for volume, pan and an output parameter for automating any plugin parameter to this LFO\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Put this plugin on a track. The Volume/Pan parameter toggles between applying the LFO to the volume, the pan or neither and just exposing an output parameter which can be linked to any plugin on the FX chain to modulate one of its parameters with the LFO Parameter list:\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab output. the output of the LFO. Link other plugin parameters to this parameter in the Reaper parameter modulation dialog.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Frequency. Frequency in cycles per second (Hertz) or cycles per beat depending on the setting of the tempo sync parameter.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Phase. Sets the phase of the LFO ranging from 0 to 100. When LFO is in deterministic mode (see free running parameter) the LFO starts with a phase at this value.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Min and max amplitude. Sets the low and high extents of the LFO. When in volume mode, minimum value should be 0 and max value should be 1. For pan mode the practical range is -1 to +1.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Wave type. Hopefully self explanatory. Or play around to hear the effect.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab PCM width. When wave type is set to square this parameter varies how much time is spent at the low and high values.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Portomento. When in square wave mode this slides the LFO from one value to the next. The value is a percentage of the length of the value being moved to.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Symmetry of portomento. Only has an effect when PCM width is not set to 50% and portomento is non-zero. The portomento slide can be made unsymmetrical to match the width of each part of the square wave.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Inflation. Applies to sine and triangle wave shapes only. Positive values make the LFO spend more time closer to the extremes. Imagine inflating a sine wave like a balloon so more of the curve is near the top and bottom of the curve. In the extreme you end up with a square wave and in a way this parameter is useful for creating a softer edged square wave. A negative value for this parameter is like sucking air out of the LFO and for a sine wave it tends towards a spike pointing up and a spike pointing down until in the extreme you get a flat line.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Rectify. Makes the LFO have only positive values in terms of the fundamental shape of the waveform. Or rectify to flat sets the negative portion to zero.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Invert. Flips the LFO.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Tempo sync. Toggles between the frequency being in Hertz or cycles per beat.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Slowness factor. When you want a really slow LFO you can reduce the frequency by a factor of up to 1000.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab On/Off/Hold. On means the LFO is fully working. Off means the output is zero. Hold suspends the LFO at the current value.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Secondary wave type. A second waveform can be blended in with the primary waveform and selected here.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Blend amount. 0 means the output is all primary waveform and 1 means the output is all secondary wave form.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Floor and ceiling. Caps the extremes of the LFO output. These parameters are percentages of the range.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Deterministic / free running. A deterministic LFO will start with a phase defined by the phase parameter when play starts. A free running LFO keeps going and is never reset.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Randomize PCM width. When the waveform is square the width of the pulse can be randomized using this parameter. this parameter indicates the percentage of the width for the maximum range of the randomness.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Randomize range. Randomizes the low and high value of the LFO. Is a percentage of the range.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab MIDI mode. There are two relevant controls:\par}
+{\pard \ql \f0 \sa0 \li720 \fi-360 \endash \tx360\tab Apply, which can be just envelope, just LFO or both envelope and LFO.\par}
+{\pard \ql \f0 \sa0 \li720 \fi-360 \endash \tx360\tab MIDI on off which has values of off, retrigger, on and on inverted.\sa180\par}
+{\pard \ql \f0 \sa180 \li360 \fi0 When midi is off then the midi keys have no effect and whether the envelope and LFO are applied is purely down to the apply parameter. The envelope will loop. When midi is on or inverted on, the modulation is either on or off depending on the midi keys pressed. the envelope loops but pressing the LFO or envelope retrigger keys will reset these. In retrigger mode, the envelope is only active when the envelope note is held down. It will stay in the sustain stage once reached and as long as the note is held down. If the sustain level is zero then the envelope will loop back to the beginning. When the note is released the envelope goes into the release stage and will not start again until the note is played again. What is heard is all subject to the state of the apply parameter.\line Volume and pan will follow the above rules.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab MIDI velocity. When on, how fast the note is played is reflected in the max range of the LFO.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab MIDI channel. The channel the plugin is listening to for a MIDI trigger.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab MIDI note. The note value the plugin is listening for to. 60 is middle C.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Envelope retrigger. the MIDI note that retriggers the envelope.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab LFO Retrigger. When MIDI is on this is the note that causes the LFO to be set back to zero plus any phase offset\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Volume or pan. Sets whether the LFO affects the volume of the audio it receives, the pan, or neither and just modulates the output parameter which other plugins on the FX chain can be linked to.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Inputs 1 to 6. Link these parameters to another LFO here and they get added to the output.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Absolute phase. Internal use only.\sa180\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.4" author="Chessel (Chris Goodwin)" time="2023-12-22T15:11:28Z">
+        <source>https://github.com/Timtam/reapack/raw/d4feb358646d2b6defa9f82e9e4359be141aaca6/FX/chessel_LFO%20Genie.jsfx</source>
       </version>
     </reapack>
     <reapack name="chessel_midi ball bouncer.jsfx" type="effect" desc="MIDI Ball Bouncer">
