@@ -1,0 +1,567 @@
+desc:LFO Genie 
+author:Chessel (Chris Goodwin)
+version:1.4
+about:
+  LFO generator for volume, pan and an output  parameter  for automating any plugin parameter  to this LFO 
+
+  Put this plugin on a track.  The Volume/Pan parameter toggles between applying the LFO to the volume, the pan or neither and just exposing an output parameter which can be linked to any plugin on the FX chain to modulate one of its parameters with the LFO Parameter list: 
+  
+  * output. the output of the LFO. Link other plugin parameters to this parameter in the Reaper parameter modulation dialog.
+  * Frequency.  Frequency in cycles per second (Hertz) or cycles per beat depending on the setting of the tempo sync parameter.
+  * Phase. Sets the phase of the LFO ranging from 0 to 100.   When LFO is in deterministic mode (see free running parameter) the LFO starts with a phase at this value.
+  * Min and max amplitude.  Sets the low and high extents of the LFO.  When in volume mode, minimum value should be 0 and max value should be 1.  For pan mode the practical range is -1 to +1.  
+  * Wave type.  Hopefully self explanatory.  Or play around to hear the effect.
+  * PCM width.  When wave type is set to square this parameter varies how much time is spent at the low and high values.
+  * Portomento. When in square wave mode this slides the LFO from one value to the next.  The value is a percentage of the length of the value being moved to.
+  * Symmetry of portomento.  Only has an effect when PCM width is not set to 50% and portomento is non-zero.  The portomento slide can be made unsymmetrical to match the width of each part of the square wave.
+  * Inflation.  Applies to sine and triangle wave shapes only.  Positive values make the LFO spend more time closer to the extremes.  Imagine inflating a sine wave like a balloon so more of the curve is near the top and bottom of the curve.  In the extreme you end up with a square wave and in a way this parameter is useful for creating a softer edged square wave.  A negative value for this parameter is like sucking air out of the LFO and for a sine wave it tends towards a spike pointing up and a spike pointing down until in the extreme you get a flat line.
+  * Rectify.  Makes the LFO have only positive values in terms of the fundamental shape of the waveform.  Or rectify  to flat sets the negative portion to zero.
+  * Invert.  Flips the LFO.
+  * Tempo sync.  Toggles between the frequency being in Hertz or cycles per beat.
+  * Slowness factor.  When you want a really slow LFO you can reduce the frequency by a factor of up to 1000.  
+  * On/Off/Hold. On means the LFO is fully working.  Off means the output is zero.  Hold suspends the LFO at the current value.
+  * Secondary wave type.  A second waveform can be blended in with the primary waveform and selected here.
+  * Blend amount.  0 means the output is all primary waveform and 1 means the output is all secondary wave form.  
+  * Floor and ceiling.  Caps the extremes of the LFO output.  These parameters are percentages of the range.
+  * Deterministic / free running.  A deterministic LFO will start with a phase defined by the phase parameter when play starts.  A free running LFO keeps going and is never reset.
+  * Randomize PCM width.  When the waveform is square the width of the pulse can be randomized using this parameter.  this parameter indicates the percentage of the width for the maximum range of the randomness.
+  * Randomize range.  Randomizes the low and high value of the LFO.  Is a percentage of the range.
+  * MIDI mode. There are two relevant controls:
+
+    * Apply, which can be just envelope, just LFO or both envelope and LFO.
+    * MIDI on off which has values of off, retrigger, on and on inverted.
+
+    When midi is off then the midi keys have no effect and whether the envelope and LFO are applied is purely down to the apply parameter. The envelope will loop.
+    When midi is on or inverted on, the modulation is either on or off depending on the midi keys pressed.  the envelope loops but pressing the LFO or envelope retrigger keys will reset these.
+    In retrigger mode, the envelope is only active when the envelope note is held down.  It  will stay in the sustain stage once reached and as long as the note is held down.  If the sustain level is zero then the envelope will loop back to the beginning.  When the note is released the envelope goes into the release stage and will not start again until the note is played again.
+    What is heard is all subject to the state of the apply parameter.  
+    Volume and pan will follow the above rules.
+
+   * MIDI velocity.  When on, how fast the note is played is reflected in the max range of the LFO.
+  * MIDI channel.  The channel the plugin is listening to for a MIDI trigger.
+  * MIDI note.  The note value the plugin is listening for to.  60 is middle C.
+  * Envelope retrigger.  the MIDI note that retriggers the envelope.
+  * LFO Retrigger.  When MIDI is on this is the note that causes the LFO to be set back to zero plus any phase offset 
+  * Volume or pan.  Sets whether the LFO affects the volume of the audio it receives, the pan, or neither and just modulates the output parameter which other plugins on the FX chain can be linked to.
+  * Inputs 1 to 6.  Link these parameters to another LFO here and they get added to the output.
+  * Absolute phase.  Internal use only.
+
+changelog:
+  Fixed bug with MIDI LFO retrigger  and added MIDI pass through option 
+  Added an input parameter which gets added to the output parameter.  Allows adding the output of a different instance of LFO Genie  to the current LFO.
+  Added a further 5 external inputs so possible to have 6 other LFO driving a single instance of LFO Genie 
+  Fixed a bug where midi on off inverted only started working correctly after one press of a midi key 
+  Added portomento to saw L and saw R waveforms
+
+slider1:sldOutput=0<-1,1,0.1>Output
+slider2:sldFrequency=1<0.01,20,0.01>Frequency (HZ)
+slider3:sldPhase=0<0,100,1>Phase (%)
+slider4:sldMinAmp=0<-200,200,0.1>Minimum amplitude 
+slider5:sldMaxAmp=1<-200,200,0.1>Maximum amplitude
+slider6:sldWaveType=0<0,7,1{Sine,PCM/Square,Triangle,Saw L,Saw R,Random,Sample and hold}>Wave type
+slider7:sldPCMWidth=50<0,100,1>PCM width
+slider8:sldPortomento=0<0,100,1>Portomento (percentage of PCM width) 
+slider9:sldSymmetry=0<0,1,1{Symmetric,Asymmetric}>Symmetry of portomento
+slider10:sldInflation=0.0<-1.0,1.0,0.1>Inflation / deflation 
+slider11:sldRectify=0<0,2,1{Off,Rectify to positive,Rectify to flat}>Rectify
+slider12:sldInvert=0<0,1,1{Normal,Inverted}>Invert
+slider13:sldTempoSync=0<0,1,1{Hertz,Cycles per beat}>Tempo sync (Hertz or cycles per beat)
+slider14:sldSlowness=1<1,1000,1>Slow frequency factor
+slider15:sldOnOffHold=0<0,2,1{On,Off,Hold}>On/Off/Hold  
+
+//Secondary wave and blender
+slider16:sldSecondaryWaveType=0<0,7,1{Sine,Square,Triangle,Saw L,Saw R,Random,Sample and hold}>Secondary wave type
+slider17:sldBlend=0<0,100,1>Blend percent
+
+slider19:sldFloor=0<0,100,1>Floor
+slider20:sldCeiling=0<0,100,1>Ceiling
+slider21:sldFreeRunning=0<0,1,1{Deterministic LFO,Free running}>Deterministic / free running LFO
+
+
+//Randomizing 
+slider25:sldPCMWidthRandomize=0<0,25,1>Randomize PCM width percentage 
+slider26:sldMinMAxRandomize=0<0,25,1>Randomize range  
+
+//Envelope 
+slider30:sldApply=1<0,2,1{LFO and envelope,LFO only,Envelope only}>Apply
+slider31:sldEnvelopeUnits=0<0,1,1{Seconds,Beats}>Envelope units
+slider32:sldEnvelopeDelay=0<0,128,0.001>Envelope delay
+slider33:sldEnvelopeAttack=1<0,128,0.001>Envelope attack
+slider34:sldEnvelopeHold=0<0,128,0.001>Envelope hold
+slider35:sldEnvelopeDecay=1<0,128,0.001>Envelope decay
+slider36:sldEnvelopeSustainLevel=50<0,100,1>Envelope sustain level 
+slider37:sldEnvelopeSustainLength=1<0,128,0.001>Envelope sustain length 
+slider38:sldEnvelopeRelease=1<0,128,0.001>Envelope release
+
+//MIDI slider  definitions 
+slider40:sldMIDIOnOff=0<0,3,1{Off,Retrigger,MIDI on, MIDI on inverted}>MIDI 
+slider41:sldMIDIVelocity=0<0,1,1{Off,On}>Velocity sensitive
+slider42:sldMIDIChannel=1<1,16,1>MIDI channel
+slider43:sldMIDINote=42<0,127,1>MIDI note
+slider44:sldEnvelopeRetrigger=44<0,127,1>Envelope retrigger 
+slider45:sldLFORetrigger=46<0,127,1>LFO retrigger 
+slider46:sldMIDIPassThrough=0<0,1,1{Yes,No}>MIDI pass through
+
+//Volume and pan options
+slider47:sldVolumePan=1<0,2,1{LFO output only,Volume,Pan}>Volume or pan
+
+//External input parameters 
+slider50:sldInput1=0<-1,1,0.1>Input 1 
+slider51:sldInput2=0<-1,1,0.1>Input 2
+slider52:sldInput3=0<-1,1,0.1>Input 3
+slider53:sldInput4=0<-1,1,0.1>Input 4
+slider54:sldInput5=0<-1,1,0.1>Input 5
+slider55:sldInput6=0<-1,1,0.1>Input 6
+
+//Hidden slider used to enable a free running LFO 
+slider61:sldAbsolute=0<0,7,0.01>-Absolute phase (for internal use only) 
+
+@init
+phase = 0;
+PIO2 = $pi/2;
+randomStart = rand( 2 ) - 1;
+randomEnd = rand( 2 ) - 1;
+varVelocity = 1;
+bNoteIsOn = 0;
+varMidiVolume  = 0;
+arrNotesOn = 0;
+
+//Wave types
+enumWTSine=0;
+enumWTSquare=1;
+enumWTTriangle=2;
+enumWTSawL=3;
+enumWTSawR=4;
+enumWTRandom=5;
+enumWTSampleAndHold = 6;
+
+//Envelope stages
+enumStageDelay = 0;
+enumStageAttack = 1;
+enumStageHold = 2;
+enumStageDecay = 3;
+enumStageSustain = 4;
+enumStageRelease = 5;
+
+//MIDI states for sldMIDIOnOff slider 
+enumMIDIOff = 0;
+enumMIDIRetriggerOnly = 1;
+enumMIDIOn = 2;
+enumMIDIOnInverted = 3;
+
+//MIDI note on and off bitwise values
+enumNoteOnGeneral = 1;
+enumNoteOffGeneral = 2;
+enumNoteOnLFORetrigger = 4;
+enumNoteOnEnvelopeRetrigger = 8;
+enumNoteOffEnvelopeRetrigger = 16;
+
+
+@slider
+//Update the frequency from user input  
+f = sldFrequency / sldSlowness;
+
+//Offset of LFO set by sldPhase slider 
+phaseOffset = 2 * $pi * sldPhase / 100;
+
+//New Inflation value.  Slider goes from minus one to plus one but Inflation goes from 90 degrees to 0 degrees, 
+kx = ( $pi / 2 ) * ( -sldInflation + 1 ) / 2;
+// Inflation goes from 0 to PI where zero means most bloated, and pi over 2 is thinnest.
+//We know where the knee point is as ky = -kx + pi over 2
+ky = - kx+ $pi/2;
+
+//Catch the hold value
+sldOnOffHold == 2 ? yHold = y;
+
+//Work out the floor and ceiling values
+varFloor = sldMinAmp + sldFloor * ( sldMaxAmp - sldMinAmp ) / 100;
+varCeiling = sldMaxAmp - sldCeiling * ( sldMaxAmp - sldMinAmp ) / 100; 
+
+//PCMWidth variable needs initialising as may not get set by the reset of phase 
+varPCMWidth = sldPCMWidth; 
+varMinAmp = sldMinAmp;
+varMaxAmp = sldMaxAmp;
+
+//MIDI in slider  code 
+sldMIDIOnOff == enumMIDIOn  ? 
+(
+  varMidiOnVolume = 1;
+  varMidiOffVolume = 0;
+)
+: sldMIDIOnOff == enumMIDIOnInverted  ?
+(
+  varMidiOnVolume = 0;
+  varMidiOffVolume = 1;
+);  
+  varMidiVolume = varMidiOffVolume;
+
+@block
+memset( arrNotesOn, 0, samplesblock );
+blockCounter = 0;
+
+//Calculate how quickly to change the volume.
+//Capture the volume from the last sample of the previous block and the volume from the last sample of the block before that.  Calculate a delta adjustment across the time of one block and use this to calculate the volume to adjust each sample in sample   code 
+adjust = output - outputPrev;
+dAdjust = adjust / samplesblock;
+adjustS = outputPrev;
+outputPrev = output;
+
+sldMIDIOnOff != enumMIDIOff  ?
+(
+  while( midirecv( offset, msg1, msg2, msg3 ) )
+  (
+    bFound = 0;
+    msg1 & 0xFF == ( 0x90 + ( sldMIDIChannel - 1 ) ) ? 
+    (
+      msg2 == sldMIDINote ? //Note on is general on note 
+      (
+        arrNotesOn[ offset ] += enumNoteOnGeneral;
+        sldMIDIVelocity == 1 ? varVelocity = msg3 / 127 : varVelocity = 1;
+        bFound = 1;
+      )
+      : msg2 == sldLFORetrigger ? //Note on is LFO retrigger note 
+      (
+        arrNotesOn[ offset ] += enumNoteOnLFORetrigger;
+        bFound = 1;
+      )
+      : msg2 == sldEnvelopeRetrigger ? //Note on is envelope retrigger note 
+      (
+        arrNotesOn[ offset ] += enumNoteOnEnvelopeRetrigger;
+        sldMIDIVelocity == 1 ? varVelocity = msg3 / 127 : varVelocity = 1;
+        bFound = 1;
+      );
+    )
+    : msg1 & 0xFF == ( 0x80 + ( sldMIDIChannel - 1 ) ) ?  //Note off on correct channel 
+    (
+msg2 == sldMIDINote ? //Note off is general off note 
+      (
+        arrNotesOn[ offset ] += enumNoteOffGeneral;
+        bFound = 1;
+      )
+: msg2 == sldEnvelopeRetrigger ? //Note off is envelope off note 
+      (
+        arrNotesOn[ offset ] += enumNoteOffEnvelopeRetrigger;
+        bFound = 1;
+      );
+    );
+    //If we did not process the midi or if midi pass through is enabled then pass the midi on 
+    !bFound || sldMIDIPassThrough == 0 ? midisend( offset, msg1, msg2, msg3 ); 
+  );   //End of midi receive loop 
+); //If doing midi 
+
+@sample
+//New increment to change the phase by  which is tempo specific when in tempo sync mode which is not captured in @slider block  so have to do it every sample 
+sldTempoSync  == 0 ?
+  phaseIncrement = 2 * $pi * f / srate
+: phaseIncrement =  2 * $pi * f * tempo / ( 60 * srate );
+
+//Increment the phase and bring back to within range of zero to 2 pi 
+sldFreeRunning == 1 ? phaseAbsolute   = sldAbsolute;
+phaseAbsolute  += phaseIncrement;
+phaseAbsolute >= 2 *$pi ? phaseAbsolute -= 2 * $pi;
+sldAbsolute = phaseAbsolute;  //Keep the absolute slider in sync with the LFO 
+
+//Retrigger absolute phase if not free running and LFO retrigger note was pressed at this sample
+sldFreeRunning == 0 && ( arrNotesOn[ blockCounter ] & enumNoteOnLFORetrigger ) == enumNoteOnLFORetrigger  ? phaseAbsolute = 0; 
+
+//Update phase which is combination of absolute phase and offset.  Also detect if start of a new cycle so can update random wave types 
+phaseOld = phase;
+phase = phaseAbsolute + phaseOffset;
+phase >= 2 *$pi ?  phase -= 2 * $pi;
+phaseOld > phase ?
+(
+  randomStart = randomEnd;
+  randomEnd = rand( 2 ) - 1;
+//Randomizing PCM width 
+  randAmount = rand( sldPCMWidthRandomize * 2 ) - sldPCMWidthRandomize ;
+  varPCMWidth = sldPCMWidth + randAmount;
+  varPCMWidth  < 0 ? varPCMWidth  = -varPCMWidth  
+  : varPCMWidth  > 100  ? varPCMWidth  = 100 - varPCMWidth ;
+
+  //Randomizing the range
+  randAmount = sldMinMaxRandomize * rand( ( sldMaxAmp - sldMinAmp) * 2 ) / 100;
+  varMinAmp = sldMinAmp + randAmount;
+  randAmount = sldMinMaxRandomize * rand( ( sldMaxAmp - sldMinAmp) * 2 ) / 100;
+  varMaxAmp = sldMaxAmp + randAmount;
+);
+
+//Distort the phase according to user input 
+//Work out the distorted phase value for the first quarter of the sine wave and then apply to the actual phase 
+//x is our position in the first quarter translated and or reflected from other quadrants 
+phase < $pi / 2 ? x = phase 
+: phase < $pi ? x = $pi - phase 
+: phase < $pi*3/2 ? x = phase - $pi 
+: x = 2 * $pi - phase;
+
+//Work out the new distorted phase based on x and whether we are before or after the knee point 
+x <= kx ? 
+(
+  kx > dMin ? phaseNew = x * ky / kx :phaseNew  = ky;
+) : 
+
+//When x is after d then imagine our second line is passing through an origin at pi over 2 and pi over 2.  
+// It extends distance r and has height pi over 2 minus y  and horizontal distance pi over 2 minus d
+// x will be pi over 2 - x, and we need to subtract what we calculate from pi over 2
+(
+  x > dMin ? phaseNew = PIO2 - ( ( PIO2 - x ) * ( PIO2 - ky ) / ( PIO2 - kx ) ) : phaseNew = ky;
+);
+
+//Now transform new phase back to the other quadrants
+phase < $pi/2 ? phaseNew = phaseNew
+: phase < $pi ? phaseNew = $pi - phaseNew 
+: phase < $pi*3/2  ? phaseNew += $pi 
+: phaseNew = 2 *$pi - phaseNew; 
+
+
+//Envelope calculations
+//Convert stages to samples 
+sldTempoSync == 0 ? eFactor = srate :  eFactor = srate * 60 / tempo;
+varEnvelopeDelay = sldEnvelopeDelay * eFactor;
+varEnvelopeAttack = sldEnvelopeAttack * eFactor;
+varEnvelopeHold = sldEnvelopeHold * eFactor;
+varEnvelopeDecay = sldEnvelopeDecay * eFactor;
+varEnvelopeSustainLength = sldEnvelopeSustainLength * eFactor;
+varEnvelopeSustainLevel = sldEnvelopeSustainLevel / 100;
+varEnvelopeRelease = sldEnvelopeRelease * eFactor;
+
+//Calculate rates 
+varEnvelopeAttackRate =  1 / varEnvelopeAttack;
+varEnvelopeDecayRate = 1 / varEnvelopeDecay;
+varEnvelopeReleaseRate = 1 / varEnvelopeRelease;
+
+//If there is an envelope retrigger this sample then push us back to beginning 
+arrNotesOn[ blockCounter ]  & enumNoteOnEnvelopeRetrigger ? 
+(
+  eStage =  enumStageDelay;  
+  eCounter = 0; 
+  e = 0;
+  bInsideEnvelopeRetrigger = 1;
+);
+
+//If the envelope trigger note has just been released and in trigger mode then put the envelope into release stage
+arrNotes[ blockCounter ] & enumNoteOffEnvelopeRetrigger && sldMIDIOnOff == enumMIDIRetriggerOnly ?
+(
+  eStage = enumStageRelease;
+  bInsideEnvelopeRetrigger = 0;
+);
+
+//Do checks for each stage of the envelope to update envelope and progress to next stage if needed 
+eStage == enumStageDelay  ? 
+( 
+  eCounter >= varEnvelopeDelay ? eStage = enumStageAttack;
+)
+: eStage == enumStageAttack ? 
+( 
+  e += varEnvelopeAttackRate;
+  e >= 1 ?
+  (
+    eStage = enumStageHold;
+    eCounter = 0;
+    e = 1;
+  );
+)
+: eStage == enumStageHold ?
+(
+  eCounter >= varEnvelopeHold ? eStage = enumStageDecay;
+)
+: eStage == enumStageDecay ?
+(
+  e -= varEnvelopeDecayRate;
+  e <= varEnvelopeSustainLevel ?
+  (
+    eStage = enumStageSustain;
+    eCounter = 0;
+    e = varEnvelopeSustainLevel;
+    e == 0 ? eStage = enumStageRelease;  //Skip sustain if already at zero 
+  );
+) 
+: eStage == enumStageSustain ?
+(
+  //Only do something if not in trigger mode
+  sldMIDIOnOff != enumMIDIRetriggerOnly ? 
+  (
+    eCounter >= varEnvelopeSustainLength ? eStage = enumStageRelease;
+  );
+)
+: eStage == enumStageRelease ?
+(
+  e -= varEnvelopeReleaseRate;
+  e <= 0 || sldEnvelopeRelease == 0 ?
+  (
+    eStage = enumStageDelay;
+    eCounter = 0;
+    e = 0;
+  );
+);
+
+//Increment eCounter used in delay, hold and sustain length 
+eCounter += 1;
+
+//Zero the envelope if in retrigger mode and envelope trigger note not pressed 
+sldMIDIOnOff == enumMIDIRetriggerOnly && !bInsideEnvelopeRetrigger ?
+(
+  //Exception is if in release stage of envelope 
+  eStage != enumStageRelease ? 
+  (
+    e = 0;
+  );
+);
+  
+//Sine wave 
+sldWaveType == enumWTSine || sldSecondaryWaveType == enumWTSine ? 
+(
+  y =    sin( phaseNew );
+  sldWaveType == enumWTSine ? yPrimary = y; 
+  sldSecondaryWaveType == enumWTSine  ?ySecondary = y;
+);
+
+
+//Square wave
+sldWaveType == enumWTSquare || sldSecondaryWaveType == enumWTSquare ? 
+(  
+  //Calculate how much of the phase is taken up with portomento 
+  sldSymmetry == 0 ? varPCMWidth  < 50 ? minPhase = ( varPCMWidth / 50 ) * $pi * ( sldPortomento / 100 ) : minPhase = ( ( 100 - varPCMWidth) / 50 ) * $pi * ( sldPortomento / 100 )
+  : phase < $pi * varPCMWidth / 50 ? minPhase = ( varPCMWidth / 50 ) * $pi * ( sldPortomento / 100 ) : minPhase = ( ( 100 - varPCMWidth) / 50 ) * $pi * ( sldPortomento / 100 );
+
+  //Calculate y based on which quarter of the cycle we are (part 1 portomento, part 1 beyond portomento, part 2 inside portomento, part 2 beyond portomento )
+  phase < minPhase && phase < $pi * varPCMWidth / 50 ? y = -1 + 2 * phase / minPhase 
+  : phase < $pi * varPCMWidth / 50 ? y = 1 
+  : phase < ( minPhase + $pi * varPCMWidth / 50 ) ?y = 1 -  2 * ( phase - $pi * varPCMWidth / 50 ) / minPhase 
+  : y = -1;
+
+  sldWaveType == enumWTSquare ? yPrimary = y; 
+  sldSecondaryWaveType == enumWTSquare  ?ySecondary = y;
+);
+
+//Triangle  wave
+sldWaveType == enumWTTriangle ||  sldSecondaryWaveType == enumWTTriangle  ?
+(
+  phase < $pi/2 ? y = phaseNew * 2 / $pi 
+  : phase < $pi ? y = ($pi - phaseNew ) * 2 /$pi 
+  : phase < $pi*3/2 ? y = -( phaseNew - $pi  ) * 2 / $pi 
+  : y = ( phaseNew - $pi*2 ) * 2 / $pi;
+  sldWaveType == enumWTTriangle ? yPrimary = y; 
+  sldSecondaryWaveType == enumWTTriangle  ?ySecondary = y;
+);
+
+//Saw left (descending)
+sldWaveType == enumWTSawL || sldSecondaryWaveType == enumWTSawL ?
+(
+  //Work out how much of wave is taken up with portomento 
+  minPhase = 2 * $pi * sldPortomento / 100;
+yPorto = -1 + 2 * phase / minPhase;
+
+  y = 1 - (  phaseNew / $pi );   //Ranges from 1 to -1 
+  //If the portomento is less than the saw then the portomento value is the value we are after 
+  yPorto < y ? y = yPorto;
+
+  sldWaveType == enumWTSawL ? yPrimary = y; 
+  sldSecondaryWaveType == enumWTSawL  ?ySecondary = y;
+);
+
+//Saw right (ascending)
+sldWaveType == enumWTSawR || sldSecondaryWaveType == enumWTSawR  ?
+(
+  //Work out how much of wave is taken up with portomento 
+  minPhase = 2 * $pi * sldPortomento / 100;
+yPorto = 1 - 2 * phase / minPhase;
+
+  y = -1 + ( phaseNew / $pi );   ;//Ranges from -1 to 1 
+  //If porto version of wave is greater than y then this is what we need
+  yPorto > y ? y = yPorto;
+
+
+  sldWaveType == enumWTSawR ? yPrimary = y; 
+
+  sldSecondaryWaveType == enumWTSawR  ?ySecondary = y;
+);
+
+//Random 
+sldWaveType == enumWTRandom || sldSecondaryWaveType == enumWTRandom ?
+(
+  y = randomStart + phase * ( randomEnd - randomStart ) / ( 2 * $pi );
+  sldWaveType == enumWTRandom ? yPrimary = y; 
+  sldSecondaryWaveType == enumWTRandom  ?ySecondary = y;
+);
+
+//Sample and hold 
+sldWaveType == enumWTSampleAndHold || sldSecondaryWaveType == enumWTSampleAndHold  ?
+(
+  //Calculate how much of the phase is taken up with portomento 
+  minPhase = 2 * $pi * ( sldPortomento / 100 );  
+
+  //Calculate y based on whether in portomento or main part of waveform 
+  phase < minPhase ? y = randomStart + ( phase / minPhase  ) * ( randomEnd - randomStart )
+  : y = randomEnd;
+
+  sldWaveType == enumWTSampleAndHold ? yPrimary = y; 
+  sldSecondaryWaveType == enumWTSampleAndHold ?ySecondary = y;
+);
+
+//Blend primary and secondary 
+y = ( 1 - sldBlend / 100 ) * yPrimary    +  sldBlend * ySecondary / 100;
+
+//Invert 
+sldInvert == 1 ? y = -y;
+
+//Rectify 
+sldRectify == 1 && y < 0 ? y *= -1;
+sldRectify == 2 && y < 0 ? y = 0;
+
+
+//Calculate output, the scaled value 
+sldApply == 0 ?
+  output = e * ( ( varMaxAmp - varMinAmp ) * ( y + 1 ) / 2 + varMinAmp )
+: sldApply == 1 ? output =   ( varMaxAmp - varMinAmp ) * ( y + 1 ) / 2 + varMinAmp
+: sldApply == 2 ? output =   e;
+
+//Cap the output to the ceiling and floor values 
+output > varCeiling ? output = varCeiling 
+: output < varFloor ? output = varFloor;
+
+//Also cater for being off or on hold 
+sldOnOffHold == 2 ? output = yHold
+: sldOnOffHold == 1 ? output  = 0;
+
+//MIDI has final say
+( arrNotesOn[ blockCounter ] & enumNoteOnGeneral  ) ?
+(
+  varMidiVolume = varMidiOnVolume;
+      bNoteIsOn = 1;
+);
+( arrNotesOn[ blockCounter ] & enumNoteOffGeneral ) ?
+(
+  varMidiVolume = varMidiOffVolume;
+  bNoteIsOn = 0;
+);
+//If in note on mode and key is not pressed, or in note invert mode and key is pressed, set output to zero 
+( sldMIDIOnOff == enumMIDIOn   && !bNoteIsOn ) || ( sldMIDIOnOff == enumMIDIOnInverted   && bNoteIsOn )  ? output = 0;
+//If the opposite is true then set multiply output by velocity
+( sldMIDIOnOff == enumMIDIOn   && bNoteIsOn ) 
+|| ( sldMIDIOnOff == enumMIDIOnInverted   && !bNoteIsOn )  
+|| ( sldMIDIOnOff == enumMIDIRetriggerOnly ) 
+? output *= varVelocity;
+blockCounter += 1;
+
+//Add on any input signal
+output += sldInput1 +  sldInput2 + sldInput3 + sldInput4 + sldInput5 + sldInput6;
+
+//At last we can update the output slider 
+sldOutput = output; 
+//Finding this more a problem than a help  slider_automate( sldOutput ); 
+
+sldVolumePan == 1 ?
+( 
+//  spl0 *= 2 ^( adjustS / 6 );
+//  spl1 *= 2 ^ ( adjustS / 6 );
+spl0 *= adjustS ;
+spl1 *= adjustS ;
+  adjustS += dAdjust;
+)
+: sldVolumePan == 2 ?
+(
+  adjustS > 0 ?   spl0 *= ( 1 - adjustS );
+  adjustS < 0 ? spl1 *= ( 1 + adjustS );
+  adjustS += dAdjust;
+);
+//End
