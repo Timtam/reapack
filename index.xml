@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="d4feb358646d2b6defa9f82e9e4359be141aaca6">
+<index version="1" name="Toni Barth REAPER Things" commit="852da85f1608ab9a88de382b5bde6147f548d0ac">
   <category name="FX">
     <reapack name="chessel_Chesseq.jsfx" type="effect" desc="ChessSeq Midi sequencer">
       <metadata>
@@ -235,6 +235,12 @@
       </metadata>
       <version name="1.0" author="Chessel (Chris Goodwin)" time="2023-01-07T21:13:57Z">
         <source main="midi_editor">https://github.com/Timtam/reapack/raw/afc172cdaf7649277f87672abf552b246c963f68/MIDI%20Editor/chessel_Speak%20note%20velocity.lua</source>
+      </version>
+    </reapack>
+    <reapack name="ReaperAccessible_Increase or decrease velocity between 2 limits entered by user with tension.lua" type="script" desc="Increase or decrease velocity between 2 limits entered by user with tension">
+      <version name="1.1" author="Lee JULIEN pour Reaper Accessible augmented by Chessel" time="2024-12-18T19:04:08Z">
+        <changelog><![CDATA[initial release]]></changelog>
+        <source main="midi_editor">https://github.com/Timtam/reapack/raw/852da85f1608ab9a88de382b5bde6147f548d0ac/MIDI%20Editor/ReaperAccessible_Increase%20or%20decrease%20velocity%20between%202%20limits%20entered%20by%20user%20with%20tension.lua</source>
       </version>
     </reapack>
     <reapack name="timtam_AccessiChords.lua" type="script" desc="AccessiChords">
