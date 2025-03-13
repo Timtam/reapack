@@ -1,0 +1,174 @@
+about:
+  this plugin can map any note on a 61 key piano to any other note on a 61 key piano. chane the slider values next to note names to remap keys. use c as your reference point all c notes are multiples of 12 c2 is 24 c4 is 48 etc.
+
+  These instructions apply to both the CH 61 and 88 ReMapper plugins.
+  as the name suggests, these plugins are made to remap keys or notes on a midi keyboard. if you are looking for a remapper plugin, you already know what to use it for. but a few use cases include changing the keymaps for different drum plugins to make playing them easier or to make midi groove files work better betweeen different drum plugins, to remap drum pads, make templates for scales you find difficult to play or to repurpose other keys to play dead notes on your piano.
+  these plugins serve only a single purpose, but the interface can be confusing at first, so below is a little guide on how to use these.
+  Note: the only difference between the CH 61 and 88 ReMapper plugins, is the number of notes they can remap. the 88 remapper can remap any note on an 88 key midi keyboard to any other note on an 88 key midi keyboard. while the 61 remapper can do that for a 61 key midi keyboard. so use the version according to your hardware.
+
+  How To Use:
+
+  1. insert the CH ReMapper plugin on the track you wish to remap the incoming midi notes on.
+  2. make sure the ReMapper plugin comes before the virtual instrument you want to control or send the remapped midi data to. reason, the remapper plugin will take the normal midi data, change it and send it to the plugin so it needs to be before the instrument in the fx list.
+  3. open the osara parameter list by pressing "P" on the instrument track and select the CH 61 or 88  ReMapper plugin. hit enter to enter the parameter list.
+  4. you will be presented by 61 or 88 parameters depending on the version you're using. all 61 or 88 parameters represent the notes on a piano that you can remap. all parameters are named according to the note they represent.
+  5. on the 61 key version these notes start from C2 and go up to C7. on the 88 key version this range is A0 to C8, covering the entire range of an 88 key keyboard.
+  6. clicking tab once on a note name will land you to a slider with numbers ranging from 24 to 84 for the 61 key version and 9 to 96 for the 88 key version. changing this number with the arrow keys will change the note that the selected note is mapped to and plays when its pressed.
+  7. every note name is set to a value by default. this value represents their position on the piano. for A0 it is 9 because its the 9th note starting from C0 which we call 0 and will take as a reference point.
+  8. once you know that rest is easy. there are 12 notes in an octave so every c on the piano is a multiple of 12. c1 is 12, c2 is 24, which is the starting nnote on a 61 key piano. c3 is 36, c4 is 48, c5 is 60, c6 is 72, c7 is 84, which is the last key on a 61 key piano and c8 is 96 which is the last key on an 88 key piano.
+  9. you can find the value of other notes relative to the value of c. for example e is the 5th note in an octave, so e2 is 4 (5 minus 1 because 24 is already the first note of the octave) added to 24 which is 28. e4 is 4 added to 48 which is 52. hope it makes sense. a is the 10th note so a4 is 9 added to 48 which is 57.
+  10. and thats it change the value and you're done. yeehaw.
+
+  Disclaimer: the developer of these plugins (me) is blind and not by any means an expert at this. so he (me) cant promise any support if these plugins misbehave or decide to not work. nor will the developer (again me) be responsible for any damage caused to your equipment or brain while using this plugin.
+  that said, if you find these useful and feel like saying thanks you can reach me at imcaesarhope@gmail.com. i can also be found in the reaper access group. happy remapping.
+desc:CH 61 ReMapper
+author:Caesar H (reaper access)
+version:1.0
+changelog:
+  * initial release
+
+slider1:24<24,84,1>C2
+slider2:25<24,84,1>C#2
+slider3:26<24,84,1>D2
+slider4:27<24,84,1>D#2
+slider5:28<24,84,1>E2
+slider6:29<24,84,1>F2
+slider7:30<24,84,1>F#2
+slider8:31<24,84,1>G2
+slider9:32<24,84,1>G#2
+slider10:33<24,84,1>A2
+slider11:34<24,84,1>A#2
+slider12:35<24,84,1>B2
+slider13:36<24,84,1>C3
+slider14:37<24,84,1>C#3
+slider15:38<24,84,1>D3
+slider16:39<24,84,1>D#3
+slider17:40<24,84,1>E3
+slider18:41<24,84,1>F3
+slider19:42<24,84,1>F#3
+slider20:43<24,84,1>G3
+slider21:44<24,84,1>G#3
+slider22:45<24,84,1>A3
+slider23:46<24,84,1>A#3
+slider24:47<24,84,1>B3
+slider25:48<24,84,1>C4
+slider26:49<24,84,1>C#4
+slider27:50<24,84,1>D4
+slider28:51<24,84,1>D#4
+slider29:52<24,84,1>E4
+slider30:53<24,84,1>F4
+slider31:54<24,84,1>F#4
+slider32:55<24,84,1>G4
+slider33:56<24,84,1>G#4
+slider34:57<24,84,1>A4
+slider35:58<24,84,1>A#4
+slider36:59<24,84,1>B4
+slider37:60<24,84,1>C5
+slider38:61<24,84,1>C#5
+slider39:62<24,84,1>D5
+slider40:63<24,84,1>D#5
+slider41:64<24,84,1>E5
+slider42:65<24,84,1>F5
+slider43:66<24,84,1>F#5
+slider44:67<24,84,1>G5
+slider45:68<24,84,1>G#5
+slider46:69<24,84,1>A5
+slider47:70<24,84,1>A#5
+slider48:71<24,84,1>B5
+slider49:72<24,84,1>C6
+slider50:73<24,84,1>C#6
+slider51:74<24,84,1>D6
+slider52:75<24,84,1>D#6
+slider53:76<24,84,1>E6
+slider54:77<24,84,1>F6
+slider55:78<24,84,1>F#6
+slider56:79<24,84,1>G6
+slider57:80<24,84,1>G#6
+slider58:81<24,84,1>A6
+slider59:82<24,84,1>A#6
+slider60:83<24,84,1>B6
+slider61:84<24,84,1>C7
+
+in_pin:none
+out_pin:none
+
+@init
+
+@slider
+
+base = 12;
+note_map[36] = slider1 + base;
+note_map[37] = slider2 + base;
+note_map[38] = slider3 + base;
+note_map[39] = slider4 + base;
+note_map[40] = slider5 + base;
+note_map[41] = slider6 + base;
+note_map[42] = slider7 + base;
+note_map[43] = slider8 + base;
+note_map[44] = slider9 + base;
+note_map[45] = slider10 + base;
+note_map[46] = slider11 + base;
+note_map[47] = slider12 + base;
+note_map[48] = slider13 + base;
+note_map[49] = slider14 + base;
+note_map[50] = slider15 + base;
+note_map[51] = slider16 + base;
+note_map[52] = slider17 + base;
+note_map[53] = slider18 + base;
+note_map[54] = slider19 + base;
+note_map[55] = slider20 + base;
+note_map[56] = slider21 + base;
+note_map[57] = slider22 + base;
+note_map[58] = slider23 + base;
+note_map[59] = slider24 + base;
+note_map[60] = slider25 + base;
+note_map[61] = slider26 + base;
+note_map[62] = slider27 + base;
+note_map[63] = slider28 + base;
+note_map[64] = slider29 + base;
+note_map[65] = slider30 + base;
+note_map[66] = slider31 + base;
+note_map[67] = slider32 + base;
+note_map[68] = slider33 + base;
+note_map[69] = slider34 + base;
+note_map[70] = slider35 + base;
+note_map[71] = slider36 + base;
+note_map[72] = slider37 + base;
+note_map[73] = slider38 + base;
+note_map[74] = slider39 + base;
+note_map[75] = slider40 + base;
+note_map[76] = slider41 + base;
+note_map[77] = slider42 + base;
+note_map[78] = slider43 + base;
+note_map[79] = slider44 + base;
+note_map[80] = slider45 + base;
+note_map[81] = slider46 + base;
+note_map[82] = slider47 + base;
+note_map[83] = slider48 + base;
+note_map[84] = slider49 + base;
+note_map[85] = slider50 + base;
+note_map[86] = slider51 + base;
+note_map[87] = slider52 + base;
+note_map[88] = slider53 + base;
+note_map[89] = slider54 + base;
+note_map[90] = slider55 + base;
+note_map[91] = slider56 + base;
+note_map[92] = slider57 + base;
+note_map[93] = slider58 + base;
+note_map[94] = slider59 + base;
+note_map[95] = slider60 + base;
+note_map[96] = slider61 + base;
+
+@block
+  while (midirecv(offset, msg1, msg2, msg3))
+  (
+    status = msg1 & 0xF0;
+    channel = msg1 & 0x0F;
+
+    (status == 0x90 || status == 0x80) ? (
+      mapped_note = note_map[msg2 % 108];
+      midisend(offset, status | channel, mapped_note, msg3);
+    ) : (
+      midisend(offset, msg1, msg2, msg3);
+    );
+  );

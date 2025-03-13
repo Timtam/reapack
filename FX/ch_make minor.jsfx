@@ -1,0 +1,72 @@
+about:
+  this plugin takes the c major scale keys and maps them to minor scale, all black keys are blocked, change the root note to change key. use the octave offset to make higher keys start at a lower position. range is c2 to c7.
+  disclaimer, im a blind person like most other folks in the reaper access group and not a js expert. so i cant promise any support if this plugin misbehaves or decides to not work. nor will i be responsible for any damage caused to your equipment and brain when trying to use this plugin. 
+  if you find this tool useful and feel like saying thanks, you can reach me at imcaesarhope@gmail.com. i can also be found in the reaper access group; have fun remapping.
+desc:CH Make Minor
+author:Caesar H
+version:1.0
+changelog:
+  * initial release
+
+slider1:0<0,11,1{C,C#,D,D#,E,F,F#,G,G#,A,A#,B}>Route Note
+slider2:0<0,1,1{None,Minus One}>Octave Offset
+
+in_pin:none
+out_pin:none
+
+@init
+
+@slider
+
+base = slider1 - (slider2 * 12);
+
+note_map[36] = 36 + base;
+note_map[38] = 38 + base;
+note_map[40] = 39 + base;
+note_map[41] = 41 + base;
+note_map[43] = 43 + base;
+note_map[45] = 44 + base;
+note_map[47] = 46 + base;
+note_map[48] = 48 + base;
+note_map[50] = 50 + base;
+note_map[52] = 51 + base;
+note_map[53] = 53 + base;
+note_map[55] = 55 + base;
+note_map[57] = 56 + base;
+note_map[59] = 58 + base;
+note_map[60] = 60 + base;
+note_map[62] = 62 + base;
+note_map[64] = 63 + base;
+note_map[65] = 65 + base;
+note_map[67] = 67 + base;
+note_map[69] = 68 + base;
+note_map[71] = 70 + base;
+note_map[72] = 72 + base;
+note_map[74] = 74 + base;
+note_map[76] = 75 + base;
+note_map[77] = 77 + base;
+note_map[79] = 79 + base;
+note_map[81] = 80 + base;
+note_map[83] = 82 + base;
+note_map[84] = 84 + base;
+note_map[86] = 86 + base;
+note_map[88] = 87 + base;
+note_map[89] = 89 + base;
+note_map[91] = 91 + base;
+note_map[93] = 92 + base;
+note_map[95] = 94 + base;
+note_map[96] = 96 + base;
+
+@block
+  while (midirecv(offset, msg1, msg2, msg3))
+  (
+    status = msg1 & 0xF0;
+    channel = msg1 & 0x0F;
+
+    (status == 0x90 || status == 0x80) ? (
+      mapped_note = note_map[msg2 % 108];
+      midisend(offset, status | channel, mapped_note, msg3);
+    ) : (
+      midisend(offset, msg1, msg2, msg3);
+    );
+  );
