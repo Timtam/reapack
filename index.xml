@@ -1,6 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="852da85f1608ab9a88de382b5bde6147f548d0ac">
+<index version="1" name="Toni Barth REAPER Things" commit="9458ca3a7248a7bcd5abdd57738f420f2ccc39cf">
   <category name="FX">
+    <reapack name="ch_61 re-mapper.jsfx" type="effect" desc="CH 61 ReMapper">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 this plugin can map any note on a 61 key piano to any other note on a 61 key piano. chane the slider values next to note names to remap keys. use c as your reference point all c notes are multiples of 12 c2 is 24 c4 is 48 etc.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 These instructions apply to both the CH 61 and 88 ReMapper plugins. as the name suggests, these plugins are made to remap keys or notes on a midi keyboard. if you are looking for a remapper plugin, you already know what to use it for. but a few use cases include changing the keymaps for different drum plugins to make playing them easier or to make midi groove files work better betweeen different drum plugins, to remap drum pads, make templates for scales you find difficult to play or to repurpose other keys to play dead notes on your piano. these plugins serve only a single purpose, but the interface can be confusing at first, so below is a little guide on how to use these. Note: the only difference between the CH 61 and 88 ReMapper plugins, is the number of notes they can remap. the 88 remapper can remap any note on an 88 key midi keyboard to any other note on an 88 key midi keyboard. while the 61 remapper can do that for a 61 key midi keyboard. so use the version according to your hardware.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 How To Use:\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab insert the CH ReMapper plugin on the track you wish to remap the incoming midi notes on.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 2.\tx360\tab make sure the ReMapper plugin comes before the virtual instrument you want to control or send the remapped midi data to. reason, the remapper plugin will take the normal midi data, change it and send it to the plugin so it needs to be before the instrument in the fx list.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 3.\tx360\tab open the osara parameter list by pressing "P" on the instrument track and select the CH 61 or 88 ReMapper plugin. hit enter to enter the parameter list.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 4.\tx360\tab you will be presented by 61 or 88 parameters depending on the version you're using. all 61 or 88 parameters represent the notes on a piano that you can remap. all parameters are named according to the note they represent.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 5.\tx360\tab on the 61 key version these notes start from C2 and go up to C7. on the 88 key version this range is A0 to C8, covering the entire range of an 88 key keyboard.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 6.\tx360\tab clicking tab once on a note name will land you to a slider with numbers ranging from 24 to 84 for the 61 key version and 9 to 96 for the 88 key version. changing this number with the arrow keys will change the note that the selected note is mapped to and plays when its pressed.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 7.\tx360\tab every note name is set to a value by default. this value represents their position on the piano. for A0 it is 9 because its the 9th note starting from C0 which we call 0 and will take as a reference point.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 8.\tx360\tab once you know that rest is easy. there are 12 notes in an octave so every c on the piano is a multiple of 12. c1 is 12, c2 is 24, which is the starting nnote on a 61 key piano. c3 is 36, c4 is 48, c5 is 60, c6 is 72, c7 is 84, which is the last key on a 61 key piano and c8 is 96 which is the last key on an 88 key piano.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 9.\tx360\tab you can find the value of other notes relative to the value of c. for example e is the 5th note in an octave, so e2 is 4 (5 minus 1 because 24 is already the first note of the octave) added to 24 which is 28. e4 is 4 added to 48 which is 52. hope it makes sense. a is the 10th note so a4 is 9 added to 48 which is 57.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 10.\tx360\tab and thats it change the value and you're done. yeehaw.\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Disclaimer: the developer of these plugins (me) is blind and not by any means an expert at this. so he (me) cant promise any support if these plugins misbehave or decide to not work. nor will the developer (again me) be responsible for any damage caused to your equipment or brain while using this plugin. that said, if you find these useful and feel like saying thanks you can reach me at imcaesarhope@gmail.com. i can also be found in the reaper access group. happy remapping.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Caesar H (reaper access)" time="2025-03-13T14:59:33Z">
+        <changelog><![CDATA[* initial release]]></changelog>
+        <source>https://github.com/Timtam/reapack/raw/9458ca3a7248a7bcd5abdd57738f420f2ccc39cf/FX/ch_61%20re-mapper.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="ch_88 re-mapper.jsfx" type="effect" desc="CH 88 ReMapper">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 this plugin can map any note on an 88 key piano to any other note on an 88 key piano. chane the slider values next to note names to remap keys. use c as your reference point all c notes are multiples of 12 c2 is 24 c4 is 48 etc.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 These instructions apply to both the CH 61 and 88 ReMapper plugins. as the name suggests, these plugins are made to remap keys or notes on a midi keyboard. if you are looking for a remapper plugin, you already know what to use it for. but a few use cases include changing the keymaps for different drum plugins to make playing them easier or to make midi groove files work better betweeen different drum plugins, to remap drum pads, make templates for scales you find difficult to play or to repurpose other keys to play dead notes on your piano. these plugins serve only a single purpose, but the interface can be confusing at first, so below is a little guide on how to use these. Note: the only difference between the CH 61 and 88 ReMapper plugins, is the number of notes they can remap. the 88 remapper can remap any note on an 88 key midi keyboard to any other note on an 88 key midi keyboard. while the 61 remapper can do that for a 61 key midi keyboard. so use the version according to your hardware.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 How To Use:\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab insert the CH ReMapper plugin on the track you wish to remap the incoming midi notes on.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 2.\tx360\tab make sure the ReMapper plugin comes before the virtual instrument you want to control or send the remapped midi data to. reason, the remapper plugin will take the normal midi data, change it and send it to the plugin so it needs to be before the instrument in the fx list.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 3.\tx360\tab open the osara parameter list by pressing "P" on the instrument track and select the CH 61 or 88 ReMapper plugin. hit enter to enter the parameter list.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 4.\tx360\tab you will be presented by 61 or 88 parameters depending on the version you're using. all 61 or 88 parameters represent the notes on a piano that you can remap. all parameters are named according to the note they represent.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 5.\tx360\tab on the 61 key version these notes start from C2 and go up to C7. on the 88 key version this range is A0 to C8, covering the entire range of an 88 key keyboard.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 6.\tx360\tab clicking tab once on a note name will land you to a slider with numbers ranging from 24 to 84 for the 61 key version and 9 to 96 for the 88 key version. changing this number with the arrow keys will change the note that the selected note is mapped to and plays when its pressed.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 7.\tx360\tab every note name is set to a value by default. this value represents their position on the piano. for A0 it is 9 because its the 9th note starting from C0 which we call 0 and will take as a reference point.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 8.\tx360\tab once you know that rest is easy. there are 12 notes in an octave so every c on the piano is a multiple of 12. c1 is 12, c2 is 24, which is the starting nnote on a 61 key piano. c3 is 36, c4 is 48, c5 is 60, c6 is 72, c7 is 84, which is the last key on a 61 key piano and c8 is 96 which is the last key on an 88 key piano.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 9.\tx360\tab you can find the value of other notes relative to the value of c. for example e is the 5th note in an octave, so e2 is 4 (5 minus 1 because 24 is already the first note of the octave) added to 24 which is 28. e4 is 4 added to 48 which is 52. hope it makes sense. a is the 10th note so a4 is 9 added to 48 which is 57.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 10.\tx360\tab and thats it change the value and you're done. yeehaw.\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Disclaimer: the developer of these plugins (me) is blind and not by any means an expert at this. so he (me) cant promise any support if these plugins misbehave or decide to not work. nor will the developer (again me) be responsible for any damage caused to your equipment or brain while using this plugin. that said, if you find these useful and feel like saying thanks you can reach me at imcaesarhope@gmail.com. i can also be found in the reaper access group. happy remapping.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Caesar H (reaper access)" time="2025-03-13T14:59:33Z">
+        <changelog><![CDATA[* initial release]]></changelog>
+        <source>https://github.com/Timtam/reapack/raw/9458ca3a7248a7bcd5abdd57738f420f2ccc39cf/FX/ch_88%20re-mapper.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="ch_drum re-mapper.jsfx" type="effect" desc="CH Drum ReMapper">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 this plugin is made to remap keys on a piano or drumpads. it has a range of 24 notes and you can map them to any note from a0 to c8. these two octaves repeat after ending, read the read me file for more information. disclaimer, im a blind person like most other folks in the reaper access group and not a js expert. so i cant promise any support if this plugin misbehaves or decides to not work. nor will i be responsible for any damage caused to your equipment and brain when trying to use this plugin. if you find this little tool useful and feel like saying thanks, you can reach me at imcaesarhope@gmail.com. i can also be found in the reaper access group; have fun remapping.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Caesar H" time="2025-03-13T14:59:33Z">
+        <changelog><![CDATA[* initial release]]></changelog>
+        <source>https://github.com/Timtam/reapack/raw/9458ca3a7248a7bcd5abdd57738f420f2ccc39cf/FX/ch_drum%20re-mapper.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="ch_make minor.jsfx" type="effect" desc="CH Make Minor">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 this plugin takes the c major scale keys and maps them to minor scale, all black keys are blocked, change the root note to change key. use the octave offset to make higher keys start at a lower position. range is c2 to c7. disclaimer, im a blind person like most other folks in the reaper access group and not a js expert. so i cant promise any support if this plugin misbehaves or decides to not work. nor will i be responsible for any damage caused to your equipment and brain when trying to use this plugin. if you find this tool useful and feel like saying thanks, you can reach me at imcaesarhope@gmail.com. i can also be found in the reaper access group; have fun remapping.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Caesar H" time="2025-03-13T14:59:33Z">
+        <changelog><![CDATA[* initial release]]></changelog>
+        <source>https://github.com/Timtam/reapack/raw/9458ca3a7248a7bcd5abdd57738f420f2ccc39cf/FX/ch_make%20minor.jsfx</source>
+      </version>
+    </reapack>
     <reapack name="chessel_Chesseq.jsfx" type="effect" desc="ChessSeq Midi sequencer">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
@@ -699,11 +785,11 @@ https://github.com/Timtam/IntelliFreeze
     </reapack>
   </category>
   <metadata>
-    <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
+    <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
 \widowctrl\hyphauto
 
-{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 ReaPack Repository Template\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 ReaPack Repository Template\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 A template for GitHub-hosted ReaPack repositories with automated {\field{\*\fldinst{HYPERLINK "https://github.com/cfillion/reapack-index"}}{\fldrslt{\ul
 reapack-index
 }}}
