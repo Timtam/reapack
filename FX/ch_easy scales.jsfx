@@ -1,0 +1,80 @@
+about:
+  this plugin maps the selected scales to the white keys on a piano for easier playing. the options are major, natural, harmonic and melodic minor. all black keys are blocked, change the root note to change key. use the octave offset to make higher keys start at a lower position. range is c2 to c7.
+  disclaimer, im a blind person like most other folks in the reaper access group and not a js expert. so i cant promise any support if this plugin misbehaves or decides to not work. nor will i be responsible for any damage caused to your equipment and brain when trying to use this plugin. 
+  if you find this tool useful and feel like saying thanks, you can reach me at imcaesarhope@gmail.com. i can also be found in the reaper access group; have fun playing.
+desc:CH Easy Scales
+author:Caesar H
+version:1.0
+changelog:
+  * initial release
+
+slider1:0<0,3,1{Major,Natural Minor,Harmonic Minor,Melodic Minor}>Scale
+slider2:0<0,11,1{C,C#,D,D#,E,F,F#,G,G#,A,A#,B}>Route Note
+slider3:0<0,1,1{None,Minus One}>Octave Offset
+
+in_pin:none
+out_pin:none
+
+@init
+
+@slider
+
+base = slider2 - (slider3 * 12);
+n1 = base;
+n2 = base;
+n3 = (slider1==0 ? base : base-1);
+n4 = base;
+n5 = base;
+n6 = (slider1==1 || slider1==2 ? base-1 : base);
+n7 = (slider1==1 ? base-1 : base);
+
+note_map[36] = 36 + n1;
+note_map[38] = 38 + n2;
+note_map[40] = 40 + n3;
+note_map[41] = 41 + n4;
+note_map[43] = 43 + n5;
+note_map[45] = 45 + n6;
+note_map[47] = 47 + n7;
+note_map[48] = 48 + n1;
+note_map[50] = 50 + n2;
+note_map[52] = 52 + n3;
+note_map[53] = 53 + n4;
+note_map[55] = 55 + n5;
+note_map[57] = 57 + n6;
+note_map[59] = 59 + n7;
+note_map[60] = 60 + n1;
+note_map[62] = 62 + n2;
+note_map[64] = 64 + n3;
+note_map[65] = 65 + n4;
+note_map[67] = 67 + n5;
+note_map[69] = 69 + n6;
+note_map[71] = 71 + n7;
+note_map[72] = 72 + n1;
+note_map[74] = 74 + n2;
+note_map[76] = 76 + n3;
+note_map[77] = 77 + n4;
+note_map[79] = 79 + n5;
+note_map[81] = 81 + n6;
+note_map[83] = 83 + n7;
+note_map[84] = 84 + n1;
+note_map[86] = 86 + n2;
+note_map[88] = 88 + n3;
+note_map[89] = 89 + n4;
+note_map[91] = 91 + n5;
+note_map[93] = 93 + n6;
+note_map[95] = 95 + n7;
+note_map[96] = 96 + n1;
+
+@block
+  while (midirecv(offset, msg1, msg2, msg3))
+  (
+    status = msg1 & 0xF0;
+    channel = msg1 & 0x0F;
+
+    (status == 0x90 || status == 0x80) ? (
+      mapped_note = note_map[msg2 % 108];
+      midisend(offset, status | channel, mapped_note, msg3);
+    ) : (
+      midisend(offset, msg1, msg2, msg3);
+    );
+  );
