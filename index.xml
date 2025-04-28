@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="1756ad29b0ec0b61ec55bfe4d94b92c53cab7c82">
+<index version="1" name="Toni Barth REAPER Things" commit="a1bed436581cb4c022a9ffc51c5a936b585fe749">
   <category name="FX">
     <reapack name="ch_61 re-mapper.jsfx" type="effect" desc="CH 61 ReMapper">
       <metadata>
@@ -566,7 +566,7 @@ https://github.com/Timtam/AccessiChords
     </reapack>
     <reapack name="timtam_IntelliQuant.lua" type="script" desc="IntelliQuant">
       <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
 \widowctrl\hyphauto
 
@@ -615,6 +615,20 @@ https://github.com/Timtam/AccessiChords
         <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant set parameters for 8th triplet note quantization.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b3/timtam_IntelliQuant/timtam_IntelliQuant%20set%20parameters%20for%208th%20triplet%20note%20quantization.lua</source>
         <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant set parameters for quintuplet note quantization.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b3/timtam_IntelliQuant/timtam_IntelliQuant%20set%20parameters%20for%20quintuplet%20note%20quantization.lua</source>
         <source file="timtam_IntelliQuant/timtam_IntelliQuant.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b3/timtam_IntelliQuant/timtam_IntelliQuant.lua</source>
+      </version>
+      <version name="1.0b4" author="Toni Barth (Timtam)" time="2025-04-28T12:16:14Z">
+        <changelog><![CDATA[added new action to report selected note positions]]></changelog>
+        <source file="timtam_IntelliQuant/smallfolk.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b4/timtam_IntelliQuant/smallfolk.lua</source>
+        <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant report selected note positions.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b4/timtam_IntelliQuant/timtam_IntelliQuant%20report%20selected%20note%20positions.lua</source>
+        <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant quantize.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b4/timtam_IntelliQuant/timtam_IntelliQuant%20quantize.lua</source>
+        <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant set parameters for 16th note quantization.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b4/timtam_IntelliQuant/timtam_IntelliQuant%20set%20parameters%20for%2016th%20note%20quantization.lua</source>
+        <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant set parameters for 16th triplet note quantization.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b4/timtam_IntelliQuant/timtam_IntelliQuant%20set%20parameters%20for%2016th%20triplet%20note%20quantization.lua</source>
+        <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant set parameters for 32nd note quantization.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b4/timtam_IntelliQuant/timtam_IntelliQuant%20set%20parameters%20for%2032nd%20note%20quantization.lua</source>
+        <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant set parameters for 4th note quantization.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b4/timtam_IntelliQuant/timtam_IntelliQuant%20set%20parameters%20for%204th%20note%20quantization.lua</source>
+        <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant set parameters for 8th note quantization.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b4/timtam_IntelliQuant/timtam_IntelliQuant%20set%20parameters%20for%208th%20note%20quantization.lua</source>
+        <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant set parameters for 8th triplet note quantization.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b4/timtam_IntelliQuant/timtam_IntelliQuant%20set%20parameters%20for%208th%20triplet%20note%20quantization.lua</source>
+        <source main="midi_editor" file="timtam_IntelliQuant/timtam_IntelliQuant set parameters for quintuplet note quantization.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b4/timtam_IntelliQuant/timtam_IntelliQuant%20set%20parameters%20for%20quintuplet%20note%20quantization.lua</source>
+        <source file="timtam_IntelliQuant/timtam_IntelliQuant.lua">https://github.com/Timtam/IntelliQuant/raw/v1.0b4/timtam_IntelliQuant/timtam_IntelliQuant.lua</source>
       </version>
     </reapack>
   </category>
