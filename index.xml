@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="a1bed436581cb4c022a9ffc51c5a936b585fe749">
+<index version="1" name="Toni Barth REAPER Things" commit="7b0560680be4eab3174886a5c66feb3ba79f42d7">
   <category name="FX">
     <reapack name="ch_61 re-mapper.jsfx" type="effect" desc="CH 61 ReMapper">
       <metadata>
@@ -745,6 +745,22 @@ https://github.com/Timtam/AccessiChords
       </metadata>
       <version name="1.0" author="Chessel (Chris Goodwin)" time="2022-11-24T16:42:09Z">
         <source main="main">https://github.com/Timtam/reapack/raw/fc905baddaf27285ba2784d737f9c6cb32db7267/Various/chessel_Unfreeze%20track%20and%20remove%20text%20from%20track%20name.lua</source>
+      </version>
+    </reapack>
+    <reapack name="timtam_Export markers in relation to items on selected track.lua" type="script" desc="Export markers in relation to items on selected track">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 This script will export all markers on the selected track in relation to the items on said track. The resulting list of markers will be copied to the clipboard and look like the following. track \{item_number\}, \{time_into_item\}, \{marker_text\} Example:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Track 1, 00:00:01.000, Marker 1 text Track 2, 00:03:05.271, you need to cut a breath here Track 7, 01:05:00.022, cut that outtake\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Toni Barth (Timtam)" time="2025-05-24T15:46:09Z">
+        <changelog><![CDATA[initial release]]></changelog>
+        <source main="main">https://github.com/Timtam/reapack/raw/7b0560680be4eab3174886a5c66feb3ba79f42d7/Various/timtam_Export%20markers%20in%20relation%20to%20items%20on%20selected%20track.lua</source>
       </version>
     </reapack>
     <reapack name="timtam_IntelliFreeze.lua" type="script" desc="IntelliFreeze">
