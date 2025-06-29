@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="7b0560680be4eab3174886a5c66feb3ba79f42d7">
+<index version="1" name="Toni Barth REAPER Things" commit="dfbb04b443c9660b1375a0bd3f129317de212613">
   <category name="FX">
     <reapack name="ch_61 re-mapper.jsfx" type="effect" desc="CH 61 ReMapper">
       <metadata>
@@ -761,6 +761,10 @@ https://github.com/Timtam/AccessiChords
       <version name="1.0" author="Toni Barth (Timtam)" time="2025-05-24T15:46:09Z">
         <changelog><![CDATA[initial release]]></changelog>
         <source main="main">https://github.com/Timtam/reapack/raw/7b0560680be4eab3174886a5c66feb3ba79f42d7/Various/timtam_Export%20markers%20in%20relation%20to%20items%20on%20selected%20track.lua</source>
+      </version>
+      <version name="1.1" author="Toni Barth (Timtam)" time="2025-06-29T18:48:52Z">
+        <changelog><![CDATA[use the item take name instead of enumerating tracks]]></changelog>
+        <source main="main">https://github.com/Timtam/reapack/raw/dfbb04b443c9660b1375a0bd3f129317de212613/Various/timtam_Export%20markers%20in%20relation%20to%20items%20on%20selected%20track.lua</source>
       </version>
     </reapack>
     <reapack name="timtam_IntelliFreeze.lua" type="script" desc="IntelliFreeze">
