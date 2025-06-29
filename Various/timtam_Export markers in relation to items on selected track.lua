@@ -1,5 +1,5 @@
 -- @description Export markers in relation to items on selected track
--- @version 1.0
+-- @version 1.1
 -- @about 
 --   This script will export all markers on the selected track in relation to the items on said track.
 --   The resulting list of markers will be copied to the clipboard and look like the following.
@@ -11,7 +11,7 @@
 --   Track 7, 01:05:00.022, cut that outtake
 -- @author Toni Barth (Timtam)
 -- @changelog
---   initial release
+--   use the item take name instead of enumerating tracks
 
 -- Function to format time in hh:mm:ss.sss
 local function format_time(time)
@@ -39,10 +39,16 @@ function main()
     local item_start = reaper.GetMediaItemInfo_Value(item, "D_POSITION")
     local item_length = reaper.GetMediaItemInfo_Value(item, "D_LENGTH")
     local item_end = item_start + item_length
-    items[#items + 1] = {
-      item_start = item_start,
-      item_end = item_end
-    }
+    local take = reaper.GetActiveTake(item)
+
+    if take ~= nil then
+      local _, name = reaper.GetSetMediaItemTakeInfo_String(take, "P_NAME", "", false)
+      items[#items + 1] = {
+        item_start = item_start,
+        item_end = item_end,
+        item_name = name
+      }
+    end
   end
                 
   -- Get number of project markers and regions
@@ -56,19 +62,19 @@ function main()
     local retval, isrgn, pos, _, name, markrgnindex, _ = reaper.EnumProjectMarkers(i)
     if not isrgn then
       local marker_time = pos
-      local track_number = "unknown"
+      local track_name = "unknown"
       local relative_time = 0
         
       for j = 1, #items do
         -- Check if marker time is within item time range
         if marker_time >= items[j].item_start and marker_time <= items[j].item_end then
-          track_number = j  -- Track number (1-based)
+          track_name = items[j].item_name
           relative_time = marker_time - items[j].item_start
           break
         end
       end
 
-      output = output .. string.format("Track %s: %s, %s\n", track_number, format_time(relative_time), name or (tostring(i + 1)))
+      output = output .. string.format("%s: %s, %s\n", track_name, format_time(relative_time), name or (tostring(i + 1)))
     end
   end
 
