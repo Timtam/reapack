@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="dfbb04b443c9660b1375a0bd3f129317de212613">
+<index version="1" name="Toni Barth REAPER Things" commit="5f2370485943b5facab00e291b0b8e92efd24f8d">
   <category name="FX">
+    <reapack name="acer_2mfilter.jsfx" type="effect" desc="2 mode filter">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 This is a combination high pass and low pass filter. It can be used for each function independently. available parameters and their functions follow filter mode: sets the filter mode to either low or high pass frequency (hz): determins the cutoff frequency for the filter. Default is 1000 role off rate (db/oct: sets the level of roleoff for frequencies at and above/ below the cutoff frequency, depending on mode, in 12 db per octave steps. Default is 12 db per octave, and it goes all the way to 72 db per octave. resinence (cue): determins how much resinence is added near the cutoff point. Default is 0.707, which is quite flat. Lowering the value atteunuates frequencies near the cutoff, while raising it boosts them. gain (db): sets the over all gain of the output from the effect. Default is 0 db, and it can go from -24 to 24 db.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.2" author="acer bt and claude" time="2025-11-03T20:47:41Z">
+        <source>https://github.com/Timtam/reapack/raw/5f2370485943b5facab00e291b0b8e92efd24f8d/FX/acer_2mfilter.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="acer_mechanize.jsfx" type="effect" desc="mechanizer (inspired by gold wave)">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 This is a modulation effect, inspired by the Mechanize effect available in gold wave. It only has 2 controls, explained below. modulation frequency (hz): sets the frequency of the modulation. It defaults to 100 hz, but can go from 1 hz to 20000. waveform: selects the modulation wave form. Default is sign, but it also supports triangle, and a modified square wave, which maintains bass frequencies when used.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="acer bt and claude" time="2025-11-03T20:47:41Z">
+        <source>https://github.com/Timtam/reapack/raw/5f2370485943b5facab00e291b0b8e92efd24f8d/FX/acer_mechanize.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="acer_precision_pcm.jsfx" type="effect" desc="precision PCM">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 This effect started as an attempt to make a bitcrusher with detailed controls, but has since become a pcm output simulator. It acts like a regular bitcrusher in that it can do bit reduction and bad resampling, but it can also do a lot more. Below is a list of the available parameters and there functions. sample rate (hz): sets the rate that the plugin will resample audio to. The default is 44100 hz, and it can go from 100 hz to 192000 hz. interpolation mode: sets the interpolation mode used when processing samples. The default is set to sample and hold, for retro purposes, but it also includes linear, cubic, and band limited modes. Band limited combines cubick interpolation with a low pass filter just before the final output, to get as close to high quality reconstruction as possible. prefilter (antialiasing): this applies low pass filtering before the down sampling step, to reduce frequencies that would cause fold over aliasing. It's disabled by default. prefilter role off (db/oct): sets the role off rate for the prefilter, which determins how much frequencies above the prefilter frequency are attenuated. 12 db per octave is default, it can go in 12 db steps all the way to 72 db per octave. Do note that you will need steeper role offs for antialiasing at lower samplerates if you want it to sound clean. band limit roleoff (db/oct: similar to the roleoff for the prefilter, but it affects the role off rate for the band limiting filter used just before the output when interpolation mode is set to band limited. It defaults to 48 db per octave, and goes from 12 to 72 dbp per octave in 12 db steps. bit depth crushing (enabled/ disabled): determins if the bit reduction component of the effect is on or off. It defaults to off. bit depth: sets the target bit depth to crush to. Default is 16, and it can go from 1 to 24 bit. Lower bit depths introduce more noise into the signal and lower dynamic range. crush mode (gated/ no gate): determins if the bit crushing gates the output, or keeps a constant noise floor below the sound at lower bit depths. Default is no gate. isolation filter (high pass): this switch toggles the state of a high pass filter which can be used to filter for just aliasing/ sample and hold artafacts. It defaults to off. isolation filter role off (db/oct): determins how much frequencies below the cutoff point of the isolation filter are roled off. It defaults to 12 db per octave, and has the same value choices as the other filters in this plugin. output gain (db): sets the final output level after processing. Default is 0 db, and it ranges from -24 to 24 db. output mode (stereo/mono): sets if the plugin outputs in stereo, or sums both channels to mono before outputting. Default is stereo\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.4" author="acer bt and claude" time="2025-11-03T20:47:41Z">
+        <source>https://github.com/Timtam/reapack/raw/5f2370485943b5facab00e291b0b8e92efd24f8d/FX/acer_precision_pcm.jsfx</source>
+      </version>
+    </reapack>
     <reapack name="ch_61 re-mapper.jsfx" type="effect" desc="CH 61 ReMapper">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
