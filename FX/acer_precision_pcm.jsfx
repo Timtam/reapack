@@ -1,0 +1,594 @@
+desc:precision PCM
+author:acer bt and claude
+version:1.4
+tags:bitcrusher distortion retro samplerate
+about:
+	This effect started as an attempt to make a bitcrusher with detailed controls, but has since become a pcm output simulator. It acts like a regular bitcrusher in that it can do bit reduction and bad resampling, but it can also do a lot more. Below is a list of the available parameters and there functions.
+	sample rate (hz): sets the rate that the plugin will resample audio to. The default is 44100 hz, and it can go from 100 hz to 192000 hz.
+	interpolation mode: sets the interpolation mode used when processing samples. The default is set to sample and hold, for retro purposes, but it also includes linear, cubic, and band limited modes. Band limited combines cubick interpolation with a low pass filter just before the final output, to get as close to high quality reconstruction as possible.
+	prefilter (antialiasing): this applies low pass filtering before the down sampling step, to reduce frequencies that would cause fold over aliasing. It's disabled by default.
+	prefilter role off (db/oct): sets the role off rate for the prefilter, which determins how much frequencies above the prefilter frequency are attenuated. 12 db per octave is default, it can go in 12 db steps all the way to 72 db per octave. Do note that you will need steeper role offs for antialiasing at lower samplerates if you want it to sound clean.
+	band limit roleoff (db/oct: similar to the roleoff for the prefilter, but it affects the role off rate for the band limiting filter used just before the output when interpolation mode is set to band limited. It defaults to 48 db per octave, and goes from 12 to 72 dbp per octave in 12 db steps.
+	bit depth crushing (enabled/ disabled): determins if the bit reduction component of the effect is on or off. It defaults to off.
+	bit depth: sets the target bit depth to crush to. Default is 16, and it can go from 1 to 24 bit. Lower bit depths introduce more noise into the signal and lower dynamic range.
+	crush mode (gated/ no gate): determins if the bit crushing gates the output, or keeps a constant noise floor below the sound at lower bit depths. Default is no gate.
+	isolation filter (high pass): this switch toggles the state of a high pass filter which can be used to filter for just aliasing/ sample and hold artafacts. It defaults to off.
+	isolation filter role off (db/oct): determins how much frequencies below the cutoff point of the isolation filter are roled off. It defaults to 12 db per octave, and has the same value choices as the other filters in this plugin.
+	output gain (db): sets the final output level after processing. Default is 0 db, and it ranges from -24 to 24 db.
+	output mode (stereo/mono): sets if the plugin outputs in stereo, or sums both channels to mono before outputting. Default is stereo
+
+slider1:44100<100,192000,10>Sample Rate (Hz)
+slider2:0<0,3,1{Sample & Hold,Linear,Cubic,Band-Limited}>Interpolation Mode
+slider3:0<0,1,1{Disabled,Enabled}>Pre-Filter (Anti-Aliasing)
+slider4:0<1,6,1{12 dB/oct,24 dB/oct,36 dB/oct,48 dB/oct,60 dB/oct,72 dB/oct}>Pre-Filter Rolloff
+slider5:3<1,6,1{12 dB/oct,24 dB/oct,36 dB/oct,48 dB/oct,60 dB/oct,72 dB/oct}>Band-Limit Rolloff
+slider6:0<0,1,1{Disabled,Enabled}>Bit Depth Crushing
+slider7:16<1,24,1>Bit Depth
+slider8:0<0,1,1{No Gate,Gated}>Crush Mode
+slider9:0<0,1,1{Disabled,Enabled}>Isolation Filter (HPF)
+slider10:0<1,6,1{12 dB/oct,24 dB/oct,36 dB/oct,48 dB/oct,60 dB/oct,72 dB/oct}>Isolation Filter Rolloff
+slider11:0<-24,24,0.1>Output Gain (dB)
+slider12:0<0,1,1{Stereo,Mono}>Output Mode
+
+in_pin:left input
+in_pin:right input
+out_pin:left output
+out_pin:right output
+
+@init
+initialized = 0;
+
+// Anti-aliasing filter state variables - multiple stages
+x1_l = x2_l = y1_l = y2_l = 0;
+x1_r = x2_r = y1_r = y2_r = 0;
+x1_l2 = x2_l2 = y1_l2 = y2_l2 = 0;
+x1_r2 = x2_r2 = y1_r2 = y2_r2 = 0;
+x1_l3 = x2_l3 = y1_l3 = y2_l3 = 0;
+x1_r3 = x2_r3 = y1_r3 = y2_r3 = 0;
+x1_l4 = x2_l4 = y1_l4 = y2_l4 = 0;
+x1_r4 = x2_r4 = y1_r4 = y2_r4 = 0;
+x1_l5 = x2_l5 = y1_l5 = y2_l5 = 0;
+x1_r5 = x2_r5 = y1_r5 = y2_r5 = 0;
+x1_l6 = x2_l6 = y1_l6 = y2_l6 = 0;
+x1_r6 = x2_r6 = y1_r6 = y2_r6 = 0;
+
+// Band-limit reconstruction filter state variables
+bx1_l = bx2_l = by1_l = by2_l = 0;
+bx1_r = bx2_r = by1_r = by2_r = 0;
+bx1_l2 = bx2_l2 = by1_l2 = by2_l2 = 0;
+bx1_r2 = bx2_r2 = by1_r2 = by2_r2 = 0;
+bx1_l3 = bx2_l3 = by1_l3 = by2_l3 = 0;
+bx1_r3 = bx2_r3 = by1_r3 = by2_r3 = 0;
+bx1_l4 = bx2_l4 = by1_l4 = by2_l4 = 0;
+bx1_r4 = bx2_r4 = by1_r4 = by2_r4 = 0;
+bx1_l5 = bx2_l5 = by1_l5 = by2_l5 = 0;
+bx1_r5 = bx2_r5 = by1_r5 = by2_r5 = 0;
+bx1_l6 = bx2_l6 = by1_l6 = by2_l6 = 0;
+bx1_r6 = bx2_r6 = by1_r6 = by2_r6 = 0;
+
+// Isolation filter state variables
+px1_l = px2_l = py1_l = py2_l = 0;
+px1_r = px2_r = py1_r = py2_r = 0;
+px1_l2 = px2_l2 = py1_l2 = py2_l2 = 0;
+px1_r2 = px2_r2 = py1_r2 = py2_r2 = 0;
+px1_l3 = px2_l3 = py1_l3 = py2_l3 = 0;
+px1_r3 = px2_r3 = py1_r3 = py2_r3 = 0;
+px1_l4 = px2_l4 = py1_l4 = py2_l4 = 0;
+px1_r4 = px2_r4 = py1_r4 = py2_r4 = 0;
+px1_l5 = px2_l5 = py1_l5 = py2_l5 = 0;
+px1_r5 = px2_r5 = py1_r5 = py2_r5 = 0;
+px1_l6 = px2_l6 = py1_l6 = py2_l6 = 0;
+px1_r6 = px2_r6 = py1_r6 = py2_r6 = 0;
+
+// Sample rate reduction variables
+phase_accum_l = phase_accum_r = 0;
+held_l = held_r = 0;
+prev_held_l = prev_held_r = 0;
+pprev_held_l = pprev_held_r = 0;
+
+pi = $pi;
+
+function biquad_lp(input, freq, q)
+local(w, cosw, sinw, alpha, b0, b1, b2, a0, a1, a2, output)
+(
+  w = 2 * pi * freq / srate;
+  cosw = cos(w);
+  sinw = sin(w);
+  alpha = sinw / (2 * q);
+  
+  b0 = (1 - cosw) / 2;
+  b1 = 1 - cosw;
+  b2 = (1 - cosw) / 2;
+  a0 = 1 + alpha;
+  a1 = -2 * cosw;
+  a2 = 1 - alpha;
+  
+  b0 /= a0; b1 /= a0; b2 /= a0;
+  a1 /= a0; a2 /= a0;
+  
+  output = b0*input + b1*x1 + b2*x2 - a1*y1 - a2*y2;
+  
+  x2 = x1; x1 = input;
+  y2 = y1; y1 = output;
+  
+  output;
+);
+
+function biquad_hp(input, freq, q)
+local(w, cosw, sinw, alpha, b0, b1, b2, a0, a1, a2, output)
+(
+  w = 2 * pi * freq / srate;
+  cosw = cos(w);
+  sinw = sin(w);
+  alpha = sinw / (2 * q);
+  
+  b0 = (1 + cosw) / 2;
+  b1 = -(1 + cosw);
+  b2 = (1 + cosw) / 2;
+  a0 = 1 + alpha;
+  a1 = -2 * cosw;
+  a2 = 1 - alpha;
+  
+  b0 /= a0; b1 /= a0; b2 /= a0;
+  a1 /= a0; a2 /= a0;
+  
+  output = b0*input + b1*x1 + b2*x2 - a1*y1 - a2*y2;
+  
+  x2 = x1; x1 = input;
+  y2 = y1; y1 = output;
+  
+  output;
+);
+
+function bit_crush(input, bits, gated)
+local(levels, step, crushed, gate_threshold)
+(
+  bits <= 1 ? (
+    input >= 0 ? 1 : -1;
+  ) : (
+    levels = pow(2, bits);
+    step = 2.0 / levels;
+    
+    crushed = floor((input + 1.0) / step) * step - 1.0;
+    
+    gated ? (
+      gate_threshold = step * 0.5;
+      abs(input) < gate_threshold ? 0 : crushed;
+    ) : (
+      crushed;
+    );
+  );
+);
+
+function linear_interp(frac, prev, curr)
+(
+  prev + (curr - prev) * frac
+);
+
+function cubic_interp(frac, pprev, prev, curr, next)
+local(a0, a1, a2, a3, f2, f3)
+(
+  f2 = frac * frac;
+  f3 = f2 * frac;
+  
+  a0 = -0.5 * pprev + 1.5 * prev - 1.5 * curr + 0.5 * next;
+  a1 = pprev - 2.5 * prev + 2 * curr - 0.5 * next;
+  a2 = -0.5 * pprev + 0.5 * curr;
+  a3 = prev;
+  
+  a0 * f3 + a1 * f2 + a2 * frac + a3
+);
+
+@slider
+// Sample rate reduction settings (sliders 1-2)
+target_rate = max(100, min(slider1, srate));
+interp_mode = floor(slider2);
+
+// Pre-filter settings (sliders 3-4)
+prefilter = slider3;
+pre_stages = slider4;
+
+// Band-limit settings (slider 5)
+bandlimit_stages = slider5;
+
+// Bit crushing settings (sliders 6-8)
+btcrush = slider6;
+bit_depth = max(1, min(slider7, 24));
+crushgate = slider8;
+
+// Isolation filter settings (sliders 9-10)
+postfilter = slider9;
+isolation_stages = slider10;
+
+// Output settings (sliders 11-12)
+gain = pow(10, slider11 / 20);
+mono_mode = slider12;
+
+// Calculate filter frequencies with rolloff compensation
+// Higher order filters can get closer to Nyquist without aliasing
+// Pre-filter: conservative (prevents aliasing on downsample)
+pre_stages == 1 ? (
+  nyquist_freq = target_rate * 0.42;  // 12 dB/oct - most conservative
+) : pre_stages == 2 ? (
+  nyquist_freq = target_rate * 0.44;  // 24 dB/oct
+) : pre_stages == 3 ? (
+  nyquist_freq = target_rate * 0.46;  // 36 dB/oct
+) : pre_stages == 4 ? (
+  nyquist_freq = target_rate * 0.47;  // 48 dB/oct
+) : pre_stages == 5 ? (
+  nyquist_freq = target_rate * 0.48;  // 60 dB/oct
+) : (
+  nyquist_freq = target_rate * 0.485; // 72 dB/oct - steepest, closest to Nyquist
+);
+
+// Band-limit reconstruction: can be more aggressive (removes interpolation artifacts)
+bandlimit_stages == 1 ? (
+  bandlimit_freq = target_rate * 0.44;  // 12 dB/oct
+) : bandlimit_stages == 2 ? (
+  bandlimit_freq = target_rate * 0.46;  // 24 dB/oct
+) : bandlimit_stages == 3 ? (
+  bandlimit_freq = target_rate * 0.475; // 36 dB/oct
+) : bandlimit_stages == 4 ? (
+  bandlimit_freq = target_rate * 0.485; // 48 dB/oct
+) : bandlimit_stages == 5 ? (
+  bandlimit_freq = target_rate * 0.49;  // 60 dB/oct
+) : (
+  bandlimit_freq = target_rate * 0.495; // 72 dB/oct - very close to Nyquist
+);
+
+@sample
+
+input_l = spl0;
+input_r = spl1;
+
+// Mono conversion (if enabled)
+mono_mode ? (
+  mono_sum = (input_l + input_r) * 0.5;
+  input_l = mono_sum;
+  input_r = mono_sum;
+);
+
+// Step 1: Pre-filter (Anti-aliasing, if enabled)
+prefilter ? (
+  x1 = x1_l; x2 = x2_l; y1 = y1_l; y2 = y2_l;
+  filtered_l = biquad_lp(input_l, nyquist_freq, 0.707);
+  x1_l = x1; x2_l = x2; y1_l = y1; y2_l = y2;
+  
+  x1 = x1_r; x2 = x2_r; y1 = y1_r; y2 = y2_r;
+  filtered_r = biquad_lp(input_r, nyquist_freq, 0.707);
+  x1_r = x1; x2_r = x2; y1_r = y1; y2_r = y2;
+  
+  pre_stages > 1 ? (
+    x1 = x1_l2; x2 = x2_l2; y1 = y1_l2; y2 = y2_l2;
+    filtered_l = biquad_lp(filtered_l, nyquist_freq, 0.707);
+    x1_l2 = x1; x2_l2 = x2; y1_l2 = y1; y2_l2 = y2;
+    
+    x1 = x1_r2; x2 = x2_r2; y1 = y1_r2; y2 = y2_r2;
+    filtered_r = biquad_lp(filtered_r, nyquist_freq, 0.707);
+    x1_r2 = x1; x2_r2 = x2; y1_r2 = y1; y2_r2 = y2;
+  );
+  
+  pre_stages > 2 ? (
+    x1 = x1_l3; x2 = x2_l3; y1 = y1_l3; y2 = y2_l3;
+    filtered_l = biquad_lp(filtered_l, nyquist_freq, 0.707);
+    x1_l3 = x1; x2_l3 = x2; y1_l3 = y1; y2_l3 = y2;
+    
+    x1 = x1_r3; x2 = x2_r3; y1 = y1_r3; y2 = y2_r3;
+    filtered_r = biquad_lp(filtered_r, nyquist_freq, 0.707);
+    x1_r3 = x1; x2_r3 = x2; y1_r3 = y1; y2_r3 = y2;
+  );
+  
+  pre_stages > 3 ? (
+    x1 = x1_l4; x2 = x2_l4; y1 = y1_l4; y2 = y2_l4;
+    filtered_l = biquad_lp(filtered_l, nyquist_freq, 0.707);
+    x1_l4 = x1; x2_l4 = x2; y1_l4 = y1; y2_l4 = y2;
+    
+    x1 = x1_r4; x2 = x2_r4; y1 = y1_r4; y2 = y2_r4;
+    filtered_r = biquad_lp(filtered_r, nyquist_freq, 0.707);
+    x1_r4 = x1; x2_r4 = x2; y1_r4 = y1; y2_r4 = y2;
+  );
+  
+  pre_stages > 4 ? (
+    x1 = x1_l5; x2 = x2_l5; y1 = y1_l5; y2 = y2_l5;
+    filtered_l = biquad_lp(filtered_l, nyquist_freq, 0.707);
+    x1_l5 = x1; x2_l5 = x2; y1_l5 = y1; y2_l5 = y2;
+    
+    x1 = x1_r5; x2 = x2_r5; y1 = y1_r5; y2 = y2_r5;
+    filtered_r = biquad_lp(filtered_r, nyquist_freq, 0.707);
+    x1_r5 = x1; x2_r5 = x2; y1_r5 = y1; y2_r5 = y2;
+  );
+  
+  pre_stages > 5 ? (
+    x1 = x1_l6; x2 = x2_l6; y1 = y1_l6; y2 = y2_l6;
+    filtered_l = biquad_lp(filtered_l, nyquist_freq, 0.707);
+    x1_l6 = x1; x2_l6 = x2; y1_l6 = y1; y2_l6 = y2;
+    
+    x1 = x1_r6; x2 = x2_r6; y1 = y1_r6; y2 = y2_r6;
+    filtered_r = biquad_lp(filtered_r, nyquist_freq, 0.707);
+    x1_r6 = x1; x2_r6 = x2; y1_r6 = y1; y2_r6 = y2;
+  );
+) : (
+  filtered_l = input_l;
+  filtered_r = input_r;
+);
+
+// Step 2: Sample rate reduction with interpolation
+target_rate < srate ? (
+  rate_ratio = target_rate / srate;
+  phase_accum_l += rate_ratio;
+  phase_accum_r += rate_ratio;
+  
+  phase_accum_l >= 1.0 ? (
+    pprev_held_l = prev_held_l;
+    prev_held_l = held_l;
+    held_l = filtered_l;
+    phase_accum_l -= 1.0;
+  );
+  
+  phase_accum_r >= 1.0 ? (
+    pprev_held_r = prev_held_r;
+    prev_held_r = held_r;
+    held_r = filtered_r;
+    phase_accum_r -= 1.0;
+  );
+  
+  // Interpolate based on mode
+  interp_mode == 0 ? (
+    resampled_l = held_l;
+    resampled_r = held_r;
+  ) : interp_mode == 1 ? (
+    resampled_l = linear_interp(phase_accum_l, prev_held_l, held_l);
+    resampled_r = linear_interp(phase_accum_r, prev_held_r, held_r);
+  ) : (
+    // Modes 2 and 3 both use cubic interpolation
+    resampled_l = cubic_interp(phase_accum_l, pprev_held_l, prev_held_l, held_l, held_l);
+    resampled_r = cubic_interp(phase_accum_r, pprev_held_r, prev_held_r, held_r, held_r);
+  );
+) : (
+  resampled_l = filtered_l;
+  resampled_r = filtered_r;
+);
+
+// Step 3: Bit depth crushing (if enabled)
+btcrush ? (
+  output_l = bit_crush(resampled_l, bit_depth, crushgate);
+  output_r = bit_crush(resampled_r, bit_depth, crushgate);
+) : (
+  output_l = resampled_l;
+  output_r = resampled_r;
+);
+
+// Step 4: Band-limited reconstruction filter (if in band-limited mode)
+interp_mode == 3 && target_rate < srate ? (
+  // Apply reconstruction lowpass at target rate's nyquist
+  x1 = bx1_l; x2 = bx2_l; y1 = by1_l; y2 = by2_l;
+  output_l = biquad_lp(output_l, bandlimit_freq, 0.707);
+  bx1_l = x1; bx2_l = x2; by1_l = y1; by2_l = y2;
+  
+  x1 = bx1_r; x2 = bx2_r; y1 = by1_r; y2 = by2_r;
+  output_r = biquad_lp(output_r, bandlimit_freq, 0.707);
+  bx1_r = x1; bx2_r = x2; by1_r = y1; by2_r = y2;
+  
+  bandlimit_stages > 1 ? (
+    x1 = bx1_l2; x2 = bx2_l2; y1 = by1_l2; y2 = by2_l2;
+    output_l = biquad_lp(output_l, bandlimit_freq, 0.707);
+    bx1_l2 = x1; bx2_l2 = x2; by1_l2 = y1; by2_l2 = y2;
+    
+    x1 = bx1_r2; x2 = bx2_r2; y1 = by1_r2; y2 = by2_r2;
+    output_r = biquad_lp(output_r, bandlimit_freq, 0.707);
+    bx1_r2 = x1; bx2_r2 = x2; by1_r2 = y1; by2_r2 = y2;
+  );
+  
+  bandlimit_stages > 2 ? (
+    x1 = bx1_l3; x2 = bx2_l3; y1 = by1_l3; y2 = by2_l3;
+    output_l = biquad_lp(output_l, bandlimit_freq, 0.707);
+    bx1_l3 = x1; bx2_l3 = x2; by1_l3 = y1; by2_l3 = y2;
+    
+    x1 = bx1_r3; x2 = bx2_r3; y1 = by1_r3; y2 = by2_r3;
+    output_r = biquad_lp(output_r, bandlimit_freq, 0.707);
+    bx1_r3 = x1; bx2_r3 = x2; by1_r3 = y1; by2_r3 = y2;
+  );
+  
+  bandlimit_stages > 3 ? (
+    x1 = bx1_l4; x2 = bx2_l4; y1 = by1_l4; y2 = by2_l4;
+    output_l = biquad_lp(output_l, bandlimit_freq, 0.707);
+    bx1_l4 = x1; bx2_l4 = x2; by1_l4 = y1; by2_l4 = y2;
+    
+    x1 = bx1_r4; x2 = bx2_r4; y1 = by1_r4; y2 = by2_r4;
+    output_r = biquad_lp(output_r, bandlimit_freq, 0.707);
+    bx1_r4 = x1; bx2_r4 = x2; by1_r4 = y1; by2_r4 = y2;
+  );
+  
+  bandlimit_stages > 4 ? (
+    x1 = bx1_l5; x2 = bx2_l5; y1 = by1_l5; y2 = by2_l5;
+    output_l = biquad_lp(output_l, bandlimit_freq, 0.707);
+    bx1_l5 = x1; bx2_l5 = x2; by1_l5 = y1; by2_l5 = y2;
+    
+    x1 = bx1_r5; x2 = bx2_r5; y1 = by1_r5; y2 = by2_r5;
+    output_r = biquad_lp(output_r, bandlimit_freq, 0.707);
+    bx1_r5 = x1; bx2_r5 = x2; by1_r5 = y1; by2_r5 = y2;
+  );
+  
+  bandlimit_stages > 5 ? (
+    x1 = bx1_l6; x2 = bx2_l6; y1 = by1_l6; y2 = by2_l6;
+    output_l = biquad_lp(output_l, bandlimit_freq, 0.707);
+    bx1_l6 = x1; bx2_l6 = x2; by1_l6 = y1; by2_l6 = y2;
+    
+    x1 = bx1_r6; x2 = bx2_r6; y1 = by1_r6; y2 = by2_r6;
+    output_r = biquad_lp(output_r, bandlimit_freq, 0.707);
+    bx1_r6 = x1; bx2_r6 = x2; by1_r6 = y1; by2_r6 = y2;
+  );
+);
+
+// Step 5: Isolation filter (High-pass to hear only downsampling artifacts)
+postfilter ? (
+  x1 = px1_l; x2 = px2_l; y1 = py1_l; y2 = py2_l;
+  output_l = biquad_hp(output_l, nyquist_freq, 0.707);
+  px1_l = x1; px2_l = x2; py1_l = y1; py2_l = y2;
+  
+  x1 = px1_r; x2 = px2_r; y1 = py1_r; y2 = py2_r;
+  output_r = biquad_hp(output_r, nyquist_freq, 0.707);
+  px1_r = x1; px2_r = x2; py1_r = y1; py2_r = y2;
+  
+  isolation_stages > 1 ? (
+    x1 = px1_l2; x2 = px2_l2; y1 = py1_l2; y2 = py2_l2;
+    output_l = biquad_hp(output_l, nyquist_freq, 0.707);
+    px1_l2 = x1; px2_l2 = x2; py1_l2 = y1; py2_l2 = y2;
+    
+    x1 = px1_r2; x2 = px2_r2; y1 = py1_r2; y2 = py2_r2;
+    output_r = biquad_hp(output_r, nyquist_freq, 0.707);
+    px1_r2 = x1; px2_r2 = x2; py1_r2 = y1; py2_r2 = y2;
+  );
+  
+  isolation_stages > 2 ? (
+    x1 = px1_l3; x2 = px2_l3; y1 = py1_l3; y2 = py2_l3;
+    output_l = biquad_hp(output_l, nyquist_freq, 0.707);
+    px1_l3 = x1; px2_l3 = x2; py1_l3 = y1; py2_l3 = y2;
+    
+    x1 = px1_r3; x2 = px2_r3; y1 = py1_r3; y2 = py2_r3;
+    output_r = biquad_hp(output_r, nyquist_freq, 0.707);
+    px1_r3 = x1; px2_r3 = x2; py1_r3 = y1; py2_r3 = y2;
+  );
+  
+  isolation_stages > 3 ? (
+    x1 = px1_l4; x2 = px2_l4; y1 = py1_l4; y2 = py2_l4;
+    output_l = biquad_hp(output_l, nyquist_freq, 0.707);
+    px1_l4 = x1; px2_l4 = x2; py1_l4 = y1; py2_l4 = y2;
+    
+    x1 = px1_r4; x2 = px2_r4; y1 = py1_r4; y2 = py2_r4;
+    output_r = biquad_hp(output_r, nyquist_freq, 0.707);
+    px1_r4 = x1; px2_r4 = x2; py1_r4 = y1; py2_r4 = y2;
+  );
+  
+  isolation_stages > 4 ? (
+    x1 = px1_l5; x2 = px2_l5; y1 = py1_l5; y2 = py2_l5;
+    output_l = biquad_hp(output_l, nyquist_freq, 0.707);
+    px1_l5 = x1; px2_l5 = x2; py1_l5 = y1; py2_l5 = y2;
+    
+    x1 = px1_r5; x2 = px2_r5; y1 = py1_r5; y2 = py2_r5;
+    output_r = biquad_hp(output_r, nyquist_freq, 0.707);
+    px1_r5 = x1; px2_r5 = x2; py1_r5 = y1; py2_r5 = y2;
+  );
+  
+  isolation_stages > 5 ? (
+    x1 = px1_l6; x2 = px2_l6; y1 = py1_l6; y2 = py2_l6;
+    output_l = biquad_hp(output_l, nyquist_freq, 0.707);
+    px1_l6 = x1; px2_l6 = x2; py1_l6 = y1; py2_l6 = y2;
+    
+    x1 = px1_r6; x2 = px2_r6; y1 = py1_r6; y2 = py2_r6;
+    output_r = biquad_hp(output_r, nyquist_freq, 0.707);
+    px1_r6 = x1; px2_r6 = x2; py1_r6 = y1; py2_r6 = y2;
+  );
+);
+
+// Step 6: Apply output gain
+spl0 = output_l * gain;
+spl1 = output_r * gain;
+
+@gfx 400 330
+gfx_update_needed > 0 ? gfx_update_needed -= 1;
+
+gfx_r = gfx_g = gfx_b = 0;
+gfx_rect(0, 0, gfx_w, gfx_h);
+
+gfx_r = gfx_g = gfx_b = 0.8;
+
+// Sample Rate Section
+gfx_x = 10; gfx_y = 10;
+gfx_printf("Sample Rate: %.0f Hz", slider1);
+
+slider1 < srate ? (
+  gfx_x = 10; gfx_y = 25;
+  gfx_r = 0.9; gfx_g = 0.7; gfx_b = 0.3;
+  gfx_printf("Sample Rate Reduction: Active");
+  
+  gfx_r = gfx_g = gfx_b = 0.8;
+  gfx_x = 10; gfx_y = 40;
+  interp_mode == 0 ? gfx_printf("Interpolation: Sample & Hold") :
+  interp_mode == 1 ? gfx_printf("Interpolation: Linear") :
+  interp_mode == 2 ? gfx_printf("Interpolation: Cubic") :
+  gfx_printf("Interpolation: Band-Limited");
+  
+  // Show band-limit info if in band-limited mode
+  interp_mode == 3 ? (
+    gfx_x = 10; gfx_y = 55;
+    gfx_r = 0.3; gfx_g = 0.9; gfx_b = 0.9;
+    gfx_printf("Band-Limit: %.0f Hz @ %d dB/oct", bandlimit_freq, bandlimit_stages * 12);
+    gfx_r = gfx_g = gfx_b = 0.8;
+  );
+) : (
+  gfx_x = 10; gfx_y = 25;
+  gfx_printf("Sample Rate Reduction: Bypassed");
+  gfx_x = 10; gfx_y = 40;
+  gfx_r = gfx_g = gfx_b = 0.4;
+  gfx_printf("Interpolation: (inactive)");
+  gfx_r = gfx_g = gfx_b = 0.8;
+);
+
+// Pre-Filter Section
+gfx_x = 10; gfx_y = 75;
+gfx_printf("Pre-Filter: %s", prefilter ? "Enabled" : "Disabled");
+
+prefilter ? (
+  gfx_r = gfx_g = gfx_b = 0.8;
+  gfx_x = 10; gfx_y = 90;
+  gfx_printf("Pre-Filter: %d dB/oct @ %.0f Hz", pre_stages * 12, nyquist_freq);
+) : (
+  gfx_r = gfx_g = gfx_b = 0.4;
+  gfx_x = 10; gfx_y = 90;
+  gfx_printf("Pre-Filter: (inactive)");
+  gfx_r = gfx_g = gfx_b = 0.8;
+);
+
+// Bit Crushing Section
+gfx_x = 10; gfx_y = 110;
+gfx_printf("Bit Crushing: %s", btcrush ? "Enabled" : "Disabled");
+
+btcrush ? (
+  gfx_x = 10; gfx_y = 125;
+  gfx_printf("Bit Depth: %d bits", slider7);
+  gfx_x = 10; gfx_y = 140;
+  gfx_printf("Mode: %s", crushgate ? "Gated" : "No Gate");
+);
+
+// Isolation Filter Section
+gfx_x = 10; gfx_y = 160;
+gfx_printf("Isolation Filter: %s", postfilter ? "Enabled" : "Disabled");
+
+postfilter ? (
+  gfx_r = gfx_g = gfx_b = 0.8;
+  gfx_x = 10; gfx_y = 175;
+  gfx_printf("Isolation: %d dB/oct @ %.0f Hz", isolation_stages * 12, nyquist_freq);
+) : (
+  gfx_r = gfx_g = gfx_b = 0.4;
+  gfx_x = 10; gfx_y = 175;
+  gfx_printf("Isolation: (inactive)");
+  gfx_r = gfx_g = gfx_b = 0.8;
+);
+
+// Output Section
+gfx_x = 10; gfx_y = 195;
+gfx_printf("Output Gain: %.1f dB", slider11);
+
+gfx_x = 10; gfx_y = 210;
+gfx_printf("Output Mode: %s", mono_mode ? "Mono" : "Stereo");
+
+// Status
+gfx_x = 10; gfx_y = 235;
+effect_active = (btcrush || (slider1 < srate) || prefilter || postfilter || slider11 != 0);
+effect_active ? (
+  gfx_r = 0.3; gfx_g = 0.9; gfx_b = 0.3;
+  gfx_printf("Status: Processing Audio");
+) : (
+  gfx_r = 0.6; gfx_g = 0.6; gfx_b = 0.6;
+  gfx_printf("Status: Bypassed (Pass-through)");
+);
+
+// Show helpful tip for band-limited mode
+interp_mode == 3 && slider1 < srate ? (
+  gfx_x = 10; gfx_y = 260;
+  gfx_r = 0.7; gfx_g = 0.7; gfx_b = 0.9;
+  gfx_printf("TIP: Enable Pre-Filter (48-72 dB/oct)");
+  gfx_x = 10; gfx_y = 275;
+  gfx_printf("for best band-limited quality");
+);

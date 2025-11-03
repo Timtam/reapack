@@ -1,0 +1,259 @@
+desc:2 mode filter
+author:acer bt and claude
+version:1.2
+tags:filter multiband eq
+about:
+	This is a combination high pass and low pass filter. It can be used for each function independently.
+	available parameters and their functions follow
+	filter mode: sets the filter mode to either low or high pass
+	frequency (hz): determins the cutoff frequency for the filter. Default is 1000
+	role off rate (db/oct: sets the level of roleoff for frequencies at and above/ below the cutoff frequency, depending on mode, in 12 db per octave steps. Default is 12 db per octave, and it goes all the way to 72 db per octave.
+	resinence (cue): determins how much resinence is added near the cutoff point. Default is 0.707, which is quite flat. Lowering the value atteunuates frequencies near the cutoff, while raising it boosts them.
+	gain (db): sets the over all gain of the output from the effect. Default is 0 db, and it can go from -24 to 24 db.
+
+slider1:0<0,1,1{Low Pass,High Pass}>Filter Type
+slider2:1000<20,20000,1>Frequency (Hz)
+slider3:0<1,6,1{12 dB/oct,24 dB/oct,36 dB/oct,48 dB/oct,60 dB/oct,72 dB/oct}>Rolloff Rate
+slider4:0.707<0.1,10,0.01>Resonance (Q)
+slider5:0<-24,24,0.1>Gain (dB)
+
+in_pin:left input
+in_pin:right input
+out_pin:left output
+out_pin:right output
+
+@init
+// Filter state variables - separate for each stage and channel
+x1_l = x2_l = y1_l = y2_l = 0;
+x1_r = x2_r = y1_r = y2_r = 0;
+
+// Additional stages for steep rolloff
+x1_l2 = x2_l2 = y1_l2 = y2_l2 = 0;
+x1_r2 = x2_r2 = y1_r2 = y2_r2 = 0;
+x1_l3 = x2_l3 = y1_l3 = y2_l3 = 0;
+x1_r3 = x2_r3 = y1_r3 = y2_r3 = 0;
+x1_l4 = x2_l4 = y1_l4 = y2_l4 = 0;
+x1_r4 = x2_r4 = y1_r4 = y2_r4 = 0;
+x1_l5 = x2_l5 = y1_l5 = y2_l5 = 0;
+x1_r5 = x2_r5 = y1_r5 = y2_r5 = 0;
+x1_l6 = x2_l6 = y1_l6 = y2_l6 = 0;
+x1_r6 = x2_r6 = y1_r6 = y2_r6 = 0;
+
+// Constants
+pi = $pi;
+
+function biquad_lp(input, freq, q)
+(
+  // Simple biquad low pass
+  w = 2 * pi * freq / srate;
+  cosw = cos(w);
+  sinw = sin(w);
+  alpha = sinw / (2 * q);
+  
+  b0 = (1 - cosw) / 2;
+  b1 = 1 - cosw;
+  b2 = (1 - cosw) / 2;
+  a0 = 1 + alpha;
+  a1 = -2 * cosw;
+  a2 = 1 - alpha;
+  
+  // Normalize
+  b0 /= a0; b1 /= a0; b2 /= a0;
+  a1 /= a0; a2 /= a0;
+  
+  // Apply filter
+  output = b0*input + b1*x1 + b2*x2 - a1*y1 - a2*y2;
+  
+  // Update history
+  x2 = x1; x1 = input;
+  y2 = y1; y1 = output;
+  
+  output;
+);
+
+function biquad_hp(input, freq, q)
+(
+  // Simple biquad high pass  
+  w = 2 * pi * freq / srate;
+  cosw = cos(w);
+  sinw = sin(w);
+  alpha = sinw / (2 * q);
+  
+  b0 = (1 + cosw) / 2;
+  b1 = -(1 + cosw);
+  b2 = (1 + cosw) / 2;
+  a0 = 1 + alpha;
+  a1 = -2 * cosw;
+  a2 = 1 - alpha;
+  
+  // Normalize
+  b0 /= a0; b1 /= a0; b2 /= a0;
+  a1 /= a0; a2 /= a0;
+  
+  // Apply filter
+  output = b0*input + b1*x1 + b2*x2 - a1*y1 - a2*y2;
+  
+  // Update history
+  x2 = x1; x1 = input;
+  y2 = y1; y1 = output;
+  
+  output;
+);
+
+@slider
+need_update = 1;
+
+@sample
+freq = max(20, min(slider2, srate/2.1));
+q = max(0.1, slider4);
+stages = slider3;
+gain = pow(10, slider5/20);
+
+  slider1 == 0 ? ( // Low Pass
+    // Stage 1
+    x1 = x1_l; x2 = x2_l; y1 = y1_l; y2 = y2_l;
+    spl0 = biquad_lp(spl0, freq, q);
+    x1_l = x1; x2_l = x2; y1_l = y1; y2_l = y2;
+    
+    x1 = x1_r; x2 = x2_r; y1 = y1_r; y2 = y2_r;
+    spl1 = biquad_lp(spl1, freq, q);
+    x1_r = x1; x2_r = x2; y1_r = y1; y2_r = y2;
+    
+    // Stage 2
+    stages > 1 ? (
+      x1 = x1_l2; x2 = x2_l2; y1 = y1_l2; y2 = y2_l2;
+      spl0 = biquad_lp(spl0, freq, q);
+      x1_l2 = x1; x2_l2 = x2; y1_l2 = y1; y2_l2 = y2;
+      
+      x1 = x1_r2; x2 = x2_r2; y1 = y1_r2; y2 = y2_r2;
+      spl1 = biquad_lp(spl1, freq, q);
+      x1_r2 = x1; x2_r2 = x2; y1_r2 = y1; y2_r2 = y2;
+    );
+    
+    // Stage 3
+    stages > 2 ? (
+      x1 = x1_l3; x2 = x2_l3; y1 = y1_l3; y2 = y2_l3;
+      spl0 = biquad_lp(spl0, freq, q);
+      x1_l3 = x1; x2_l3 = x2; y1_l3 = y1; y2_l3 = y2;
+      
+      x1 = x1_r3; x2 = x2_r3; y1 = y1_r3; y2 = y2_r3;
+      spl1 = biquad_lp(spl1, freq, q);
+      x1_r3 = x1; x2_r3 = x2; y1_r3 = y1; y2_r3 = y2;
+    );
+    
+    // Stage 4
+    stages > 3 ? (
+      x1 = x1_l4; x2 = x2_l4; y1 = y1_l4; y2 = y2_l4;
+      spl0 = biquad_lp(spl0, freq, q);
+      x1_l4 = x1; x2_l4 = x2; y1_l4 = y1; y2_l4 = y2;
+      
+      x1 = x1_r4; x2 = x2_r4; y1 = y1_r4; y2 = y2_r4;
+      spl1 = biquad_lp(spl1, freq, q);
+      x1_r4 = x1; x2_r4 = x2; y1_r4 = y1; y2_r4 = y2;
+    );
+    
+    // Stage 5
+    stages > 4 ? (
+      x1 = x1_l5; x2 = x2_l5; y1 = y1_l5; y2 = y2_l5;
+      spl0 = biquad_lp(spl0, freq, q);
+      x1_l5 = x1; x2_l5 = x2; y1_l5 = y1; y2_l5 = y2;
+      
+      x1 = x1_r5; x2 = x2_r5; y1 = y1_r5; y2 = y2_r5;
+      spl1 = biquad_lp(spl1, freq, q);
+      x1_r5 = x1; x2_r5 = x2; y1_r5 = y1; y2_r5 = y2;
+    );
+    
+    // Stage 6
+    stages > 5 ? (
+      x1 = x1_l6; x2 = x2_l6; y1 = y1_l6; y2 = y2_l6;
+      spl0 = biquad_lp(spl0, freq, q);
+      x1_l6 = x1; x2_l6 = x2; y1_l6 = y1; y2_l6 = y2;
+      
+      x1 = x1_r6; x2 = x2_r6; y1 = y1_r6; y2 = y2_r6;
+      spl1 = biquad_lp(spl1, freq, q);
+      x1_r6 = x1; x2_r6 = x2; y1_r6 = y1; y2_r6 = y2;
+    );
+    
+  ) : ( // High Pass
+    // Stage 1
+    x1 = x1_l; x2 = x2_l; y1 = y1_l; y2 = y2_l;
+    spl0 = biquad_hp(spl0, freq, q);
+    x1_l = x1; x2_l = x2; y1_l = y1; y2_l = y2;
+    
+    x1 = x1_r; x2 = x2_r; y1 = y1_r; y2 = y2_r;
+    spl1 = biquad_hp(spl1, freq, q);
+    x1_r = x1; x2_r = x2; y1_r = y1; y2_r = y2;
+    
+    // Stage 2
+    stages > 1 ? (
+      x1 = x1_l2; x2 = x2_l2; y1 = y1_l2; y2 = y2_l2;
+      spl0 = biquad_hp(spl0, freq, q);
+      x1_l2 = x1; x2_l2 = x2; y1_l2 = y1; y2_l2 = y2;
+      
+      x1 = x1_r2; x2 = x2_r2; y1 = y1_r2; y2 = y2_r2;
+      spl1 = biquad_hp(spl1, freq, q);
+      x1_r2 = x1; x2_r2 = x2; y1_r2 = y1; y2_r2 = y2;
+    );
+    
+    // Stage 3
+    stages > 2 ? (
+      x1 = x1_l3; x2 = x2_l3; y1 = y1_l3; y2 = y2_l3;
+      spl0 = biquad_hp(spl0, freq, q);
+      x1_l3 = x1; x2_l3 = x2; y1_l3 = y1; y2_l3 = y2;
+      
+      x1 = x1_r3; x2 = x2_r3; y1 = y1_r3; y2 = y2_r3;
+      spl1 = biquad_hp(spl1, freq, q);
+      x1_r3 = x1; x2_r3 = x2; y1_r3 = y1; y2_r3 = y2;
+    );
+    
+    // Stage 4
+    stages > 3 ? (
+      x1 = x1_l4; x2 = x2_l4; y1 = y1_l4; y2 = y2_l4;
+      spl0 = biquad_hp(spl0, freq, q);
+      x1_l4 = x1; x2_l4 = x2; y1_l4 = y1; y2_l4 = y2;
+      
+      x1 = x1_r4; x2 = x2_r4; y1 = y1_r4; y2 = y2_r4;
+      spl1 = biquad_hp(spl1, freq, q);
+      x1_r4 = x1; x2_r4 = x2; y1_r4 = y1; y2_r4 = y2;
+    );
+    
+    // Stage 5
+    stages > 4 ? (
+      x1 = x1_l5; x2 = x2_l5; y1 = y1_l5; y2 = y2_l5;
+      spl0 = biquad_hp(spl0, freq, q);
+      x1_l5 = x1; x2_l5 = x2; y1_l5 = y1; y2_l5 = y2;
+      
+      x1 = x1_r5; x2 = x2_r5; y1 = y1_r5; y2 = y2_r5;
+      spl1 = biquad_hp(spl1, freq, q);
+      x1_r5 = x1; x2_r5 = x2; y1_r5 = y1; y2_r5 = y2;
+    );
+    
+    // Stage 6
+    stages > 5 ? (
+      x1 = x1_l6; x2 = x2_l6; y1 = y1_l6; y2 = y2_l6;
+      spl0 = biquad_hp(spl0, freq, q);
+      x1_l6 = x1; x2_l6 = x2; y1_l6 = y1; y2_l6 = y2;
+      
+      x1 = x1_r6; x2 = x2_r6; y1 = y1_r6; y2 = y2_r6;
+      spl1 = biquad_hp(spl1, freq, q);
+      x1_r6 = x1; x2_r6 = x2; y1_r6 = y1; y2_r6 = y2;
+    );
+  );
+
+// Apply gain
+spl0 *= gain;
+spl1 *= gain;
+
+@gfx 400 200
+gfx_r = gfx_g = gfx_b = 0;
+gfx_rect(0, 0, gfx_w, gfx_h);
+
+gfx_r = gfx_g = gfx_b = 0.8;
+gfx_x = 10; gfx_y = 10;
+gfx_printf("Filter: %s", slider1 == 0 ? "Low Pass" : "High Pass");
+gfx_x = 10; gfx_y = 25;
+gfx_printf("Freq: %.0f Hz", slider2);
+gfx_x = 10; gfx_y = 40;
+gfx_printf("Rolloff: %d dB/oct", slider3 * 12);
+gfx_x = 10; gfx_y = 55;
+gfx_printf("Q: %.2f", slider4);

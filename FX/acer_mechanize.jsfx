@@ -1,0 +1,45 @@
+desc:mechanizer (inspired by gold wave)
+author:acer bt and claude
+version:1.0
+about:
+	This is a modulation effect, inspired by the Mechanize effect available in gold wave. It only has 2 controls, explained below.
+	modulation frequency (hz): sets the frequency of the modulation. It defaults to 100 hz, but can go from 1 hz to 20000.
+	waveform: selects the modulation wave form. Default is sign, but it also supports triangle, and a modified square wave, which maintains bass frequencies when used.
+
+//Sliders
+slider1:100<1,20000,1>Modulation Frequency (Hz)
+slider2:0<0,2,1{Sine,Triangle,Square}>Waveform
+
+//Variables
+@init
+two_pi = 2 * $pi;
+phase = 0;
+
+//  Functions 
+function generate_waveform(type, phase) (
+    // type: 0 = sine, 1 = triangle, 2 = square (special)
+    type == 0 ? (
+        sin(two_pi * phase);
+    ) :
+    type == 1 ? (
+        4 * abs(phase - floor(phase + 0.5)) - 1;
+    ) :
+    (
+        // Special square for preserving bass
+        phase - floor(phase) < 0.5 ? 1 : 0; // **multiply by 1 or 0** instead of flipping
+    )
+);
+
+//  Per Sample Processing 
+@sample
+// Calculate phase increment
+phasestep = slider1 / srate;
+phase += phasestep;
+phase -= floor(phase); // keep phase in [0,1)
+
+// Generate selected waveform
+mod_wave = generate_waveform(slider2, phase);
+
+// Apply modulation
+spl0 *= mod_wave;
+spl1 *= mod_wave;
