@@ -1,34 +1,60 @@
 desc:precision PCM
 author:acer bt and claude
-version:1.4
+version:1.6
 tags:bitcrusher distortion retro samplerate
+changelog:
+	v1.6
+	added quality options to the band limit and anti aliasing filters, to help with sound shaping.
+	made trangular pdf dithering more mathematically accurate.
+	v1.5
+	added dithering, both rectangular and triangular, for bit crushed modes.
+	added dynamickly adjusting cutoff frequencies for filters, to try and get closer to true nyquist for both anti aliasing and band limiting
 about:
 	This effect started as an attempt to make a bitcrusher with detailed controls, but has since become a pcm output simulator. It acts like a regular bitcrusher in that it can do bit reduction and bad resampling, but it can also do a lot more. Below is a list of the available parameters and there functions.
-	sample rate (hz): sets the rate that the plugin will resample audio to. The default is 44100 hz, and it can go from 100 hz to 192000 hz.
-	interpolation mode: sets the interpolation mode used when processing samples. The default is set to sample and hold, for retro purposes, but it also includes linear, cubic, and band limited modes. Band limited combines cubick interpolation with a low pass filter just before the final output, to get as close to high quality reconstruction as possible.
+	sample rate (Hz): sets the rate that the plugin will resample audio to. The default is 44100 Hz, and it can go from 100 Hz to 192000 Hz.
+	interpolation mode: sets the interpolation mode used when processing samples. The default is set to sample and hold, for retro purposes, but it also includes linear, cubic, and band limited modes. Band limited combines cubic interpolation with a low pass filter just before the final output, to get as close to high quality reconstruction as possible.
 	prefilter (antialiasing): this applies low pass filtering before the down sampling step, to reduce frequencies that would cause fold over aliasing. It's disabled by default.
-	prefilter role off (db/oct): sets the role off rate for the prefilter, which determins how much frequencies above the prefilter frequency are attenuated. 12 db per octave is default, it can go in 12 db steps all the way to 72 db per octave. Do note that you will need steeper role offs for antialiasing at lower samplerates if you want it to sound clean.
-	band limit roleoff (db/oct: similar to the roleoff for the prefilter, but it affects the role off rate for the band limiting filter used just before the output when interpolation mode is set to band limited. It defaults to 48 db per octave, and goes from 12 to 72 dbp per octave in 12 db steps.
-	bit depth crushing (enabled/ disabled): determins if the bit reduction component of the effect is on or off. It defaults to off.
+	prefilter rolloff (dB/oct): sets the rolloff rate for the prefilter, which determines how much frequencies above the prefilter frequency are attenuated. 12 dB per octave is default, it can go in 12 dB steps all the way to 72 dB per octave. Do note that you will need steeper rolloffs for antialiasing at lower samplerates if you want it to sound clean.
+	prefilter quality: controls the tradeoff between bandwidth preservation and aliasing prevention. Maximum Bandwidth gets closest to Nyquist (may allow slight aliasing at extreme low rates), Adaptive automatically adjusts based on target sample rate (recommended), Clean uses conservative filtering that guarantees minimal aliasing at most rates, Ultra Clean uses very conservative filtering (v1.5 style) for maximum artifact elimination at extreme low rates. Use Maximum Bandwidth for transparent resampling at normal rates, Adaptive for general use, Clean for working below 8 kHz, or Ultra Clean when absolute purity is required at very low rates (trades significant bandwidth for complete artifact removal).
+	band limit rolloff (dB/oct): similar to the rolloff for the prefilter, but it affects the rolloff rate for the band limiting filter used just before the output when interpolation mode is set to band limited. It defaults to 48 dB per octave, and goes from 12 to 72 dB per octave in 12 dB steps.
+	band limit quality: controls reconstruction filter behavior in band-limited mode. Maximum Bandwidth preserves the most high frequency content (may have slight artifacts at extreme low rates), Adaptive automatically adjusts for cleaner reconstruction at low rates while staying aggressive at normal rates (recommended), Clean uses conservative filtering for artifact-free reconstruction at most rates, Ultra Clean uses very conservative filtering (v1.5 style) for maximum purity at extreme low rates. Use Maximum Bandwidth for professional quality resampling above 8 kHz, Adaptive for general use, Clean for rates below 8 kHz, or Ultra Clean for complete artifact elimination at very low rates. Note: Clean and Ultra Clean modes automatically use linear interpolation below 8 kHz for cleaner results.
+	bit depth crushing (enabled/ disabled): determines if the bit reduction component of the effect is on or off. It defaults to off.
 	bit depth: sets the target bit depth to crush to. Default is 16, and it can go from 1 to 24 bit. Lower bit depths introduce more noise into the signal and lower dynamic range.
-	crush mode (gated/ no gate): determins if the bit crushing gates the output, or keeps a constant noise floor below the sound at lower bit depths. Default is no gate.
+	crush mode (gated/ no gate): determines if the bit crushing gates the output, or keeps a constant noise floor below the sound at lower bit depths. Default is no gate.
+	dither type (none/ rpdf/ tpdf): controls the type of dithering applied before bit reduction. Dithering converts harsh quantization distortion into smooth random noise, which is especially noticeable at lower bit depths. None disables dithering (default), RPDF (rectangular probability density function) applies basic random dither, and TPDF (triangular probability density function) applies higher quality dither that's less audible. TPDF is recommended for cleaner results.
+	dither amount (%): sets the intensity of the dither signal from 0 to 100 percent. At 100% (default), dithering is applied at the proper mathematical level for the target bit depth. Lower values reduce the dither noise but may allow some quantization distortion to remain. This control is mainly for creative/experimental purposes - for proper PCM reconstruction, keep it at 100%.
+	dither silence cutoff: when enabled (default), dithering will not be applied to signals below -96 dB to avoid adding noise to silent passages. When disabled, dithering is always applied when enabled (mathematically accurate). Disable this for archival/mastering work where absolute accuracy is required.
 	isolation filter (high pass): this switch toggles the state of a high pass filter which can be used to filter for just aliasing/ sample and hold artafacts. It defaults to off.
-	isolation filter role off (db/oct): determins how much frequencies below the cutoff point of the isolation filter are roled off. It defaults to 12 db per octave, and has the same value choices as the other filters in this plugin.
-	output gain (db): sets the final output level after processing. Default is 0 db, and it ranges from -24 to 24 db.
+	isolation filter rolloff (dB/oct): determines how much frequencies below the cutoff point of the isolation filter are roled off. It defaults to 12 dB per octave, and has the same value choices as the other filters in this plugin.
+	output gain (dB): sets the final output level after processing. Default is 0 dB, and it ranges from -24 to 24 dB.
 	output mode (stereo/mono): sets if the plugin outputs in stereo, or sums both channels to mono before outputting. Default is stereo
+
+// Calculate filter frequencies with rolloff compensation
+// Compensate for cascaded filter attenuation to maximize usable bandwidth
+// while maintaining effectiveness at each rolloff level
+
+// Determine adaptive scaling based on target rate (for Adaptive mode)
+rate_factor = target_rate / 44100;  // Normalize to CD quality
+rate_factor < 0.18 ? (  // Below ~8kHz, start pulling back
+  adaptive_scale = 0
 
 slider1:44100<100,192000,10>Sample Rate (Hz)
 slider2:0<0,3,1{Sample & Hold,Linear,Cubic,Band-Limited}>Interpolation Mode
 slider3:0<0,1,1{Disabled,Enabled}>Pre-Filter (Anti-Aliasing)
 slider4:0<1,6,1{12 dB/oct,24 dB/oct,36 dB/oct,48 dB/oct,60 dB/oct,72 dB/oct}>Pre-Filter Rolloff
-slider5:3<1,6,1{12 dB/oct,24 dB/oct,36 dB/oct,48 dB/oct,60 dB/oct,72 dB/oct}>Band-Limit Rolloff
-slider6:0<0,1,1{Disabled,Enabled}>Bit Depth Crushing
-slider7:16<1,24,1>Bit Depth
-slider8:0<0,1,1{No Gate,Gated}>Crush Mode
-slider9:0<0,1,1{Disabled,Enabled}>Isolation Filter (HPF)
-slider10:0<1,6,1{12 dB/oct,24 dB/oct,36 dB/oct,48 dB/oct,60 dB/oct,72 dB/oct}>Isolation Filter Rolloff
-slider11:0<-24,24,0.1>Output Gain (dB)
-slider12:0<0,1,1{Stereo,Mono}>Output Mode
+slider5:1<0,3,1{Maximum Bandwidth,Adaptive,Clean,Ultra Clean}>Pre-Filter Quality
+slider6:3<1,6,1{12 dB/oct,24 dB/oct,36 dB/oct,48 dB/oct,60 dB/oct,72 dB/oct}>Band-Limit Rolloff
+slider7:1<0,3,1{Maximum Bandwidth,Adaptive,Clean,Ultra Clean}>Band-Limit Quality
+slider8:0<0,1,1{Disabled,Enabled}>Bit Depth Crushing
+slider9:16<1,24,1>Bit Depth
+slider10:0<0,1,1{No Gate,Gated}>Crush Mode
+slider11:0<0,2,1{None,RPDF,TPDF}>Dither Type
+slider12:100<0,100,1>Dither Amount (%)
+slider13:1<0,1,1{Disabled,Enabled}>Dither Silence Cutoff
+slider14:0<0,1,1{Disabled,Enabled}>Isolation Filter (HPF)
+slider15:0<1,6,1{12 dB/oct,24 dB/oct,36 dB/oct,48 dB/oct,60 dB/oct,72 dB/oct}>Isolation Filter Rolloff
+slider16:0<-24,24,0.1>Output Gain (dB)
+slider17:0<0,1,1{Stereo,Mono}>Output Mode
 
 in_pin:left input
 in_pin:right input
@@ -160,6 +186,27 @@ local(levels, step, crushed, gate_threshold)
   );
 );
 
+function apply_dither(input, bits, dtype, amount)
+local(lsb, r1, r2, dither_signal)
+(
+  bits <= 1 || dtype == 0 ? input : (
+    lsb = 1.0 / pow(2, bits);
+    
+    dtype == 1 ? (  // RPDF: ±0.5 LSB amplitude, scaled by amount
+      dither_signal = (rand() - 0.5) * lsb * amount;
+    ) : (  // TPDF: ±1 LSB amplitude, properly scaled to maintain triangular PDF
+      // Generate full amplitude TPDF first
+      r1 = rand() - 0.5;
+      r2 = rand() - 0.5;
+      dither_signal = (r1 + r2) * lsb;
+      // Scale the complete TPDF signal by amount
+      dither_signal = dither_signal * amount;
+    );
+    
+    input + dither_signal;
+  );
+);
+
 function linear_interp(frac, prev, curr)
 (
   prev + (curr - prev) * frac
@@ -184,57 +231,132 @@ local(a0, a1, a2, a3, f2, f3)
 target_rate = max(100, min(slider1, srate));
 interp_mode = floor(slider2);
 
-// Pre-filter settings (sliders 3-4)
+// Pre-filter settings (sliders 3-5)
 prefilter = slider3;
 pre_stages = slider4;
+pre_quality = slider5;
 
-// Band-limit settings (slider 5)
-bandlimit_stages = slider5;
+// Band-limit settings (sliders 6-7)
+bandlimit_stages = slider6;
+bandlimit_quality = slider7;
 
-// Bit crushing settings (sliders 6-8)
-btcrush = slider6;
-bit_depth = max(1, min(slider7, 24));
-crushgate = slider8;
+// Bit crushing settings (sliders 8-10)
+btcrush = slider8;
+bit_depth = max(1, min(slider9, 24));
+crushgate = slider10;
 
-// Isolation filter settings (sliders 9-10)
-postfilter = slider9;
-isolation_stages = slider10;
+// Dither settings (sliders 11-13)
+dither_type = slider11;
+dither_amount = slider12 / 100.0;
+dither_silence_cutoff = slider13;
 
-// Output settings (sliders 11-12)
-gain = pow(10, slider11 / 20);
-mono_mode = slider12;
+// Isolation filter settings (sliders 14-15)
+postfilter = slider14;
+isolation_stages = slider15;
+
+// Output settings (sliders 16-17)
+gain = pow(10, slider16 / 20);
+mono_mode = slider17;
 
 // Calculate filter frequencies with rolloff compensation
-// Higher order filters can get closer to Nyquist without aliasing
-// Pre-filter: conservative (prevents aliasing on downsample)
-pre_stages == 1 ? (
-  nyquist_freq = target_rate * 0.42;  // 12 dB/oct - most conservative
-) : pre_stages == 2 ? (
-  nyquist_freq = target_rate * 0.44;  // 24 dB/oct
-) : pre_stages == 3 ? (
-  nyquist_freq = target_rate * 0.46;  // 36 dB/oct
-) : pre_stages == 4 ? (
-  nyquist_freq = target_rate * 0.47;  // 48 dB/oct
-) : pre_stages == 5 ? (
-  nyquist_freq = target_rate * 0.48;  // 60 dB/oct
+// Target -2 to -3dB at Nyquist for perceptually transparent results
+// while giving filters enough room to eliminate artifacts effectively
+
+// Determine adaptive scaling based on target rate (for Adaptive mode)
+rate_factor = target_rate / 44100;  // Normalize to CD quality
+rate_factor < 0.18 ? (  // Below ~8kHz, start pulling back more aggressively
+  adaptive_scale = 0.88 - (0.18 - rate_factor) * 0.4;  // 0.88 down to ~0.81 at very low rates
 ) : (
-  nyquist_freq = target_rate * 0.485; // 72 dB/oct - steepest, closest to Nyquist
+  adaptive_scale = 1.0;  // No scaling at normal rates
 );
 
-// Band-limit reconstruction: can be more aggressive (removes interpolation artifacts)
-bandlimit_stages == 1 ? (
-  bandlimit_freq = target_rate * 0.44;  // 12 dB/oct
-) : bandlimit_stages == 2 ? (
-  bandlimit_freq = target_rate * 0.46;  // 24 dB/oct
-) : bandlimit_stages == 3 ? (
-  bandlimit_freq = target_rate * 0.475; // 36 dB/oct
-) : bandlimit_stages == 4 ? (
-  bandlimit_freq = target_rate * 0.485; // 48 dB/oct
-) : bandlimit_stages == 5 ? (
-  bandlimit_freq = target_rate * 0.49;  // 60 dB/oct
+// Pre-filter: Anti-aliasing on downsample
+// Quality modes: 0=Maximum Bandwidth, 1=Adaptive, 2=Clean, 3=Ultra Clean
+// Targeting -2 to -3dB at Nyquist for better artifact rejection
+pre_quality == 0 ? (
+  // Maximum Bandwidth - still aggressive but slightly more conservative
+  // Target: -2dB at Nyquist
+  pre_stages == 1 ? correction = 1.03 :
+  pre_stages == 2 ? correction = 1.06 :
+  pre_stages == 3 ? correction = 1.08 :
+  pre_stages == 4 ? correction = 1.09 :
+  pre_stages == 5 ? correction = 1.10 :
+  correction = 1.11;
+) : pre_quality == 1 ? (
+  // Adaptive - adjusts based on target rate
+  // Target: -2 to -3dB at Nyquist depending on rate
+  pre_stages == 1 ? base_correction = 1.03 :
+  pre_stages == 2 ? base_correction = 1.06 :
+  pre_stages == 3 ? base_correction = 1.08 :
+  pre_stages == 4 ? base_correction = 1.09 :
+  pre_stages == 5 ? base_correction = 1.10 :
+  base_correction = 1.11;
+  correction = base_correction * adaptive_scale;
+) : pre_quality == 2 ? (
+  // Clean - conservative, guaranteed minimal aliasing
+  // Target: -4 to -6dB at Nyquist
+  pre_stages == 1 ? correction = 0.98 :
+  pre_stages == 2 ? correction = 1.00 :
+  pre_stages == 3 ? correction = 1.01 :
+  pre_stages == 4 ? correction = 1.02 :
+  pre_stages == 5 ? correction = 1.03 :
+  correction = 1.04;
 ) : (
-  bandlimit_freq = target_rate * 0.495; // 72 dB/oct - very close to Nyquist
+  // Ultra Clean - v1.5 style very conservative filtering
+  // Maximum artifact elimination, trades bandwidth for purity
+  pre_stages == 1 ? correction = 0.84 :  // 42% of target rate
+  pre_stages == 2 ? correction = 0.88 :  // 44%
+  pre_stages == 3 ? correction = 0.92 :  // 46%
+  pre_stages == 4 ? correction = 0.94 :  // 47%
+  pre_stages == 5 ? correction = 0.96 :  // 48%
+  correction = 0.97;                      // 48.5%
 );
+
+nyquist_freq = target_rate * 0.5 * correction;
+
+// Band-limit reconstruction filter
+// Quality modes: 0=Maximum Bandwidth, 1=Adaptive, 2=Clean, 3=Ultra Clean
+// Targeting -2 to -3dB at Nyquist for effective artifact removal
+bandlimit_quality == 0 ? (
+  // Maximum Bandwidth - aggressive but manageable
+  // Target: -2dB at Nyquist
+  bandlimit_stages == 1 ? bl_correction = 1.06 :
+  bandlimit_stages == 2 ? bl_correction = 1.08 :
+  bandlimit_stages == 3 ? bl_correction = 1.09 :
+  bandlimit_stages == 4 ? bl_correction = 1.10 :
+  bandlimit_stages == 5 ? bl_correction = 1.11 :
+  bl_correction = 1.12;
+) : bandlimit_quality == 1 ? (
+  // Adaptive - adjusts based on target rate
+  // Target: -2 to -3dB at Nyquist depending on rate
+  bandlimit_stages == 1 ? bl_base_correction = 1.06 :
+  bandlimit_stages == 2 ? bl_base_correction = 1.08 :
+  bandlimit_stages == 3 ? bl_base_correction = 1.09 :
+  bandlimit_stages == 4 ? bl_base_correction = 1.10 :
+  bandlimit_stages == 5 ? bl_base_correction = 1.11 :
+  bl_base_correction = 1.12;
+  bl_correction = bl_base_correction * adaptive_scale;
+) : bandlimit_quality == 2 ? (
+  // Clean - conservative, artifact-free
+  // Target: -4 to -6dB at Nyquist
+  bandlimit_stages == 1 ? bl_correction = 0.98 :
+  bandlimit_stages == 2 ? bl_correction = 1.00 :
+  bandlimit_stages == 3 ? bl_correction = 1.02 :
+  bandlimit_stages == 4 ? bl_correction = 1.03 :
+  bandlimit_stages == 5 ? bl_correction = 1.04 :
+  bl_correction = 1.05;
+) : (
+  // Ultra Clean - v1.5 style very conservative filtering
+  // Maximum artifact elimination for extreme low rates
+  bandlimit_stages == 1 ? bl_correction = 0.88 :  // 44% of target rate
+  bandlimit_stages == 2 ? bl_correction = 0.92 :  // 46%
+  bandlimit_stages == 3 ? bl_correction = 0.95 :  // 47.5%
+  bandlimit_stages == 4 ? bl_correction = 0.97 :  // 48.5%
+  bandlimit_stages == 5 ? bl_correction = 0.98 :  // 49%
+  bl_correction = 0.99;                            // 49.5%
+);
+
+bandlimit_freq = target_rate * 0.5 * bl_correction;
 
 @sample
 
@@ -249,7 +371,8 @@ mono_mode ? (
 );
 
 // Step 1: Pre-filter (Anti-aliasing, if enabled)
-prefilter ? (
+// Only apply if target rate is significantly below host rate
+prefilter && (target_rate < srate * 0.95) ? (
   x1 = x1_l; x2 = x2_l; y1 = y1_l; y2 = y2_l;
   filtered_l = biquad_lp(input_l, nyquist_freq, 0.707);
   x1_l = x1; x2_l = x2; y1_l = y1; y2_l = y2;
@@ -341,12 +464,31 @@ target_rate < srate ? (
     resampled_r = linear_interp(phase_accum_r, prev_held_r, held_r);
   ) : (
     // Modes 2 and 3 both use cubic interpolation
-    resampled_l = cubic_interp(phase_accum_l, pprev_held_l, prev_held_l, held_l, held_l);
-    resampled_r = cubic_interp(phase_accum_r, pprev_held_r, prev_held_r, held_r, held_r);
+    // In band-limited mode with Clean/Ultra Clean quality at very low rates, fall back to linear
+    (interp_mode == 3 && (pre_quality >= 2 || bandlimit_quality >= 2) && target_rate < 8000) ? (
+      resampled_l = linear_interp(phase_accum_l, prev_held_l, held_l);
+      resampled_r = linear_interp(phase_accum_r, prev_held_r, held_r);
+    ) : (
+      resampled_l = cubic_interp(phase_accum_l, pprev_held_l, prev_held_l, held_l, held_l);
+      resampled_r = cubic_interp(phase_accum_r, pprev_held_r, prev_held_r, held_r, held_r);
+    );
   );
 ) : (
   resampled_l = filtered_l;
   resampled_r = filtered_r;
+);
+
+// Check for signal presence (for silence cutoff option)
+dither_silence_cutoff ? (
+  signal_present = (abs(resampled_l) > 0.00001) || (abs(resampled_r) > 0.00001);
+) : (
+  signal_present = 1;  // Always apply dither when cutoff is disabled
+);
+
+// Step 2.5: Apply dither (before bit crushing)
+btcrush && dither_type > 0 && signal_present ? (
+  resampled_l = apply_dither(resampled_l, bit_depth, dither_type, dither_amount);
+  resampled_r = apply_dither(resampled_r, bit_depth, dither_type, dither_amount);
 );
 
 // Step 3: Bit depth crushing (if enabled)
@@ -359,7 +501,8 @@ btcrush ? (
 );
 
 // Step 4: Band-limited reconstruction filter (if in band-limited mode)
-interp_mode == 3 && target_rate < srate ? (
+// Only apply if target rate is significantly below host rate
+interp_mode == 3 && target_rate < srate * 0.95 ? (
   // Apply reconstruction lowpass at target rate's nyquist
   x1 = bx1_l; x2 = bx2_l; y1 = by1_l; y2 = by2_l;
   output_l = biquad_lp(output_l, bandlimit_freq, 0.707);
@@ -485,7 +628,7 @@ postfilter ? (
 spl0 = output_l * gain;
 spl1 = output_r * gain;
 
-@gfx 400 330
+@gfx 400 360
 gfx_update_needed > 0 ? gfx_update_needed -= 1;
 
 gfx_r = gfx_g = gfx_b = 0;
@@ -511,10 +654,17 @@ slider1 < srate ? (
   
   // Show band-limit info if in band-limited mode
   interp_mode == 3 ? (
-    gfx_x = 10; gfx_y = 55;
-    gfx_r = 0.3; gfx_g = 0.9; gfx_b = 0.9;
-    gfx_printf("Band-Limit: %.0f Hz @ %d dB/oct", bandlimit_freq, bandlimit_stages * 12);
-    gfx_r = gfx_g = gfx_b = 0.8;
+    target_rate >= srate * 0.95 ? (
+      gfx_x = 10; gfx_y = 55;
+      gfx_r = 0.9; gfx_g = 0.5; gfx_b = 0.3;
+      gfx_printf("Band-Limit: BYPASSED (rate too close to host)");
+      gfx_r = gfx_g = gfx_b = 0.8;
+    ) : (
+      gfx_x = 10; gfx_y = 55;
+      gfx_r = 0.3; gfx_g = 0.9; gfx_b = 0.9;
+      gfx_printf("Band-Limit: %.0f Hz @ %d dB/oct", bandlimit_freq, bandlimit_stages * 12);
+      gfx_r = gfx_g = gfx_b = 0.8;
+    );
   );
 ) : (
   gfx_x = 10; gfx_y = 25;
@@ -530,9 +680,16 @@ gfx_x = 10; gfx_y = 75;
 gfx_printf("Pre-Filter: %s", prefilter ? "Enabled" : "Disabled");
 
 prefilter ? (
-  gfx_r = gfx_g = gfx_b = 0.8;
-  gfx_x = 10; gfx_y = 90;
-  gfx_printf("Pre-Filter: %d dB/oct @ %.0f Hz", pre_stages * 12, nyquist_freq);
+  target_rate >= srate * 0.95 ? (
+    gfx_r = 0.9; gfx_g = 0.5; gfx_b = 0.3;
+    gfx_x = 10; gfx_y = 90;
+    gfx_printf("Pre-Filter: BYPASSED (rate too close to host)");
+    gfx_r = gfx_g = gfx_b = 0.8;
+  ) : (
+    gfx_r = gfx_g = gfx_b = 0.8;
+    gfx_x = 10; gfx_y = 90;
+    gfx_printf("Pre-Filter: %d dB/oct @ %.0f Hz", pre_stages * 12, nyquist_freq);
+  );
 ) : (
   gfx_r = gfx_g = gfx_b = 0.4;
   gfx_x = 10; gfx_y = 90;
@@ -549,33 +706,49 @@ btcrush ? (
   gfx_printf("Bit Depth: %d bits", slider7);
   gfx_x = 10; gfx_y = 140;
   gfx_printf("Mode: %s", crushgate ? "Gated" : "No Gate");
+  
+  // Dither info
+  gfx_x = 10; gfx_y = 155;
+  dither_type == 0 ? (
+    gfx_r = gfx_g = gfx_b = 0.4;
+    gfx_printf("Dither: None");
+  ) : (
+    gfx_r = 0.3; gfx_g = 0.9; gfx_b = 0.7;
+    dither_type == 1 ? gfx_printf("Dither: RPDF @ %.0f%%", dither_amount * 100) :
+    gfx_printf("Dither: TPDF @ %.0f%%", dither_amount * 100);
+    
+    gfx_r = gfx_g = gfx_b = 0.8;
+    gfx_x = 10; gfx_y = 170;
+    gfx_printf("Silence Cutoff: %s", dither_silence_cutoff ? "On" : "Off");
+  );
+  gfx_r = gfx_g = gfx_b = 0.8;
 );
 
 // Isolation Filter Section
-gfx_x = 10; gfx_y = 160;
+gfx_x = 10; gfx_y = 190;
 gfx_printf("Isolation Filter: %s", postfilter ? "Enabled" : "Disabled");
 
 postfilter ? (
   gfx_r = gfx_g = gfx_b = 0.8;
-  gfx_x = 10; gfx_y = 175;
+  gfx_x = 10; gfx_y = 205;
   gfx_printf("Isolation: %d dB/oct @ %.0f Hz", isolation_stages * 12, nyquist_freq);
 ) : (
   gfx_r = gfx_g = gfx_b = 0.4;
-  gfx_x = 10; gfx_y = 175;
+  gfx_x = 10; gfx_y = 205;
   gfx_printf("Isolation: (inactive)");
   gfx_r = gfx_g = gfx_b = 0.8;
 );
 
 // Output Section
-gfx_x = 10; gfx_y = 195;
-gfx_printf("Output Gain: %.1f dB", slider11);
+gfx_x = 10; gfx_y = 225;
+gfx_printf("Output Gain: %.1f dB", slider16);
 
-gfx_x = 10; gfx_y = 210;
+gfx_x = 10; gfx_y = 240;
 gfx_printf("Output Mode: %s", mono_mode ? "Mono" : "Stereo");
 
 // Status
-gfx_x = 10; gfx_y = 235;
-effect_active = (btcrush || (slider1 < srate) || prefilter || postfilter || slider11 != 0);
+gfx_x = 10; gfx_y = 265;
+effect_active = (btcrush || (slider1 < srate) || prefilter || postfilter || slider16 != 0);
 effect_active ? (
   gfx_r = 0.3; gfx_g = 0.9; gfx_b = 0.3;
   gfx_printf("Status: Processing Audio");
@@ -586,9 +759,18 @@ effect_active ? (
 
 // Show helpful tip for band-limited mode
 interp_mode == 3 && slider1 < srate ? (
-  gfx_x = 10; gfx_y = 260;
+  gfx_x = 10; gfx_y = 290;
   gfx_r = 0.7; gfx_g = 0.7; gfx_b = 0.9;
   gfx_printf("TIP: Enable Pre-Filter (48-72 dB/oct)");
-  gfx_x = 10; gfx_y = 275;
+  gfx_x = 10; gfx_y = 305;
   gfx_printf("for best band-limited quality");
+);
+
+// Show dither tip if bit crushing without dither
+btcrush && dither_type == 0 && slider9 <= 8 ? (
+  gfx_x = 10; gfx_y = 325;
+  gfx_r = 0.9; gfx_g = 0.7; gfx_b = 0.3;
+  gfx_printf("TIP: Enable TPDF dither for cleaner");
+  gfx_x = 10; gfx_y = 340;
+  gfx_printf("low bit depth results");
 );
