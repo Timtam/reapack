@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="2f5a2fdcca16c39d34330dc3e7cee6e96b18dab3">
+<index version="1" name="Toni Barth REAPER Things" commit="e4e523fbc54dd518a8f74484bf4b96a33233f998">
   <category name="FX">
     <reapack name="acer_2mfilter.jsfx" type="effect" desc="2 mode filter">
       <metadata>
@@ -50,6 +50,11 @@ v1.5
 added dithering, both rectangular and triangular, for bit crushed modes.
 added dynamickly adjusting cutoff frequencies for filters, to try and get closer to true nyquist for both anti aliasing and band limiting]]></changelog>
         <source>https://github.com/Timtam/reapack/raw/2f5a2fdcca16c39d34330dc3e7cee6e96b18dab3/FX/acer_precision_pcm.jsfx</source>
+      </version>
+      <version name="1.6.1" author="acer bt and claude" time="2025-11-14T15:22:49Z">
+        <changelog><![CDATA[v1.6.1
+fixed filter instability when target sample rate is at or near host sample rate]]></changelog>
+        <source>https://github.com/Timtam/reapack/raw/e4e523fbc54dd518a8f74484bf4b96a33233f998/FX/acer_precision_pcm.jsfx</source>
       </version>
     </reapack>
     <reapack name="ch_61 re-mapper.jsfx" type="effect" desc="CH 61 ReMapper">
