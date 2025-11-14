@@ -1,14 +1,10 @@
 desc:precision PCM
 author:acer bt and claude
-version:1.6
+version:1.6.1
 tags:bitcrusher distortion retro samplerate
 changelog:
-	v1.6
-	added quality options to the band limit and anti aliasing filters, to help with sound shaping.
-	made trangular pdf dithering more mathematically accurate.
-	v1.5
-	added dithering, both rectangular and triangular, for bit crushed modes.
-	added dynamickly adjusting cutoff frequencies for filters, to try and get closer to true nyquist for both anti aliasing and band limiting
+	v1.6.1
+	fixed filter instability when target sample rate is at or near host sample rate
 about:
 	This effect started as an attempt to make a bitcrusher with detailed controls, but has since become a pcm output simulator. It acts like a regular bitcrusher in that it can do bit reduction and bad resampling, but it can also do a lot more. Below is a list of the available parameters and there functions.
 	sample rate (Hz): sets the rate that the plugin will resample audio to. The default is 44100 Hz, and it can go from 100 Hz to 192000 Hz.
@@ -28,15 +24,6 @@ about:
 	isolation filter rolloff (dB/oct): determines how much frequencies below the cutoff point of the isolation filter are roled off. It defaults to 12 dB per octave, and has the same value choices as the other filters in this plugin.
 	output gain (dB): sets the final output level after processing. Default is 0 dB, and it ranges from -24 to 24 dB.
 	output mode (stereo/mono): sets if the plugin outputs in stereo, or sums both channels to mono before outputting. Default is stereo
-
-// Calculate filter frequencies with rolloff compensation
-// Compensate for cascaded filter attenuation to maximize usable bandwidth
-// while maintaining effectiveness at each rolloff level
-
-// Determine adaptive scaling based on target rate (for Adaptive mode)
-rate_factor = target_rate / 44100;  // Normalize to CD quality
-rate_factor < 0.18 ? (  // Below ~8kHz, start pulling back
-  adaptive_scale = 0
 
 slider1:44100<100,192000,10>Sample Rate (Hz)
 slider2:0<0,3,1{Sample & Hold,Linear,Cubic,Band-Limited}>Interpolation Mode
@@ -228,6 +215,7 @@ local(a0, a1, a2, a3, f2, f3)
 
 @slider
 // Sample rate reduction settings (sliders 1-2)
+slider1_raw = slider1;  // Store raw slider value before clamping
 target_rate = max(100, min(slider1, srate));
 interp_mode = floor(slider2);
 
@@ -314,6 +302,9 @@ pre_quality == 0 ? (
 
 nyquist_freq = target_rate * 0.5 * correction;
 
+// Safety check: ensure nyquist_freq doesn't exceed 95% of host Nyquist
+nyquist_freq = min(nyquist_freq, srate * 0.475);
+
 // Band-limit reconstruction filter
 // Quality modes: 0=Maximum Bandwidth, 1=Adaptive, 2=Clean, 3=Ultra Clean
 // Targeting -2 to -3dB at Nyquist for effective artifact removal
@@ -358,6 +349,9 @@ bandlimit_quality == 0 ? (
 
 bandlimit_freq = target_rate * 0.5 * bl_correction;
 
+// Safety check: ensure bandlimit_freq doesn't exceed 95% of host Nyquist
+bandlimit_freq = min(bandlimit_freq, srate * 0.475);
+
 @sample
 
 input_l = spl0;
@@ -371,8 +365,8 @@ mono_mode ? (
 );
 
 // Step 1: Pre-filter (Anti-aliasing, if enabled)
-// Only apply if target rate is significantly below host rate
-prefilter && (target_rate < srate * 0.95) ? (
+// Only apply if slider value is significantly below host rate (before clamping)
+prefilter && (slider1_raw < srate * 0.95) ? (
   x1 = x1_l; x2 = x2_l; y1 = y1_l; y2 = y2_l;
   filtered_l = biquad_lp(input_l, nyquist_freq, 0.707);
   x1_l = x1; x2_l = x2; y1_l = y1; y2_l = y2;
@@ -501,8 +495,8 @@ btcrush ? (
 );
 
 // Step 4: Band-limited reconstruction filter (if in band-limited mode)
-// Only apply if target rate is significantly below host rate
-interp_mode == 3 && target_rate < srate * 0.95 ? (
+// Only apply if slider value is significantly below host rate (before clamping)
+interp_mode == 3 && slider1_raw < srate * 0.95 ? (
   // Apply reconstruction lowpass at target rate's nyquist
   x1 = bx1_l; x2 = bx2_l; y1 = by1_l; y2 = by2_l;
   output_l = biquad_lp(output_l, bandlimit_freq, 0.707);
@@ -654,7 +648,7 @@ slider1 < srate ? (
   
   // Show band-limit info if in band-limited mode
   interp_mode == 3 ? (
-    target_rate >= srate * 0.95 ? (
+    slider1_raw >= srate * 0.95 ? (
       gfx_x = 10; gfx_y = 55;
       gfx_r = 0.9; gfx_g = 0.5; gfx_b = 0.3;
       gfx_printf("Band-Limit: BYPASSED (rate too close to host)");
@@ -680,7 +674,7 @@ gfx_x = 10; gfx_y = 75;
 gfx_printf("Pre-Filter: %s", prefilter ? "Enabled" : "Disabled");
 
 prefilter ? (
-  target_rate >= srate * 0.95 ? (
+  slider1_raw >= srate * 0.95 ? (
     gfx_r = 0.9; gfx_g = 0.5; gfx_b = 0.3;
     gfx_x = 10; gfx_y = 90;
     gfx_printf("Pre-Filter: BYPASSED (rate too close to host)");
@@ -703,7 +697,7 @@ gfx_printf("Bit Crushing: %s", btcrush ? "Enabled" : "Disabled");
 
 btcrush ? (
   gfx_x = 10; gfx_y = 125;
-  gfx_printf("Bit Depth: %d bits", slider7);
+  gfx_printf("Bit Depth: %d bits", slider9);
   gfx_x = 10; gfx_y = 140;
   gfx_printf("Mode: %s", crushgate ? "Gated" : "No Gate");
   
