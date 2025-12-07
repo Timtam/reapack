@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="0a90a15e99d6d41b807404e158a91deef3bfaacb">
+<index version="1" name="Toni Barth REAPER Things" commit="f3fdd2aa7dd42cc94c19ffb1a8cee26eb5eee1e1">
   <category name="FX">
     <reapack name="acer_2mfilter.jsfx" type="effect" desc="2 mode filter">
       <metadata>
@@ -813,6 +813,21 @@ https://github.com/Timtam/AccessiChords
       </metadata>
       <version name="1.0" author="Chessel (Chris Goodwin)" time="2022-11-24T16:42:09Z">
         <source main="main">https://github.com/Timtam/reapack/raw/fc905baddaf27285ba2784d737f9c6cb32db7267/Various/chessel_Unfreeze%20track%20and%20remove%20text%20from%20track%20name.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Scott_Select tracks by status or type of content.lua" type="script" desc="Select tracks by status or type of content">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Shows a popup menu where you can select all tracks with statuses like empty or muted, and tracks with content like audio items or virtual instruments.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Scott Chesworth" time="2025-12-07T19:58:05Z">
+        <changelog><![CDATA[Initial release]]></changelog>
+        <source main="main">https://github.com/Timtam/reapack/raw/f3fdd2aa7dd42cc94c19ffb1a8cee26eb5eee1e1/Various/Scott_Select%20tracks%20by%20status%20or%20type%20of%20content.lua</source>
       </version>
     </reapack>
     <reapack name="timtam_Export markers in relation to items on selected track.lua" type="script" desc="Export markers in relation to items on selected track">
