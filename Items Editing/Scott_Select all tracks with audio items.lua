@@ -1,7 +1,6 @@
 -- @description Select all tracks with audio items
 -- @version 1.0
 -- @author Scott Chesworth
--- @provides [main]
 -- @changelog
 --   initial release
 
