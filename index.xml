@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="e1a7619b78ddafdc23e9a66bc7d698a37b98533a">
+<index version="1" name="Toni Barth REAPER Things" commit="0a90a15e99d6d41b807404e158a91deef3bfaacb">
   <category name="FX">
     <reapack name="acer_2mfilter.jsfx" type="effect" desc="2 mode filter">
       <metadata>
@@ -305,21 +305,6 @@ fixed filter instability when target sample rate is at or near host sample rate]
         <source main="main">https://github.com/Timtam/reapack/raw/02e4d9dc2650d0de33d8eda5cf39744aed860284/FX/chessel_Set%20Last%20Touched%20Parameter%20To%20All%20Same%20FX%20In%20FX%20Chain.lua</source>
       </version>
     </reapack>
-    <reapack name="CTP_ReaComp Sidechain Manager.lua" type="script" desc="ReaComp Sidechain Manager">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 Provides a menu-based UI for making and managing sidechains with ReaComp.\par}
-}
-]]></description>
-      </metadata>
-      <version name="1.0" author="CodyThePretender (Scott Chesworth)" time="2025-11-27T19:02:52Z">
-        <changelog><![CDATA[initial release]]></changelog>
-        <source main="main">https://github.com/Timtam/reapack/raw/e1a7619b78ddafdc23e9a66bc7d698a37b98533a/FX/CTP_ReaComp%20Sidechain%20Manager.lua</source>
-      </version>
-    </reapack>
   </category>
   <category name="Items Editing">
     <reapack name="chessel_Move to end of selected item.lua" type="script" desc="Move to end of selected item">
@@ -376,6 +361,18 @@ fixed filter instability when target sample rate is at or near host sample rate]
       </metadata>
       <version name="1.0" author="Chessel (Chris Goodwin)" time="2023-03-22T08:13:37Z">
         <source main="main">https://github.com/Timtam/reapack/raw/b44d07fe8ecae8ac8840f921439afb9867dc04ad/Items%20Editing/chessel_Move%20to%20start%20of%20selected%20item.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Scott_Select all tracks with audio items.lua" type="script" desc="Select all tracks with audio items">
+      <version name="1.0" author="Scott Chesworth" time="2025-12-07T08:21:48Z">
+        <changelog><![CDATA[initial release]]></changelog>
+        <source main="main">https://github.com/Timtam/reapack/raw/0a90a15e99d6d41b807404e158a91deef3bfaacb/Items%20Editing/Scott_Select%20all%20tracks%20with%20audio%20items.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Scott_Select all tracks with MIDI items.lua" type="script" desc="Select all tracks with MIDI items">
+      <version name="1.0" author="Scott Chesworth" time="2025-12-07T08:21:48Z">
+        <changelog><![CDATA[initial release]]></changelog>
+        <source main="main">https://github.com/Timtam/reapack/raw/0a90a15e99d6d41b807404e158a91deef3bfaacb/Items%20Editing/Scott_Select%20all%20tracks%20with%20MIDI%20items.lua</source>
       </version>
     </reapack>
   </category>
