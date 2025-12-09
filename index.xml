@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="f3fdd2aa7dd42cc94c19ffb1a8cee26eb5eee1e1">
+<index version="1" name="Toni Barth REAPER Things" commit="faf86c5a5404b3a502af8adde7335952f7dfdb8f">
   <category name="FX">
     <reapack name="acer_2mfilter.jsfx" type="effect" desc="2 mode filter">
       <metadata>
@@ -813,6 +813,36 @@ https://github.com/Timtam/AccessiChords
       </metadata>
       <version name="1.0" author="Chessel (Chris Goodwin)" time="2022-11-24T16:42:09Z">
         <source main="main">https://github.com/Timtam/reapack/raw/fc905baddaf27285ba2784d737f9c6cb32db7267/Various/chessel_Unfreeze%20track%20and%20remove%20text%20from%20track%20name.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Derek_Select next audible track at cursor position.lua" type="script" desc="Select next audible track at cursor position">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Identifies and selects the next audible track, reporting its name and peak info. We collect left and right peaks from track meters if playing, or read reapeak cache files for items if project is stopped. Muted tracks aren's aren't included.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.1" author="Derek Lane, Scott Chesworth and GPT." time="2025-12-09T20:22:10Z">
+        <changelog><![CDATA[Scott added speech feedback and fallback approach when transport is stopped.]]></changelog>
+        <source main="main">https://github.com/Timtam/reapack/raw/faf86c5a5404b3a502af8adde7335952f7dfdb8f/Various/Derek_Select%20next%20audible%20track%20at%20cursor%20position.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Derek_Select previous audible track at cursor position.lua" type="script" desc="Select previous audible track at cursor position">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Identifies and selects the previous audible track, reporting its name and peak info. We collect left and right peaks from track meters if playing, or read reapeak cache files for items if project is stopped. Muted tracks aren's aren't included.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.1" author="Derek Lane, Scott Chesworth and GPT." time="2025-12-09T20:22:10Z">
+        <changelog><![CDATA[Scott added speech feedback and fallback approach when transport is stopped.]]></changelog>
+        <source main="main">https://github.com/Timtam/reapack/raw/faf86c5a5404b3a502af8adde7335952f7dfdb8f/Various/Derek_Select%20previous%20audible%20track%20at%20cursor%20position.lua</source>
       </version>
     </reapack>
     <reapack name="Scott_Select tracks by status or type of content.lua" type="script" desc="Select tracks by status or type of content">
