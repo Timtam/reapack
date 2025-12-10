@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="faf86c5a5404b3a502af8adde7335952f7dfdb8f">
+<index version="1" name="Toni Barth REAPER Things" commit="0752d8d743df79c90a8dfaa5f221ad1907f87b40">
   <category name="FX">
     <reapack name="acer_2mfilter.jsfx" type="effect" desc="2 mode filter">
       <metadata>
@@ -843,6 +843,21 @@ https://github.com/Timtam/AccessiChords
       <version name="1.1" author="Derek Lane, Scott Chesworth and GPT." time="2025-12-09T20:22:10Z">
         <changelog><![CDATA[Scott added speech feedback and fallback approach when transport is stopped.]]></changelog>
         <source main="main">https://github.com/Timtam/reapack/raw/faf86c5a5404b3a502af8adde7335952f7dfdb8f/Various/Derek_Select%20previous%20audible%20track%20at%20cursor%20position.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Scott_Copy times and names of project markers to clipboard.lua" type="script" desc="Copy times and names of project markers to clipboard">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Copies project marker times and names to clipboard, formatted ready for pasting chapters into the Description field of YouTube videos. Requires SWS for CF_SetClipboard and uses OSARA to provide speech feedback.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="X-Raym and Scott Chesworth" time="2025-12-10T01:47:05Z">
+        <changelog><![CDATA[Initial release]]></changelog>
+        <source main="main">https://github.com/Timtam/reapack/raw/0752d8d743df79c90a8dfaa5f221ad1907f87b40/Various/Scott_Copy%20times%20and%20names%20of%20project%20markers%20to%20clipboard.lua</source>
       </version>
     </reapack>
     <reapack name="Scott_Select tracks by status or type of content.lua" type="script" desc="Select tracks by status or type of content">
