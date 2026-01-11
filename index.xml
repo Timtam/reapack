@@ -376,33 +376,6 @@ fixed filter instability when target sample rate is at or near host sample rate]
       </version>
     </reapack>
   </category>
-  <category name="Items Editing/Scan for Silence">
-    <reapack name="Scott_Configure scan for silence.lua" type="script" desc="Configure Scan for Silence (set peak dB and duration)">
-      <version name="1.1" author="Scott Chesworth" time="2026-01-11T21:59:30Z">
-        <source main="main">https://github.com/Timtam/reapack/raw/422d4e7b75516d951807092858dded14a25159b7/Items%20Editing/Scan%20for%20Silence/Scott_Configure%20scan%20for%20silence.lua</source>
-      </version>
-    </reapack>
-    <reapack name="Scott_Move to beginning of next silence in selected item.lua" type="script" desc="Move to beginning of next silence in selected item">
-      <version name="1.1" author="Scott Chesworth" time="2026-01-11T21:59:30Z">
-        <source main="main">https://github.com/Timtam/reapack/raw/422d4e7b75516d951807092858dded14a25159b7/Items%20Editing/Scan%20for%20Silence/Scott_Move%20to%20beginning%20of%20next%20silence%20in%20selected%20item.lua</source>
-      </version>
-    </reapack>
-    <reapack name="Scott_Move to beginning of previous silence in selected item.lua" type="script" desc="Move edit cursor to beginning of silence before cursor">
-      <version name="1.1" author="Scott Chesworth" time="2026-01-11T21:59:30Z">
-        <source main="main">https://github.com/Timtam/reapack/raw/422d4e7b75516d951807092858dded14a25159b7/Items%20Editing/Scan%20for%20Silence/Scott_Move%20to%20beginning%20of%20previous%20silence%20in%20selected%20item.lua</source>
-      </version>
-    </reapack>
-    <reapack name="Scott_Move to end of next silence in selected item.lua" type="script" desc="Move to end of next silence in selected item">
-      <version name="1.1" author="Scott Chesworth" time="2026-01-11T21:59:30Z">
-        <source main="main">https://github.com/Timtam/reapack/raw/422d4e7b75516d951807092858dded14a25159b7/Items%20Editing/Scan%20for%20Silence/Scott_Move%20to%20end%20of%20next%20silence%20in%20selected%20item.lua</source>
-      </version>
-    </reapack>
-    <reapack name="Scott_Move to end of previous silence in selected item.lua" type="script" desc="Move to end of previous silence in selected item">
-      <version name="1.1" author="Scott Chesworth" time="2026-01-11T21:59:30Z">
-        <source main="main">https://github.com/Timtam/reapack/raw/422d4e7b75516d951807092858dded14a25159b7/Items%20Editing/Scan%20for%20Silence/Scott_Move%20to%20end%20of%20previous%20silence%20in%20selected%20item.lua</source>
-      </version>
-    </reapack>
-  </category>
   <category name="MIDI Editor">
     <reapack name="chessel_Add Pitch Bend Vibrato.lua" type="script" desc="Add pitch bend vibrato">
       <metadata>
