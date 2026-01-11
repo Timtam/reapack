@@ -1,0 +1,15 @@
+-- @description Scan for Silence (Install All)
+-- @version 1.1
+-- @author Scott Chesworth
+-- @about
+--   Installs scripts for navigating silence in the selected item, plus configuration UI.
+--
+--   Run Configure scan for silence script first, set threshold and silence duration Those values will be stored until you change them.
+--
+--   Use the other scripts to jump to beginning or end of previous or next silent areas in the selected item.
+-- @provides
+--   [main] Scan for Silence/Scott_Move to beginning of next silence in selected item.lua
+--   [main] Scan for Silence/Scott_Move to beginning of previous silence in selected item.lua
+--   [main] Scan for Silence/Scott_Move to end of next silence in selected item.lua
+--   [main] Scan for Silence/Scott_Move to end of previous silence in selected item.lua
+--   [main] Scan for Silence/Scott_Configure scan for silence.lua
