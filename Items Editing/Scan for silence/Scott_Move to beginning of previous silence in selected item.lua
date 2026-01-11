@@ -2,7 +2,7 @@
 -- @version 1.0
 -- @author Scott Chesworth
 
--- === SPEECH OUTPUT ===
+-- SPEECH OUTPUT 
 local function Speak(str)
   if reaper.osara_outputMessage then
     reaper.osara_outputMessage(str)
@@ -11,7 +11,7 @@ local function Speak(str)
   end
 end
 
--- === PEAK ANALYSIS ===
+-- PEAK ANALYSIS 
 local function calculate_peak(buf, samples, channels)
   local max_amp = 0
   for i = 1, samples * channels do
@@ -21,7 +21,7 @@ local function calculate_peak(buf, samples, channels)
   return max_amp
 end
 
--- === REVISED REVERSE SCAN ===
+-- REVISED REVERSE SCAN 
 local function find_silence_backward(item, take, scan_start, scan_end, threshold_amp, silence_duration, window_size, hop_size)
   local accessor = reaper.CreateTakeAudioAccessor(take)
   if not accessor then return nil end
@@ -84,7 +84,7 @@ local function find_silence_backward(item, take, scan_start, scan_end, threshold
   return nil
 end
 
--- === MAIN ===
+-- MAIN 
 reaper.Undo_BeginBlock()
 
 -- Load saved settings
