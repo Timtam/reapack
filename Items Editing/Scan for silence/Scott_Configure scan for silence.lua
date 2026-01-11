@@ -1,19 +1,6 @@
 -- @description Configure Scan for Silence (set peak dB and duration)
 -- @version 1.1
 -- @author Scott Chesworth
--- @about
---   Run the Configure scan for silence script to set peak and duration of the silences you want to find. Those settings are stored in reaper-extstate, they'll be used in any project and also stick around after you've closed REAPER.
---   Use any combination of four scripts to move to the beginning or end of previous or next silence in the selected item.
---   Scanning for silence begins from the edit cursor position if stopped/paused, or from play cursor if the project is playing.
---   If the project is playing when you run the scripts, it will continue doing so after the edit cursor has been moved.
--- @provides
---   [main] . > Scan for Silence/Scott_Move to beginning of next silence in selected item.lua
---   [main] . > Scan for Silence/Scott_Move to beginning of previous silence in selected item.lua
---   [main] . > Scan for Silence/Scott_Move to end of next silence in selected item.lua
---   [main] . > Scan for Silence/Scott_Move to end of previous silence in selected item.lua
---   [main] . > Scan for Silence/Scott_Configure scan for silence.lua
--- changelog
---   Fixed packaging and improved readability
 
 local function Speak(str)
   if reaper.osara_outputMessage then

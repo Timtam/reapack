@@ -1,5 +1,5 @@
 -- @description Move to end of previous silence in selected item
--- @version 1.0
+-- @version 1.1
 -- @author Scott Chesworth
 
 -- SPEECH OUTPUT 
