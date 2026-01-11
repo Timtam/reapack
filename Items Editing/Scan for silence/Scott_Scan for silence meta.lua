@@ -10,8 +10,8 @@
 --
 --   If the project is playing when you run the scripts, it will continue doing so after the edit cursor has been moved.
 -- @provides
---   [main] Scan for Silence/Scott_Move to beginning of next silence in selected item.lua
---   [main] Scan for Silence/Scott_Move to beginning of previous silence in selected item.lua
---   [main] Scan for Silence/Scott_Move to end of next silence in selected item.lua
---   [main] Scan for Silence/Scott_Move to end of previous silence in selected item.lua
---   [main] Scan for Silence/Scott_Configure scan for silence.lua
+--   [main] Scan for silence/Scott_Move to beginning of next silence in selected item.lua
+--   [main] Scan for silence/Scott_Move to beginning of previous silence in selected item.lua
+--   [main] Scan for silence/Scott_Move to end of next silence in selected item.lua
+--   [main] Scan for silence/Scott_Move to end of previous silence in selected item.lua
+--   [main] Scan for silence/Scott_Configure scan for silence.lua
