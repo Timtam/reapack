@@ -1,3 +1,4 @@
+-- @metapackage
 -- @description Scan for Silence (Install All)
 -- @version 1.1
 -- @author Scott Chesworth
