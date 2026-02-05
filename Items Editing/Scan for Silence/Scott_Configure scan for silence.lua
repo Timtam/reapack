@@ -1,7 +1,4 @@
--- @description Configure Scan for Silence (set peak dB and duration)
--- @version 1.1
--- @author Scott Chesworth
-
+-- SPEECH OUTPUT
 local function Speak(str)
   if reaper.osara_outputMessage then
     reaper.osara_outputMessage(str)

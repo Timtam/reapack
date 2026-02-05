@@ -1,7 +1,3 @@
--- @description Move edit cursor to beginning of silence before cursor
--- @version 1.1
--- @author Scott Chesworth
-
 -- SPEECH OUTPUT 
 local function Speak(str)
   if reaper.osara_outputMessage then

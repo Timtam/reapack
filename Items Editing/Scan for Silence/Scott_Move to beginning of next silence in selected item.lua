@@ -1,7 +1,3 @@
--- @description Move to beginning of next silence in selected item
--- @version 1.1
--- @author Scott Chesworth
-
 -- SPEECH OUTPUT 
 local function Speak(str)
   if reaper.osara_outputMessage then
