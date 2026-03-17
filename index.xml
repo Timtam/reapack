@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="98578033c58c647dac75904058b817d127ee942e">
+<index version="1" name="Toni Barth REAPER Things" commit="26bf7110cb6d6f2931e138e20e8a382db34df798">
   <category name="FX">
     <reapack name="acer_2mfilter.jsfx" type="effect" desc="2 mode filter">
       <metadata>
@@ -30,15 +30,6 @@
       </version>
     </reapack>
     <reapack name="acer_precision_pcm.jsfx" type="effect" desc="precision PCM">
-      <metadata>
-        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
-{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
-\widowctrl\hyphauto
-
-{\pard \ql \f0 \sa180 \li0 \fi0 This effect started as an attempt to make a bitcrusher with detailed controls, but has since become a pcm output simulator. It acts like a regular bitcrusher in that it can do bit reduction and bad resampling, but it can also do a lot more. Below is a list of the available parameters and there functions. sample rate (Hz): sets the rate that the plugin will resample audio to. The default is 44100 Hz, and it can go from 100 Hz to 192000 Hz. interpolation mode: sets the interpolation mode used when processing samples. The default is set to sample and hold, for retro purposes, but it also includes linear, cubic, and band limited modes. Band limited combines cubic interpolation with a low pass filter just before the final output, to get as close to high quality reconstruction as possible. prefilter (antialiasing): this applies low pass filtering before the down sampling step, to reduce frequencies that would cause fold over aliasing. It's disabled by default. prefilter rolloff (dB/oct): sets the rolloff rate for the prefilter, which determines how much frequencies above the prefilter frequency are attenuated. 12 dB per octave is default, it can go in 12 dB steps all the way to 72 dB per octave. Do note that you will need steeper rolloffs for antialiasing at lower samplerates if you want it to sound clean. prefilter quality: controls the tradeoff between bandwidth preservation and aliasing prevention. Maximum Bandwidth gets closest to Nyquist (may allow slight aliasing at extreme low rates), Adaptive automatically adjusts based on target sample rate (recommended), Clean uses conservative filtering that guarantees minimal aliasing at most rates, Ultra Clean uses very conservative filtering (v1.5 style) for maximum artifact elimination at extreme low rates. Use Maximum Bandwidth for transparent resampling at normal rates, Adaptive for general use, Clean for working below 8 kHz, or Ultra Clean when absolute purity is required at very low rates (trades significant bandwidth for complete artifact removal). band limit rolloff (dB/oct): similar to the rolloff for the prefilter, but it affects the rolloff rate for the band limiting filter used just before the output when interpolation mode is set to band limited. It defaults to 48 dB per octave, and goes from 12 to 72 dB per octave in 12 dB steps. band limit quality: controls reconstruction filter behavior in band-limited mode. Maximum Bandwidth preserves the most high frequency content (may have slight artifacts at extreme low rates), Adaptive automatically adjusts for cleaner reconstruction at low rates while staying aggressive at normal rates (recommended), Clean uses conservative filtering for artifact-free reconstruction at most rates, Ultra Clean uses very conservative filtering (v1.5 style) for maximum purity at extreme low rates. Use Maximum Bandwidth for professional quality resampling above 8 kHz, Adaptive for general use, Clean for rates below 8 kHz, or Ultra Clean for complete artifact elimination at very low rates. Note: Clean and Ultra Clean modes automatically use linear interpolation below 8 kHz for cleaner results. bit depth crushing (enabled/ disabled): determines if the bit reduction component of the effect is on or off. It defaults to off. bit depth: sets the target bit depth to crush to. Default is 16, and it can go from 1 to 24 bit. Lower bit depths introduce more noise into the signal and lower dynamic range. crush mode (gated/ no gate): determines if the bit crushing gates the output, or keeps a constant noise floor below the sound at lower bit depths. Default is no gate. dither type (none/ rpdf/ tpdf): controls the type of dithering applied before bit reduction. Dithering converts harsh quantization distortion into smooth random noise, which is especially noticeable at lower bit depths. None disables dithering (default), RPDF (rectangular probability density function) applies basic random dither, and TPDF (triangular probability density function) applies higher quality dither that's less audible. TPDF is recommended for cleaner results. dither amount (%): sets the intensity of the dither signal from 0 to 100 percent. At 100% (default), dithering is applied at the proper mathematical level for the target bit depth. Lower values reduce the dither noise but may allow some quantization distortion to remain. This control is mainly for creative/experimental purposes - for proper PCM reconstruction, keep it at 100%. dither silence cutoff: when enabled (default), dithering will not be applied to signals below -96 dB to avoid adding noise to silent passages. When disabled, dithering is always applied when enabled (mathematically accurate). Disable this for archival/mastering work where absolute accuracy is required. isolation filter (high pass): this switch toggles the state of a high pass filter which can be used to filter for just aliasing/ sample and hold artafacts. It defaults to off. isolation filter rolloff (dB/oct): determines how much frequencies below the cutoff point of the isolation filter are roled off. It defaults to 12 dB per octave, and has the same value choices as the other filters in this plugin. output gain (dB): sets the final output level after processing. Default is 0 dB, and it ranges from -24 to 24 dB. output mode (stereo/mono): sets if the plugin outputs in stereo, or sums both channels to mono before outputting. Default is stereo\par}
-}
-]]></description>
-      </metadata>
       <version name="1.4" author="acer bt and claude" time="2025-11-03T20:47:41Z">
         <source>https://github.com/Timtam/reapack/raw/5f2370485943b5facab00e291b0b8e92efd24f8d/FX/acer_precision_pcm.jsfx</source>
       </version>
@@ -55,6 +46,49 @@ added dynamickly adjusting cutoff frequencies for filters, to try and get closer
         <changelog><![CDATA[v1.6.1
 fixed filter instability when target sample rate is at or near host sample rate]]></changelog>
         <source>https://github.com/Timtam/reapack/raw/e4e523fbc54dd518a8f74484bf4b96a33233f998/FX/acer_precision_pcm.jsfx</source>
+      </version>
+      <version name="2.12" author="acer bt and claude" time="2026-03-17T18:23:13Z">
+        <changelog><![CDATA[v2.12
+no functional changes from v2.11 / v2.1
+documents the v3.x experiment and why it was abandoned:
+  attempted to unify all modes under a polyphase fractional-delay FIR
+  reconstruction pipeline, with the goal of making capture timing phase-
+  coherent with the anti-alias filter across modes 0-3, and replacing the
+  FIR band-limited mode's static lowpass with true bandlimited decimation.
+  problems encountered and why each was abandoned:
+  - phase-coherent capture for modes 0-3: introduced AM sidebands that were
+    absent in v2.1. the sidebands in v2.1 modes 0-3 come from the decimation
+    grid itself and are expected/authentic; the new ones came from asymmetry
+    between the fixed Blackman window and the shifting sinc center at non-zero
+    frac values. reverted — IIR pre-filter does not need phase alignment with
+    the capture moment to suppress aliasing effectively.
+  - true polyphase FIR decimation for mode 4: produced periodic energy at
+    exactly the target sample rate, confirmed by ring mod test (8001hz ring
+    mod against 8k target -> 2hz beat; 8002hz -> 4hz beat). multiple attempts
+    to fix the frac mapping and normalization failed to eliminate the artifact.
+    root cause: any discrete capture/hold mechanism creates a decimation grid
+    that ring-mod tests will find, regardless of how clean the interpolation is.
+  - the v2.1 FIR mode is technically not doing true decimation (it filters
+    every host sample with no sample discard), but this is exactly why it
+    passes the ring mod test cleanly — there is no decimation grid to beat
+    against. it correctly represents what ideal band-limiting at the target
+    rate sounds like, which is the point of the mode.
+  - hybrid IIR fallback below 8kHz: added then removed. user is expected to
+    choose appropriate settings (IIR band-limited + steep IIR pre-filter) for
+    extreme low rates rather than having the plugin silently change behavior.
+  conclusion: v2.1 architecture is correct for the goals of this plugin.
+  FIR band-limited as a static per-sample lowpass is the right design for a
+  "what would ideal reconstruction sound like" reference mode. IIR pre-filter
+  with steep rolloff is the right tool for alias suppression at low target rates.
+v2.1
+fixed FIR band-limited mode to eliminate AM sidebands
+FIR mode now filters directly at target Nyquist without sample-and-hold
+modes 0-3 retain authentic capture/hold behavior with expected artifacts
+fixed IIR band-limited mode to apply post bit-crush (filters quantization)
+v2.0
+fixed cubic interpolation to use proper 4-point calculation with look-ahead
+added FIR filter option with 128-tap windowed-sinc and Blackman window]]></changelog>
+        <source>https://github.com/Timtam/reapack/raw/26bf7110cb6d6f2931e138e20e8a382db34df798/FX/acer_precision_pcm.jsfx</source>
       </version>
     </reapack>
     <reapack name="ch_61 re-mapper.jsfx" type="effect" desc="CH 61 ReMapper">
