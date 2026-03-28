@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="8ea5a31d9df114ad08e4a2e97023b493640a2877">
+<index version="1" name="Toni Barth REAPER Things" commit="0ec854ed148f4fde5cff1d9f95683f035629b673">
   <category name="FX">
     <reapack name="acer_2mfilter.jsfx" type="effect" desc="2 mode filter">
       <metadata>
@@ -432,6 +432,40 @@ added FIR filter option with 128-tap windowed-sinc and Blackman window]]></chang
       <version name="1.0" author="Scott Chesworth" time="2025-12-07T08:21:48Z">
         <changelog><![CDATA[initial release]]></changelog>
         <source main="main">https://github.com/Timtam/reapack/raw/0a90a15e99d6d41b807404e158a91deef3bfaacb/Items%20Editing/Scott_Select%20all%20tracks%20with%20MIDI%20items.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Scott_Set increased item rate, close gap before subsequent items on track.lua" type="script" desc="Set increased item rate, close gap before subsequent items on track">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Select items you want to speed up, run script, type an increased rate.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Should be possible to process contiguous and non-contiguous selected items, even across tracks if needed.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Shout outs to X-Raym and amagalma. I studdied scripts from them and reused some of their functions.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Scott Chesworth" time="2026-03-28T11:54:42Z">
+        <changelog><![CDATA[Initial release]]></changelog>
+        <source main="main">https://github.com/Timtam/reapack/raw/0ec854ed148f4fde5cff1d9f95683f035629b673/Items%20Editing/Scott_Set%20increased%20item%20rate,%20close%20gap%20before%20subsequent%20items%20on%20track.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Scott_Set increased item rate, preserve pitch, close gap before subsequent items on track.lua" type="script" desc="Set increased item rate, preserve pitch, close gap before subsequent items on track">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Select items you want to speed up, run script, type an increased rate.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Should be possible to process contiguous and non-contiguous selected items, even across tracks if needed.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Shout outs to X-Raym and amagalma. I studdied scripts from them and reused some of their functions.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Scott Chesworth" time="2026-03-28T11:54:42Z">
+        <changelog><![CDATA[Initial release]]></changelog>
+        <source main="main">https://github.com/Timtam/reapack/raw/0ec854ed148f4fde5cff1d9f95683f035629b673/Items%20Editing/Scott_Set%20increased%20item%20rate,%20preserve%20pitch,%20close%20gap%20before%20subsequent%20items%20on%20track.lua</source>
       </version>
     </reapack>
   </category>
