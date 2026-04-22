@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="0ec854ed148f4fde5cff1d9f95683f035629b673">
+<index version="1" name="Toni Barth REAPER Things" commit="9e76d63be2c411ba2343d551497fa682be3e693f">
   <category name="FX">
     <reapack name="acer_2mfilter.jsfx" type="effect" desc="2 mode filter">
       <metadata>
@@ -966,6 +966,21 @@ https://github.com/Timtam/AccessiChords
       <version name="1.0" author="Scott Chesworth" time="2025-12-07T19:58:05Z">
         <changelog><![CDATA[Initial release]]></changelog>
         <source main="main">https://github.com/Timtam/reapack/raw/f3fdd2aa7dd42cc94c19ffb1a8cee26eb5eee1e1/Various/Scott_Select%20tracks%20by%20status%20or%20type%20of%20content.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Scott_Speak and Set Colours of Selected Tracks.lua" type="script" desc="Speak and Set Colours of Selected Tracks (press once to speak, twice quickly to set)">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Bind this to a keystroke, then press once to speak the colour of selected tracks through OSARA, press twice quickly to load an accessible menu of custom colours.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Scott Chesworth" time="2026-04-22T15:05:05Z">
+        <changelog><![CDATA[Initial release]]></changelog>
+        <source main="main">https://github.com/Timtam/reapack/raw/9e76d63be2c411ba2343d551497fa682be3e693f/Various/Scott_Speak%20and%20Set%20Colours%20of%20Selected%20Tracks.lua</source>
       </version>
     </reapack>
     <reapack name="timtam_Export markers in relation to items on selected track.lua" type="script" desc="Export markers in relation to items on selected track">
