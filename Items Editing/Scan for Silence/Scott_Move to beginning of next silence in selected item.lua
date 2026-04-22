@@ -1,3 +1,5 @@
+-- @noindex
+
 -- SPEECH OUTPUT 
 local function Speak(str)
   if reaper.osara_outputMessage then
