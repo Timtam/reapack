@@ -1,5 +1,5 @@
 -- @description Preview skipping selected items, Sound Forge style (press once to preview, twice quickly to adjust pre and post roll times)
--- @version 1.0
+-- @version 1.1
 -- @author Scott Chesworth
 -- @about
 --   Previews the edit around selected media items by playing configurable
@@ -15,12 +15,10 @@
 --   
 --   Requires the included helper script:
 --   "Scott_Preview skipping selected items helper.lua".
--- @metapackage
 -- @provides
---   [main] Scott_Preview skipping selected items Sound Forge style (press once to preview, twice quickly to adjust pre and post roll times).lua
---   Scott_Preview skipping selected items helper.lua
+--   [nomain] Scott_Preview skipping selected items helper.lua
 -- @changelog
---   Initial release.
+--   Fixed ReaPack packaging, helper path lookup, and stale preview state handling.
 
 local DEFAULT_PREROLL_SECONDS = 2.0
 local DEFAULT_POSTROLL_SECONDS = 2.0
@@ -113,7 +111,12 @@ local function get_selected_item_bounds()
 end
 
 local function get_script_directory()
-  local _, _, _, _, _, _, script_path = reaper.get_action_context()
+  local _, script_path = reaper.get_action_context()
+
+  if not script_path then
+    return nil
+  end
+
   return script_path:match("^(.*)[/\\]")
 end
 
@@ -151,7 +154,6 @@ local function preview()
   local playback_start = math.max(0, selection_start - preroll_seconds)
   local playback_stop = selection_end + postroll_seconds
   local active_token = tostring(reaper.time_precise())
-  local helper_is_running = reaper.GetExtState(EXT_SECTION, EXT_KEY_ACTIVE_TOKEN) ~= ""
 
   reaper.SetExtState(EXT_SECTION, EXT_KEY_ACTIVE_TOKEN, active_token, false)
   reaper.SetExtState(EXT_SECTION, EXT_KEY_ORIGINAL_CURSOR, tostring(original_cursor_position), false)
@@ -172,10 +174,7 @@ local function preview()
   reaper.GetSet_LoopTimeRange(true, false, selection_start, selection_end, false)
   reaper.SetEditCurPos(playback_start, true, false)
   reaper.Main_OnCommand(PLAY_SKIP_TIME_SELECTION, 0)
-
-  if not helper_is_running then
-    launch_helper()
-  end
+  launch_helper()
 end
 
 local pending_token = reaper.GetExtState(EXT_SECTION, EXT_KEY_PENDING_TOKEN)
