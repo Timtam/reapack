@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="fe486caad29bbc4e27c149167ffec37501eda48f">
+<index version="1" name="Toni Barth REAPER Things" commit="05a79633d64c07638602f7f15c06048e02b4391b">
   <category name="FX">
     <reapack name="acer_2mfilter.jsfx" type="effect" desc="2 mode filter">
       <metadata>
@@ -1003,6 +1003,22 @@ https://github.com/Timtam/AccessiChords
       <version name="1.0" author="X-Raym and Scott Chesworth" time="2025-12-10T01:47:05Z">
         <changelog><![CDATA[Initial release]]></changelog>
         <source main="main">https://github.com/Timtam/reapack/raw/0752d8d743df79c90a8dfaa5f221ad1907f87b40/Various/Scott_Copy%20times%20and%20names%20of%20project%20markers%20to%20clipboard.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Scott_Insert project marker with configurable offset and optional speech feedback (press once to insert marker, twice to configure).lua" type="script" desc="Insert project marker with configurable offset and optional speech feedback (press once to insert marker, twice to configure)">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Bind this script to a keystroke. Press once to insert a marker. Press twice within 0.5 seconds to configure the offset in seconds.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Positive offsets insert after the play cursor. Negative offsets insert before the play cursor. For example, -5 inserts the marker 5 seconds earlier.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Scott Chesworth" time="2026-05-04T20:32:58Z">
+        <changelog><![CDATA[Initial release.]]></changelog>
+        <source main="main">https://github.com/Timtam/reapack/raw/05a79633d64c07638602f7f15c06048e02b4391b/Various/Scott_Insert%20project%20marker%20with%20configurable%20offset%20and%20optional%20speech%20feedback%20(press%20once%20to%20insert%20marker,%20twice%20to%20configure).lua</source>
       </version>
     </reapack>
     <reapack name="Scott_Preview skipping time selection Sound Forge style (press once to preview, twice quickly to adjust pre and post roll times).lua" type="script" desc="Preview skipping time selection, Sound Forge style (press once to preview, twice quickly to adjust pre and post roll times)">
