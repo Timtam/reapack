@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="ede393e9095fe1d8603311aa993ea8f8d0d3c5ca">
+<index version="1" name="Toni Barth REAPER Things" commit="7ce3a92564bb1c11f1f9f9643084c510fbd7b727">
   <category name="FX">
     <reapack name="acer_2mfilter.jsfx" type="effect" desc="2 mode filter">
       <metadata>
@@ -586,6 +586,22 @@ added FIR filter option with 128-tap windowed-sinc and Blackman window]]></chang
       <version name="1.0" author="Scott Chesworth" time="2026-05-09T11:59:20Z">
         <changelog><![CDATA[Initial release]]></changelog>
         <source main="midi_editor">https://github.com/Timtam/reapack/raw/ede393e9095fe1d8603311aa993ea8f8d0d3c5ca/MIDI%20Editor/Scott_Increase%20MIDI%20editor%20grid%20size%20with%20OSARA%20feedback.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Scott_Transpose selected MIDI notes excluding chosen notes.lua" type="script" desc="Transpose selected MIDI notes excluding chosen notes">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Prompts for a semitone transpose amount and notes to exclude.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Acts on selected notes. CC and other MIDI events are untouched.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Scott Chesworth" time="2026-05-12T13:45:50Z">
+        <changelog><![CDATA[Initial release]]></changelog>
+        <source main="midi_editor">https://github.com/Timtam/reapack/raw/7ce3a92564bb1c11f1f9f9643084c510fbd7b727/MIDI%20Editor/Scott_Transpose%20selected%20MIDI%20notes%20excluding%20chosen%20notes.lua</source>
       </version>
     </reapack>
     <reapack name="timtam_AccessiChords.lua" type="script" desc="AccessiChords">
