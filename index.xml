@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="7ce3a92564bb1c11f1f9f9643084c510fbd7b727">
+<index version="1" name="Toni Barth REAPER Things" commit="2ff3121e5c09a0e14cbcae7d8b4748b12681bd14">
   <category name="FX">
     <reapack name="acer_2mfilter.jsfx" type="effect" desc="2 mode filter">
       <metadata>
@@ -472,38 +472,38 @@ added FIR filter option with 128-tap windowed-sinc and Blackman window]]></chang
         <source main="main">https://github.com/Timtam/reapack/raw/0a90a15e99d6d41b807404e158a91deef3bfaacb/Items%20Editing/Scott_Select%20all%20tracks%20with%20MIDI%20items.lua</source>
       </version>
     </reapack>
-    <reapack name="Scott_Set increased item rate, close gap before subsequent items on track.lua" type="script" desc="Set increased item rate, close gap before subsequent items on track">
+    <reapack name="Scott_Set item rate preserving pitch, move subsequent items on track to compensate for new length.lua" type="script" desc="Set item rate preserving pitch, move subsequent items on track to compensate for new length">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
 \widowctrl\hyphauto
 
-{\pard \ql \f0 \sa180 \li0 \fi0 Select items you want to speed up, run script, type an increased rate.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Select items that you want to speed up or slow down and enter a playback rate. Anything higher than 1.0 speeds up, anything less than 1.0 slows down. Can also cope with negative numbers, -1 is half speed, -2 is one-third speed, etc.\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 Should be possible to process contiguous and non-contiguous selected items, even across tracks if needed.\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 Shout outs to X-Raym and amagalma. I studdied scripts from them and reused some of their functions.\par}
 }
 ]]></description>
       </metadata>
-      <version name="1.0" author="Scott Chesworth" time="2026-03-28T11:54:42Z">
-        <changelog><![CDATA[Initial release]]></changelog>
-        <source main="main">https://github.com/Timtam/reapack/raw/0ec854ed148f4fde5cff1d9f95683f035629b673/Items%20Editing/Scott_Set%20increased%20item%20rate,%20close%20gap%20before%20subsequent%20items%20on%20track.lua</source>
+      <version name="1.1" author="Scott Chesworth" time="2026-05-13T21:19:48Z">
+        <changelog><![CDATA[Renamed script as it's now possible to increase and decrease rate.]]></changelog>
+        <source main="main">https://github.com/Timtam/reapack/raw/2ff3121e5c09a0e14cbcae7d8b4748b12681bd14/Items%20Editing/Scott_Set%20item%20rate%20preserving%20pitch,%20move%20subsequent%20items%20on%20track%20to%20compensate%20for%20new%20length.lua</source>
       </version>
     </reapack>
-    <reapack name="Scott_Set increased item rate, preserve pitch, close gap before subsequent items on track.lua" type="script" desc="Set increased item rate, preserve pitch, close gap before subsequent items on track">
+    <reapack name="Scott_Set item rate, move subsequent items on track to compensate for new length.lua" type="script" desc="Set item rate, move subsequent items on track to compensate for new length">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
 \widowctrl\hyphauto
 
-{\pard \ql \f0 \sa180 \li0 \fi0 Select items you want to speed up, run script, type an increased rate.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Select items that you want to speed up or slow down and enter a playback rate. Anything higher than 1.0 speeds up, anything less than 1.0 slows down. Can also cope with negative numbers, -1 is half speed, -2 is one-third speed, etc.\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 Should be possible to process contiguous and non-contiguous selected items, even across tracks if needed.\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 Shout outs to X-Raym and amagalma. I studdied scripts from them and reused some of their functions.\par}
 }
 ]]></description>
       </metadata>
-      <version name="1.0" author="Scott Chesworth" time="2026-03-28T11:54:42Z">
-        <changelog><![CDATA[Initial release]]></changelog>
-        <source main="main">https://github.com/Timtam/reapack/raw/0ec854ed148f4fde5cff1d9f95683f035629b673/Items%20Editing/Scott_Set%20increased%20item%20rate,%20preserve%20pitch,%20close%20gap%20before%20subsequent%20items%20on%20track.lua</source>
+      <version name="1.1" author="Scott Chesworth" time="2026-05-13T21:19:48Z">
+        <changelog><![CDATA[Renamed script as it's now possible to increase and decrease rate.]]></changelog>
+        <source main="main">https://github.com/Timtam/reapack/raw/2ff3121e5c09a0e14cbcae7d8b4748b12681bd14/Items%20Editing/Scott_Set%20item%20rate,%20move%20subsequent%20items%20on%20track%20to%20compensate%20for%20new%20length.lua</source>
       </version>
     </reapack>
   </category>
