@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="2ff3121e5c09a0e14cbcae7d8b4748b12681bd14">
+<index version="1" name="Toni Barth REAPER Things" commit="0e49990d4625b88b0842e19cecd26fab24f1d895">
   <category name="FX">
     <reapack name="acer_2mfilter.jsfx" type="effect" desc="2 mode filter">
       <metadata>
@@ -1095,6 +1095,23 @@ https://github.com/Timtam/AccessiChords
       <version name="1.0" author="Scott Chesworth" time="2026-05-04T20:32:58Z">
         <changelog><![CDATA[Initial release.]]></changelog>
         <source main="main">https://github.com/Timtam/reapack/raw/05a79633d64c07638602f7f15c06048e02b4391b/Various/Scott_Insert%20project%20marker%20with%20configurable%20offset%20and%20optional%20speech%20feedback%20(press%20once%20to%20insert%20marker,%20twice%20to%20configure).lua</source>
+      </version>
+    </reapack>
+    <reapack name="Scott_Play preroll up to edit cursor (press once to play, twice quickly to adjust preroll time).lua" type="script" desc="Play preroll up to edit cursor (press once to play, twice quickly to adjust preroll time)">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Plays a configurable amount of audio up to the edit cursor, stopping when the playhead reaches edit cursor.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Bind a keystroke to this script. Press it once to play, press twice quickly to set the preroll time.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Scott Chesworth" time="2026-05-14T12:06:40Z">
+        <changelog><![CDATA[Initial release.]]></changelog>
+        <source main="main">https://github.com/Timtam/reapack/raw/0e49990d4625b88b0842e19cecd26fab24f1d895/Various/Scott_Play%20preroll%20up%20to%20edit%20cursor%20(press%20once%20to%20play,%20twice%20quickly%20to%20adjust%20preroll%20time).lua</source>
+        <source file="Scott_Play preroll up to edit cursor helper.lua">https://github.com/Timtam/reapack/raw/0e49990d4625b88b0842e19cecd26fab24f1d895/Various/Scott_Play%20preroll%20up%20to%20edit%20cursor%20helper.lua</source>
       </version>
     </reapack>
     <reapack name="Scott_Preview skipping time selection Sound Forge style (press once to preview, twice quickly to adjust pre and post roll times).lua" type="script" desc="Preview skipping time selection, Sound Forge style (press once to preview, twice quickly to adjust pre and post roll times)">
