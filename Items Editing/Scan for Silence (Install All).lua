@@ -1,16 +1,36 @@
 -- @metapackage
 -- @description Scan for Silence (Install All)
--- @version 1.1
+-- @version 2.0
 -- @author Scott Chesworth
 -- @about
---   Installs scripts for navigating silence in the selected item, plus configuration UI.
+--   Accessible tools for navigating and splitting silences in audio items, using REAPER's peak data
+--   for fast detection.
 --
---   Run Configure scan for silence script first, set threshold and silence duration Those values will be stored until you change them.
+--   Run Configure scan for silence script first to set the threshold (dB) and minimum
+--   silence duration; optionally enable relative-movement speech. Settings persist
+--   across projects.
 --
---   Use the other scripts to jump to beginning or end of previous or next silent areas in the selected item.
+--   Navigation features: jump the edit cursor to the start or end of the next/previous
+--   silence on the selected track, flowing across items; the item you land on is
+--   selected.
+--
+--   Splitting features: split items at the starts or ends of detected silences across selected
+--   items, selected tracks, or within time selection (provides a menu to choose context).
+-- @changelog
+--   Navigating to silences is about a million percent faster now! All scripts use REAPER's peak data instead of decoding the audio.
+--   
+--   Navigation now works across all items on the selected track, and selects the item you land on.
+--   
+--   Added scripts to split at the starts or ends of silences (selected items, selected tracks, or time selection).
+--   
+--   Added optional relative-movement feedback, respecting primary ruler format (e.g. "16 bars forward"). Enable it by running the Configure script.
+--   
+--   Scripts renamed in line with new functionality so you might need to re-bind some keyboard shortcuts.
 -- @provides
---   [main] Scan for Silence/Scott_Move to beginning of next silence in selected item.lua
---   [main] Scan for Silence/Scott_Move to beginning of previous silence in selected item.lua
---   [main] Scan for Silence/Scott_Move to end of next silence in selected item.lua
---   [main] Scan for Silence/Scott_Move to end of previous silence in selected item.lua
+--   [main] Scan for Silence/Scott_Move to beginning of next silence on selected track.lua
+--   [main] Scan for Silence/Scott_Move to end of next silence on selected track.lua
+--   [main] Scan for Silence/Scott_Move to beginning of previous silence on selected track.lua
+--   [main] Scan for Silence/Scott_Move to end of previous silence on selected track.lua
+--   [main] Scan for Silence/Scott_Split at starts of silences.lua
+--   [main] Scan for Silence/Scott_Split at ends of silences.lua
 --   [main] Scan for Silence/Scott_Configure scan for silence.lua
