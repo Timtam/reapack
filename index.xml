@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="872ed68cc590eae907731f5b377dccf9943f2eae">
+<index version="1" name="Toni Barth REAPER Things" commit="01a7546ea0a60fa9e8f94e23f79ef64127a6cea8">
   <category name="FX">
     <reapack name="acer_2mfilter.jsfx" type="effect" desc="2 mode filter">
       <metadata>
@@ -629,7 +629,7 @@ Scripts renamed in line with new functionality so you might need to re-bind some
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
 \widowctrl\hyphauto
 
-{\pard \ql \f0 \sa180 \li0 \fi0 [![Contributors][contributors-shield]][contributors-url] [![Forks][forks-shield]][forks-url] [![Stargazers][stars-shield]][stars-url] [![Issues][issues-shield]][issues-url] [![GNU GPL v3 License][license-shield]][license-url]\par}
+
 }
 ]]></description>
         <link rel="website" href="https://github.com/Timtam/AccessiChords">GitHub repository</link>
