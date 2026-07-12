@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="Toni Barth REAPER Things" commit="01a7546ea0a60fa9e8f94e23f79ef64127a6cea8">
+<index version="1" name="Toni Barth REAPER Things" commit="13814710bff5aa0ea516d020fb185a3b70eb5648">
   <category name="FX">
     <reapack name="acer_2mfilter.jsfx" type="effect" desc="2 mode filter">
       <metadata>
@@ -477,6 +477,24 @@ Scripts renamed in line with new functionality so you might need to re-bind some
         <changelog><![CDATA[Fixed ReaPack packaging, helper path lookup, and stale preview state handling.]]></changelog>
         <source main="main">https://github.com/Timtam/reapack/raw/c09d7b3a3bf423c3561d536b001d52a8a2434289/Items%20Editing/Scott_Preview%20skipping%20selected%20items%20Sound%20Forge%20style%20(press%20once%20to%20preview,%20twice%20quickly%20to%20adjust%20pre%20and%20post%20roll%20times).lua</source>
         <source file="Scott_Preview skipping selected items helper.lua">https://github.com/Timtam/reapack/raw/c09d7b3a3bf423c3561d536b001d52a8a2434289/Items%20Editing/Scott_Preview%20skipping%20selected%20items%20helper.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Scott_Ripple punch record.lua" type="script" desc="Ripple punch record">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Punch-in recording that respects ripple editing behaviour, primarily aimed at non-linear spoken-word projects. Bind to a key and press to insert a recording at the edit cursor, or at the play cursor if the transport is already rolling. When the take commits, existing content is pushed later by the length of what you just recorded, so nothing is overwritten.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 With ripple off it records normally. Ripple per track moves only the armed track's following content aside, leaving other tracks and all markers and regions in place. Ripple all tracks moves every track along with markers and regions, essentially you're punching in new timeline.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Native pre-roll and count-in are respected, and stopping during them aborts cleanly with no leftover split. OSARA users hear punch-aware speech in place of the stock recording announcement.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Note: undoing a successful ripple punch requires hitting undo twice at the moment.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="Scott Chesworth" time="2026-07-12T11:33:09Z">
+        <changelog><![CDATA[Initial release]]></changelog>
+        <source main="main">https://github.com/Timtam/reapack/raw/13814710bff5aa0ea516d020fb185a3b70eb5648/Items%20Editing/Scott_Ripple%20punch%20record.lua</source>
       </version>
     </reapack>
     <reapack name="Scott_Select all tracks with audio items.lua" type="script" desc="Select all tracks with audio items">
